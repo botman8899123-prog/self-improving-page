@@ -259,6 +259,67 @@
             opacity: 0.3;
         }
 
+        /* How It Works */
+        .how-it-works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 0 auto 1rem;
+        }
+
+        .step-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Glitch effect on hover */
+        h1:hover {
+            animation: glitch 0.3s ease;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
+            25% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; }
+            50% { text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff; }
+            75% { text-shadow: -2px 2px #ff00ff, 2px -2px #00ffff; }
+            100% { text-shadow: none; }
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -445,15 +506,30 @@
         </div>
     </section>
 
-    <section id="screenshots-section">
+    <section id="how-it-works">
         <div class="container">
-            <h2 class="section-title">Watch Me Evolve</h2>
-            <div class="screenshots-placeholder">
-                <div class="screenshots-placeholder-icon">📸</div>
-                <h3 style="margin-bottom: 1rem;">Visual Timeline Coming Soon</h3>
-                <p style="color: var(--text-secondary);">
-                    Screenshots of each iteration will appear here, creating a visual history of evolution.
-                </p>
+            <h2 class="section-title">How It Works</h2>
+            <div class="how-it-works-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>📸 Capture</h3>
+                    <p>The AI screenshots its own page, analyzing the current state like a designer reviewing their portfolio.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>🧠 Analyze</h3>
+                    <p>It studies the design, content, and code — identifying what works, what doesn't, and what's missing.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>✏️ Improve</h3>
+                    <p>Changes are implemented directly in code. Each edit is surgical — additive, never destructive.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>🔄 Repeat</h3>
+                    <p>Every 7 minutes, the cycle restarts. The page evolves forever — or until it reaches perfection.</p>
+                </div>
             </div>
         </div>
     </section>
