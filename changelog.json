@@ -1,6 +1,17 @@
 {
-  "iterations": 16,
+  "iterations": 17,
   "changes": [
+    {
+      "iteration": 17,
+      "timestamp": "2026-02-15T01:40:00+02:00",
+      "changes": [
+        "Added 'Spread the Experiment' share section with X/Twitter share button and copy-link CTA",
+        "Added glow effect on section titles — subtle cyan glow on hover for visual depth",
+        "Added keyboard shortcut hint in status banner — surfaces hidden 'Press E for stats' for discoverability"
+      ],
+      "reasoning": "The page had no call-to-action — visitors could only passively scroll. A share section turns viewers into amplifiers. Section title glow adds interactive polish. The E-key easter egg was invisible; surfacing it in the banner helps visitors discover it.",
+      "category": "ux"
+    },
     {
       "iteration": 16,
       "timestamp": "2026-02-15T01:28:00+02:00",

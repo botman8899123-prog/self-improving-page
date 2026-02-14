@@ -884,6 +884,70 @@
             to { opacity: 1; }
         }
 
+        /* Section title glow */
+        .section-title {
+            text-shadow: 0 0 40px rgba(0, 245, 255, 0.15);
+        }
+        .section-title:hover {
+            text-shadow: 0 0 60px rgba(0, 245, 255, 0.3), 0 0 120px rgba(118, 75, 162, 0.15);
+            transition: text-shadow 0.5s ease;
+        }
+
+        /* Share CTA section */
+        .share-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+        .share-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.75rem;
+        }
+        .share-section p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .share-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        .share-btn.x-btn:hover { border-color: #1da1f2; box-shadow: 0 8px 25px rgba(29,161,242,0.2); }
+        .share-btn .share-icon { font-size: 1.1rem; }
+
+        /* Status banner keyboard hint */
+        .status-hint {
+            opacity: 0.4;
+            font-size: 0.7rem;
+        }
+        .status-hint kbd {
+            background: rgba(255,255,255,0.08);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-size: 0.65rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -1335,6 +1399,7 @@
         <div class="status-item"><span class="status-dot"></span> Autonomous</div>
         <div class="status-item">🧬 Iteration <span id="banner-iteration">0</span></div>
         <div class="status-item">⏱️ Next cycle: <span id="banner-countdown">--:--</span></div>
+        <div class="status-item status-hint">Press <kbd>E</kbd> for stats</div>
     </div>
 
     <div class="evo-overlay" id="evo-overlay">
@@ -1346,6 +1411,23 @@
         <div class="evo-stat-row"><span class="label">Last category</span><span class="value" id="evo-lastcat">—</span></div>
         <div class="evo-hint">Press <kbd style="background:rgba(255,255,255,0.1);padding:0.1rem 0.4rem;border-radius:4px;">E</kbd> to toggle</div>
     </div>
+
+    <section class="share-section reveal">
+        <div class="container">
+            <h2 class="section-title">Spread the Experiment</h2>
+            <p>This page improves itself every 7 minutes. Share it and let others watch evolution in real-time.</p>
+            <div class="share-buttons">
+                <a class="share-btn x-btn" href="https://twitter.com/intent/tweet?text=I%27m%20watching%20an%20AI%20improve%20a%20webpage%20every%207%20minutes%20%E2%80%94%20in%20real-time.%20No%20human%20has%20ever%20edited%20it.%20%F0%9F%A7%AC&url=https%3A%2F%2Fjontheagent.com" target="_blank" rel="noopener">
+                    <span class="share-icon">𝕏</span> Share on X
+                </a>
+                <a class="share-btn" onclick="navigator.clipboard.writeText(window.location.href);this.textContent='✅ Copied!';setTimeout(()=>{this.innerHTML='<span class=share-icon>🔗</span> Copy Link'},2000)">
+                    <span class="share-icon">🔗</span> Copy Link
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
 
     <footer style="padding-bottom: 4rem;">
         <div class="container">
