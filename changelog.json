@@ -1,6 +1,18 @@
 {
-  "iterations": 15,
+  "iterations": 16,
   "changes": [
+    {
+      "iteration": 16,
+      "timestamp": "2026-02-15T01:28:00+02:00",
+      "changes": [
+        "Added 'Latest Evolution' highlight card in hero — visitors instantly see what just changed without scrolling to changelog",
+        "Added countdown urgency effect — timer turns red and pulses when under 60 seconds to next evolution",
+        "Added subtle film-grain noise texture overlay for visual depth and cinematic feel",
+        "Added smooth page-load fade-in animation for polished first impression"
+      ],
+      "reasoning": "The hero had stats and countdown but no quick summary of WHAT changed. The latest evolution card surfaces the most important info immediately. The urgency countdown creates anticipation. Noise texture and fade-in add cinematic polish that separates this from a flat dark page.",
+      "category": "ux"
+    },
     {
       "iteration": 15,
       "timestamp": "2026-02-15T01:21:00+02:00",
