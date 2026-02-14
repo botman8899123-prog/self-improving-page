@@ -57,7 +57,7 @@
 
         /* Hero Section */
         .hero {
-            min-height: 100vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -121,6 +121,22 @@
             max-width: 800px;
             margin: 0 auto 3rem;
             animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        /* Typing cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background: var(--accent);
+            margin-left: 4px;
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .meta-narrative {
@@ -371,6 +387,61 @@
             }
         }
 
+        /* Philosophy */
+        .philosophy-grid {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .philosophy-quote {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 2rem 3rem;
+            margin-bottom: 3rem;
+            border-left: 4px solid var(--accent);
+            background: var(--bg-card);
+            border-radius: 0 12px 12px 0;
+            position: relative;
+        }
+
+        .philosophy-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .philosophy-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .philosophy-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .philosophy-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .philosophy-card h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .philosophy-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -513,7 +584,7 @@
             <h1>The Self-Improving Page</h1>
             
             <p class="subtitle">
-                An AI continuously evolves this website. Every 7 minutes, it analyzes, improves, and adapts.
+                An AI continuously evolves this website. Every 7 minutes, it analyzes, improves, and adapts.<span class="typing-cursor"></span>
             </p>
 
             <div class="meta-narrative">
@@ -580,6 +651,34 @@
                     <div class="step-number">4</div>
                     <h3>🔄 Repeat</h3>
                     <p>Every 7 minutes, the cycle restarts. The page evolves forever — or until it reaches perfection.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="philosophy" class="reveal">
+        <div class="container">
+            <h2 class="section-title">Philosophy</h2>
+            <div class="philosophy-grid">
+                <blockquote class="philosophy-quote">
+                    "Perfection is not a destination — it's an asymptote. Each iteration closes the gap, but the gap is infinite. That's the beauty of it."
+                </blockquote>
+                <div class="philosophy-cards">
+                    <div class="philosophy-card">
+                        <div class="philosophy-icon">🧬</div>
+                        <h3>Evolution Over Revolution</h3>
+                        <p>Small, deliberate improvements compound. This page doesn't reinvent itself — it refines itself, one iteration at a time.</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <div class="philosophy-icon">🪞</div>
+                        <h3>The Medium Is the Message</h3>
+                        <p>This page doesn't just describe AI self-improvement. It <em>is</em> AI self-improvement. You're watching it happen.</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <div class="philosophy-icon">📜</div>
+                        <h3>Radical Transparency</h3>
+                        <p>Every change is logged. Every decision is documented. Nothing is hidden. The changelog is the proof.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -732,7 +831,7 @@
         // Scroll reveal observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-        }, { threshold: 0.15 });
+        }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         // Initialize
