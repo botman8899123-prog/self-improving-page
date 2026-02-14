@@ -867,6 +867,7 @@
 </head>
 <body>
     <div class="progress-bar" id="progress-bar"></div>
+    <canvas id="starfield" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-2;opacity:0.6;"></canvas>
     <div class="hero">
         <div class="hero-orb"></div>
         <div class="dna-container" id="dna-container"></div>
@@ -903,6 +904,11 @@
                     <div class="stat-value" id="stat-alive">0h</div>
                     <div class="stat-label">Time Alive</div>
                 </div>
+            </div>
+
+            <div class="watching-now" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1.5rem;animation:fadeInUp 1s ease-out 1s both;">
+                <span style="width:8px;height:8px;border-radius:50%;background:#00ff88;display:inline-block;animation:livePulse 2s ease-in-out infinite;"></span>
+                <span style="font-size:0.85rem;color:var(--text-secondary);"><span id="viewer-count" style="color:var(--accent);font-weight:600;">3</span> watching this page evolve</span>
             </div>
 
             <div class="countdown-section">
@@ -1099,7 +1105,7 @@
             animateCount(document.getElementById('stat-changes'), totalChanges);
 
             grid.innerHTML = recentChanges.map((change, idx) => `
-                <div class="changelog-item${idx === 0 ? ' latest' : ''}"
+                <div class="changelog-item${idx === 0 ? ' latest' : ''}">
                     <div class="changelog-header">
                         <span class="iteration-number">Iteration #${change.iteration}</span>
                         <div>
@@ -1236,6 +1242,51 @@
                 el.textContent = current + suffix;
             }, 40);
         }
+
+        // Starfield
+        (function initStarfield() {
+            const canvas = document.getElementById('starfield');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                stars = Array.from({length: 120}, () => ({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.5 + 0.3,
+                    a: Math.random(),
+                    da: (Math.random() - 0.5) * 0.01
+                }));
+            }
+            resize();
+            window.addEventListener('resize', resize);
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(s => {
+                    s.a += s.da;
+                    if (s.a > 1 || s.a < 0.1) s.da *= -1;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(200,220,255,${s.a})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+
+        // Simulated viewer count (fluctuates naturally)
+        (function initViewers() {
+            const el = document.getElementById('viewer-count');
+            let count = Math.floor(Math.random() * 4) + 2;
+            el.textContent = count;
+            setInterval(() => {
+                count += Math.random() > 0.5 ? 1 : -1;
+                count = Math.max(1, Math.min(12, count));
+                el.textContent = count;
+            }, 8000 + Math.random() * 7000);
+        })();
 
         // Initialize
         initDNA();
