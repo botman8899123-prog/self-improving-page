@@ -129,8 +129,6 @@
             max-width: 700px;
             margin: 0 auto 3rem;
             padding: 2rem;
-            background: var(--bg-card);
-            border-left: 4px solid var(--accent);
             border-radius: 8px;
             animation: fadeInUp 1s ease-out 0.4s both;
         }
@@ -320,6 +318,59 @@
             100% { text-shadow: none; }
         }
 
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animated gradient border on meta-narrative */
+        .meta-narrative {
+            border-left: none;
+            border: 2px solid transparent;
+            background-image: linear-gradient(var(--bg-card), var(--bg-card)),
+                              linear-gradient(135deg, var(--accent), #764ba2, #667eea, var(--accent));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            position: relative;
+        }
+
+        /* Step connectors */
+        .how-it-works-grid {
+            position: relative;
+        }
+
+        .step-card::after {
+            content: '→';
+            position: absolute;
+            right: -1.3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .step-card:last-child::after {
+            content: none;
+        }
+
+        @media (max-width: 768px) {
+            .step-card::after {
+                content: '↓';
+                right: auto;
+                left: 50%;
+                top: auto;
+                bottom: -1.3rem;
+                transform: translateX(-50%);
+            }
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -494,7 +545,7 @@
         </div>
     </div>
 
-    <section id="changelog-section">
+    <section id="changelog-section" class="reveal">
         <div class="container">
             <h2 class="section-title">Evolution Log</h2>
             <div class="changelog-grid" id="changelog-grid">
@@ -506,7 +557,7 @@
         </div>
     </section>
 
-    <section id="how-it-works">
+    <section id="how-it-works" class="reveal">
         <div class="container">
             <h2 class="section-title">How It Works</h2>
             <div class="how-it-works-grid">
@@ -677,6 +728,12 @@
             const mins = Math.floor((diff % 3600000) / 60000);
             document.getElementById('stat-alive').textContent = hours > 0 ? hours + 'h ' + mins + 'm' : mins + 'm';
         }
+
+        // Scroll reveal observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         // Initialize
         initDNA();
