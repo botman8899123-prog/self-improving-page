@@ -715,6 +715,103 @@
             margin-left: 0.5rem;
         }
 
+        /* Metrics dashboard */
+        .metrics-dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .metric-card {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+        .metric-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+        .metric-ring {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 1rem;
+        }
+        .metric-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        .ring-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.06);
+            stroke-width: 6;
+        }
+        .ring-fill {
+            fill: none;
+            stroke: var(--ring-color, var(--accent));
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 264;
+            stroke-dashoffset: 264;
+            transition: stroke-dashoffset 1.5s ease;
+        }
+        .metric-ring-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1.4;
+        }
+
+        /* Frosted glass nav */
+        .top-nav {
+            position: fixed;
+            top: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50px;
+            padding: 0.4rem 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .top-nav.visible { opacity: 1; }
+        .top-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.3rem 0;
+            transition: color 0.2s;
+        }
+        .top-nav a:hover { color: var(--accent); }
+
+        @media (max-width: 600px) {
+            .metrics-dashboard { grid-template-columns: repeat(2, 1fr); }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -920,6 +1017,13 @@
 </head>
 <body>
     <div class="progress-bar" id="progress-bar"></div>
+    <nav class="top-nav" id="top-nav">
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Home</a>
+        <a href="#changelog-section" onclick="document.getElementById('changelog-section').scrollIntoView({behavior:'smooth'});return false;">Log</a>
+        <a href="#how-it-works" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'});return false;">How</a>
+        <a href="#philosophy" onclick="document.getElementById('philosophy').scrollIntoView({behavior:'smooth'});return false;">Why</a>
+        <a href="#metrics-section" onclick="document.getElementById('metrics-section').scrollIntoView({behavior:'smooth'});return false;">Stats</a>
+    </nav>
     <canvas id="starfield" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-2;opacity:0.6;"></canvas>
     <div class="hero">
         <div class="hero-orb"></div>
@@ -1069,6 +1173,44 @@
         </div>
     </section>
 
+    <section id="metrics-section" class="reveal">
+        <div class="container">
+            <h2 class="section-title">By The Numbers</h2>
+            <div class="metrics-dashboard" id="metrics-dashboard">
+                <div class="metric-card">
+                    <div class="metric-ring" style="--ring-color: var(--accent); --ring-pct: 0;">
+                        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" class="ring-bg"/><circle cx="50" cy="50" r="42" class="ring-fill"/></svg>
+                        <div class="metric-ring-value" id="metric-avg-changes">0</div>
+                    </div>
+                    <div class="metric-label">Avg Changes<br>Per Iteration</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-ring" style="--ring-color: #764ba2; --ring-pct: 0;">
+                        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" class="ring-bg"/><circle cx="50" cy="50" r="42" class="ring-fill"/></svg>
+                        <div class="metric-ring-value" id="metric-top-cat">—</div>
+                    </div>
+                    <div class="metric-label">Most Common<br>Category</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-ring" style="--ring-color: #00ff88; --ring-pct: 0;">
+                        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" class="ring-bg"/><circle cx="50" cy="50" r="42" class="ring-fill"/></svg>
+                        <div class="metric-ring-value" id="metric-velocity">0</div>
+                    </div>
+                    <div class="metric-label">Changes<br>Per Hour</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-ring" style="--ring-color: #667eea; --ring-pct: 0;">
+                        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" class="ring-bg"/><circle cx="50" cy="50" r="42" class="ring-fill"/></svg>
+                        <div class="metric-ring-value" id="metric-code-size">0</div>
+                    </div>
+                    <div class="metric-label">Lines of<br>Code</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
     <div class="ticker-wrap" id="ticker-wrap">
         <div class="ticker" id="ticker"></div>
     </div>
@@ -1130,6 +1272,7 @@
                 } else {
                     document.getElementById('last-updated').textContent = 'Never';
                 }
+                updateMetrics();
             } catch (error) {
                 console.error('Failed to load changelog:', error);
             }
@@ -1386,6 +1529,49 @@
             if (hrs < 24) return hrs + 'h ago';
             return Math.floor(hrs / 24) + 'd ago';
         }
+
+        // Metrics dashboard
+        function updateMetrics() {
+            if (!changelogData || !changelogData.changes.length) return;
+            const changes = changelogData.changes;
+            const totalChanges = changes.reduce((s, c) => s + (c.changes ? c.changes.length : 1), 0);
+            const avgChanges = (totalChanges / changes.length).toFixed(1);
+            const hours = Math.max((Date.now() - BORN.getTime()) / 3600000, 0.1);
+            const velocity = (totalChanges / hours).toFixed(1);
+
+            // Top category
+            const catCount = {};
+            changes.forEach(c => { if (c.category) catCount[c.category] = (catCount[c.category] || 0) + 1; });
+            const topCat = Object.entries(catCount).sort((a,b) => b[1] - a[1])[0];
+
+            document.getElementById('metric-avg-changes').textContent = avgChanges;
+            document.getElementById('metric-top-cat').textContent = topCat ? (CATEGORY_ICONS[topCat[0]] || '') + ' ' + topCat[0] : '—';
+            document.getElementById('metric-velocity').textContent = velocity;
+
+            // Estimate code lines from page source
+            fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
+                const lines = t.split('\n').length;
+                document.getElementById('metric-code-size').textContent = lines;
+                // Animate ring for code (treat 800 lines as 100%)
+                setRing(3, Math.min(lines / 800, 1));
+            }).catch(() => {});
+
+            // Animate rings
+            setRing(0, Math.min(parseFloat(avgChanges) / 5, 1));
+            setRing(1, topCat ? topCat[1] / changes.length : 0);
+            setRing(2, Math.min(parseFloat(velocity) / 40, 1));
+        }
+
+        function setRing(idx, pct) {
+            const rings = document.querySelectorAll('.ring-fill');
+            if (rings[idx]) rings[idx].style.strokeDashoffset = 264 - (264 * pct);
+        }
+
+        // Frosted nav: show after scrolling past hero
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('top-nav');
+            if (nav) nav.classList.toggle('visible', window.scrollY > window.innerHeight * 0.5);
+        });
 
         // Initialize
         initDNA();
