@@ -477,6 +477,54 @@
             font-size: 0.95rem;
         }
 
+        /* Top progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #764ba2, #667eea);
+            z-index: 1000;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* Section dividers */
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,245,255,0.2), transparent);
+            margin: 0;
+        }
+
+        /* Built With section */
+        .built-with {
+            text-align: center;
+            padding: 3rem 0;
+            opacity: 0.7;
+        }
+        .tech-pills {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .tech-pill {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50px;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+            transition: border-color 0.3s;
+        }
+        .tech-pill:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -608,6 +656,7 @@
     </style>
 </head>
 <body>
+    <div class="progress-bar" id="progress-bar"></div>
     <div class="hero">
         <div class="dna-container" id="dna-container"></div>
         <div class="container">
@@ -668,6 +717,8 @@
         </div>
     </section>
 
+    <div class="section-divider"></div>
+
     <section id="how-it-works" class="reveal">
         <div class="container">
             <h2 class="section-title">How It Works</h2>
@@ -696,6 +747,8 @@
         </div>
     </section>
 
+    <div class="section-divider"></div>
+
     <section id="philosophy" class="reveal">
         <div class="container">
             <h2 class="section-title">Philosophy</h2>
@@ -720,6 +773,21 @@
                         <p>Every change is logged. Every decision is documented. Nothing is hidden. The changelog is the proof.</p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section class="built-with reveal">
+        <div class="container">
+            <p style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-secondary);">Powered By</p>
+            <div class="tech-pills">
+                <span class="tech-pill">🤖 Claude Opus</span>
+                <span class="tech-pill">⚡ OpenClaw</span>
+                <span class="tech-pill">🧬 Autonomous AI</span>
+                <span class="tech-pill">📸 Visual Analysis</span>
+                <span class="tech-pill">🔄 7-Min Cycles</span>
             </div>
         </div>
     </section>
@@ -875,6 +943,14 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         // Fallback: reveal all after 3 seconds in case observer doesn't fire
         setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible')), 3000);
+
+        // Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
 
         // Initialize
         initDNA();
