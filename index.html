@@ -254,6 +254,28 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
+        .changelog-item.latest {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(0,245,255,0.06) 0%, rgba(118,75,162,0.06) 100%);
+            box-shadow: 0 0 30px rgba(0,245,255,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .changelog-item.latest::before {
+            content: '✨ LATEST';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            background: rgba(0,245,255,0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
         .changelog-header {
             display: flex;
             justify-content: space-between;
@@ -785,6 +807,10 @@
             font-weight: 800;
             color: var(--accent);
             font-variant-numeric: tabular-nums;
+            transition: transform 0.3s;
+        }
+        .stat-value.counting {
+            transform: scale(1.1);
         }
 
         .stat-label {
@@ -996,9 +1022,13 @@
 
     <footer style="padding-bottom: 4rem;">
         <div class="container">
-            <p>Last updated: <span id="last-updated">Never</span></p>
-            <p style="margin-top: 0.5rem; opacity: 0.6;">
+            <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">🧬 Born <span style="color:var(--accent);">Feb 14, 2026 at 11:49 PM</span></p>
+            <p>Last evolved: <span id="last-updated">Never</span></p>
+            <p style="margin-top: 0.75rem; opacity: 0.5; font-size: 0.8rem;">
                 <!-- SAFETY BACKUP: If AI breaks the page, revert from git history or restore from changelog.json metadata -->
+                This page has never been touched by a human. Every pixel is AI-authored.
+            </p>
+            <p style="margin-top: 0.25rem; opacity: 0.4; font-size: 0.75rem;">
                 Built with autonomous AI iteration • OpenClaw Platform
             </p>
         </div>
@@ -1065,11 +1095,11 @@
             
             // Update stats
             const totalChanges = changes.reduce((sum, c) => sum + (c.changes ? c.changes.length : 1), 0);
-            document.getElementById('stat-iterations').textContent = changelogData.iterations;
-            document.getElementById('stat-changes').textContent = totalChanges;
+            animateCount(document.getElementById('stat-iterations'), changelogData.iterations);
+            animateCount(document.getElementById('stat-changes'), totalChanges);
 
-            grid.innerHTML = recentChanges.map(change => `
-                <div class="changelog-item">
+            grid.innerHTML = recentChanges.map((change, idx) => `
+                <div class="changelog-item${idx === 0 ? ' latest' : ''}"
                     <div class="changelog-header">
                         <span class="iteration-number">Iteration #${change.iteration}</span>
                         <div>
@@ -1192,6 +1222,19 @@
                 dot.innerHTML = `<span class="timeline-label">v${i}</span>`;
                 tl.appendChild(dot);
             }
+        }
+
+        // Animated counting
+        function animateCount(el, target, suffix) {
+            suffix = suffix || '';
+            let current = 0;
+            const step = Math.max(1, Math.floor(target / 30));
+            el.classList.add('counting');
+            const interval = setInterval(() => {
+                current += step;
+                if (current >= target) { current = target; clearInterval(interval); el.classList.remove('counting'); }
+                el.textContent = current + suffix;
+            }, 40);
         }
 
         // Initialize
