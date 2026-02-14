@@ -662,6 +662,59 @@
             font-size: 0.9rem;
         }
 
+        /* Evolution stats overlay */
+        .evo-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: rgba(10, 10, 15, 0.97);
+            border: 1px solid var(--accent);
+            border-radius: 16px;
+            padding: 2.5rem 3rem;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 0 60px rgba(0, 245, 255, 0.2);
+            min-width: 320px;
+            text-align: center;
+        }
+        .evo-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .evo-overlay h3 {
+            color: var(--accent);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+        }
+        .evo-stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+        .evo-stat-row .label { color: var(--text-secondary); }
+        .evo-stat-row .value { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+        .evo-hint {
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* Time-ago badge */
+        .time-ago {
+            font-size: 0.75rem;
+            color: var(--accent);
+            opacity: 0.7;
+            margin-left: 0.5rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -1026,6 +1079,16 @@
         <div class="status-item">⏱️ Next cycle: <span id="banner-countdown">--:--</span></div>
     </div>
 
+    <div class="evo-overlay" id="evo-overlay">
+        <h3>⚡ Evolution Stats</h3>
+        <div class="evo-stat-row"><span class="label">Avg cycle time</span><span class="value">7 min</span></div>
+        <div class="evo-stat-row"><span class="label">Changes / hour</span><span class="value" id="evo-cph">—</span></div>
+        <div class="evo-stat-row"><span class="label">Total iterations</span><span class="value" id="evo-total">—</span></div>
+        <div class="evo-stat-row"><span class="label">Uptime</span><span class="value" id="evo-uptime">—</span></div>
+        <div class="evo-stat-row"><span class="label">Last category</span><span class="value" id="evo-lastcat">—</span></div>
+        <div class="evo-hint">Press <kbd style="background:rgba(255,255,255,0.1);padding:0.1rem 0.4rem;border-radius:4px;">E</kbd> to toggle</div>
+    </div>
+
     <footer style="padding-bottom: 4rem;">
         <div class="container">
             <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">🧬 Born <span style="color:var(--accent);">Feb 14, 2026 at 11:49 PM</span></p>
@@ -1110,7 +1173,7 @@
                         <span class="iteration-number">Iteration #${change.iteration}</span>
                         <div>
                             ${change.category ? `<span class="category-badge"><span class="category-icon">${CATEGORY_ICONS[change.category] || '📝'}</span>${escapeHtml(change.category)}</span>` : ''}
-                            <span class="timestamp">${formatDate(new Date(change.timestamp))}</span>
+                            <span class="timestamp">${formatDate(new Date(change.timestamp))}<span class="time-ago">${timeAgo(new Date(change.timestamp))}</span></span>
                         </div>
                     </div>
                     ${change.changes ? `<ul class="changelog-changes">${change.changes.map(c => `<li>${escapeHtml(c)}</li>`).join('')}</ul>` : `<div class="changelog-description">${escapeHtml(change.description || '')}</div>`}
@@ -1287,6 +1350,42 @@
                 el.textContent = count;
             }, 8000 + Math.random() * 7000);
         })();
+
+        // Parallax on hero orb
+        document.querySelector('.hero').addEventListener('mousemove', (e) => {
+            const orb = document.querySelector('.hero-orb');
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width - 0.5) * 40;
+            const y = ((e.clientY - rect.top) / rect.height - 0.5) * 40;
+            orb.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+        });
+
+        // Evolution stats overlay (press E)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'e' || e.key === 'E') {
+                const overlay = document.getElementById('evo-overlay');
+                overlay.classList.toggle('active');
+                if (overlay.classList.contains('active') && changelogData) {
+                    const hours = (Date.now() - BORN.getTime()) / 3600000;
+                    const totalChanges = changelogData.changes.reduce((s, c) => s + (c.changes ? c.changes.length : 1), 0);
+                    document.getElementById('evo-cph').textContent = (totalChanges / Math.max(hours, 0.1)).toFixed(1);
+                    document.getElementById('evo-total').textContent = changelogData.iterations;
+                    document.getElementById('evo-uptime').textContent = Math.floor(hours) + 'h ' + Math.floor((hours % 1) * 60) + 'm';
+                    document.getElementById('evo-lastcat').textContent = changelogData.changes[0]?.category || '—';
+                }
+            }
+        });
+
+        // Time-ago helper
+        function timeAgo(date) {
+            const diff = Date.now() - date.getTime();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'just now';
+            if (mins < 60) return mins + 'm ago';
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return hrs + 'h ago';
+            return Math.floor(hrs / 24) + 'd ago';
+        }
 
         // Initialize
         initDNA();
