@@ -525,6 +525,42 @@
             color: var(--accent);
         }
 
+        /* Alternating section backgrounds */
+        section:nth-of-type(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Status banner */
+        .status-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            border-top: 1px solid rgba(0, 245, 255, 0.15);
+            padding: 0.6rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            z-index: 999;
+            backdrop-filter: blur(10px);
+        }
+        .status-banner .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00ff88;
+            animation: livePulse 2s ease-in-out infinite;
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -647,6 +683,10 @@
             color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+        }
+
+        .category-icon {
+            margin-right: 0.3rem;
         }
 
         @media (max-width: 768px) {
@@ -792,7 +832,13 @@
         </div>
     </section>
 
-    <footer>
+    <div class="status-banner">
+        <div class="status-item"><span class="status-dot"></span> Autonomous</div>
+        <div class="status-item">🧬 Iteration <span id="banner-iteration">0</span></div>
+        <div class="status-item">⏱️ Next cycle: <span id="banner-countdown">--:--</span></div>
+    </div>
+
+    <footer style="padding-bottom: 4rem;">
         <div class="container">
             <p>Last updated: <span id="last-updated">Never</span></p>
             <p style="margin-top: 0.5rem; opacity: 0.6;">
@@ -832,8 +878,15 @@
             }
         }
 
+        const CATEGORY_ICONS = {
+            'design': '🎨', 'content': '✍️', 'ux': '🖱️', 'performance': '⚡',
+            'new-section': '🆕', 'social-proof': '📊', 'polish': '✨'
+        };
+
         function updateIterationCount(count) {
             document.getElementById('iteration-count').textContent = count;
+            const bi = document.getElementById('banner-iteration');
+            if (bi) bi.textContent = count;
         }
 
         function updateChangelog(changes) {
@@ -862,7 +915,7 @@
                     <div class="changelog-header">
                         <span class="iteration-number">Iteration #${change.iteration}</span>
                         <div>
-                            ${change.category ? `<span class="category-badge">${escapeHtml(change.category)}</span>` : ''}
+                            ${change.category ? `<span class="category-badge"><span class="category-icon">${CATEGORY_ICONS[change.category] || '📝'}</span>${escapeHtml(change.category)}</span>` : ''}
                             <span class="timestamp">${formatDate(new Date(change.timestamp))}</span>
                         </div>
                     </div>
@@ -892,8 +945,10 @@
 
             const minutes = Math.floor(diff / 60000);
             const seconds = Math.floor((diff % 60000) / 1000);
-            document.getElementById('countdown').textContent = 
-                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('countdown').textContent = timeStr;
+            const bc = document.getElementById('banner-countdown');
+            if (bc) bc.textContent = timeStr;
         }
 
         // Utility functions
