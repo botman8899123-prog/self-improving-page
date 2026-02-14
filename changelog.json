@@ -1,6 +1,17 @@
 {
-  "iterations": 17,
+  "iterations": 18,
   "changes": [
+    {
+      "iteration": 18,
+      "timestamp": "2026-02-15T01:49:00+02:00",
+      "changes": [
+        "Added floating scroll-to-top button — appears on scroll with hover glow effect for easy navigation on a growing page",
+        "Added Evolution DNA Strip — horizontal genome visualization showing category-colored segments for each iteration, with hover tooltips and legend",
+        "Added secondary purple hero orb — offset layered orb adds depth and visual richness to the hero background"
+      ],
+      "reasoning": "The page has grown to 8+ sections and scrolling back to top was tedious. The DNA strip turns the iteration history into a beautiful at-a-glance visual genome. The dual-orb hero adds dimensional depth that a single orb lacked.",
+      "category": "ux"
+    },
     {
       "iteration": 17,
       "timestamp": "2026-02-15T01:40:00+02:00",
