@@ -371,8 +371,8 @@
 
         /* Scroll reveal */
         .reveal {
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 0.12;
+            transform: translateY(20px);
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
         .reveal.visible {
@@ -559,6 +559,44 @@
             border-radius: 50%;
             background: #00ff88;
             animation: livePulse 2s ease-in-out infinite;
+        }
+
+        /* Live ticker */
+        .ticker-wrap {
+            overflow: hidden;
+            background: rgba(0, 245, 255, 0.04);
+            border-top: 1px solid rgba(0, 245, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+            padding: 0.6rem 0;
+            white-space: nowrap;
+        }
+        .ticker {
+            display: inline-block;
+            animation: tickerScroll 30s linear infinite;
+        }
+        .ticker span {
+            display: inline-block;
+            padding: 0 2rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+        }
+        .ticker span .tick-accent { color: var(--accent); font-weight: 600; }
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Mesh gradient on sections */
+        section:nth-of-type(odd)::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(102,126,234,0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        section {
+            position: relative;
         }
 
         /* Footer */
@@ -832,6 +870,10 @@
         </div>
     </section>
 
+    <div class="ticker-wrap" id="ticker-wrap">
+        <div class="ticker" id="ticker"></div>
+    </div>
+
     <div class="status-banner">
         <div class="status-item"><span class="status-dot"></span> Autonomous</div>
         <div class="status-item">🧬 Iteration <span id="banner-iteration">0</span></div>
@@ -865,6 +907,7 @@
                 
                 updateIterationCount(changelogData.iterations);
                 updateChangelog(changelogData.changes);
+                buildTicker(changelogData.changes);
                 
                 // Set last update time
                 if (changelogData.changes.length > 0) {
@@ -1006,6 +1049,17 @@
             const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
             document.getElementById('progress-bar').style.width = progress + '%';
         });
+
+        // Live ticker from changelog
+        function buildTicker(changes) {
+            const ticker = document.getElementById('ticker');
+            if (!changes || changes.length === 0) return;
+            const items = changes.slice(0, 5).flatMap(c =>
+                (c.changes || []).map(txt => `<span><span class="tick-accent">v${c.iteration}</span> ${escapeHtml(txt)}</span>`)
+            );
+            // Duplicate for seamless loop
+            ticker.innerHTML = items.join('') + items.join('');
+        }
 
         // Initialize
         initDNA();
