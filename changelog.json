@@ -1,1 +1,1 @@
-{"iterations": 0, "changes": []}
+{"iterations": 1, "changes": [{"iteration": 1, "timestamp": "2026-02-14T23:49:00+02:00", "changes": ["Added floating DNA particle animation in hero background", "Added stats bar showing iterations, total changes, and time alive", "Upgraded changelog rendering with bullet lists and category badges"], "reasoning": "First iteration: bring the page to life with ambient animation, real-time stats, and prepare the changelog for structured data", "category": "design"}]}
