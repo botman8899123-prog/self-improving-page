@@ -2351,6 +2351,67 @@
             100% { transform: translateX(-50%); }
         }
 
+        /* Golden confetti rain — milestone celebration */
+        .confetti-piece {
+            position: fixed;
+            top: -20px;
+            z-index: 10001;
+            pointer-events: none;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            75% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(var(--confetti-rot, 720deg)) scale(0.5); opacity: 0; }
+        }
+        .confetti-piece.square {
+            width: 8px;
+            height: 8px;
+            border-radius: 1px;
+        }
+        .confetti-piece.strip {
+            width: 4px;
+            height: 14px;
+            border-radius: 2px;
+        }
+        .confetti-piece.circle {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        /* Half Century commemorative plaque */
+        .half-century-plaque {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.06) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50px;
+            font-size: 0.82rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out 0.15s both;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1), inset 0 1px 0 rgba(255, 215, 0, 0.1);
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+        }
+        .half-century-plaque.visible {
+            display: inline-flex;
+        }
+        .half-century-plaque .plaque-icon {
+            font-size: 1.2rem;
+            animation: plaqueSpin 4s ease-in-out infinite;
+        }
+        @keyframes plaqueSpin {
+            0%, 100% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+        }
+
         /* Content-visibility: auto — skip rendering off-screen sections for faster paint */
         section, .dna-strip-section, .share-section, .built-with, .dna-divider, .wave-organic-divider, .ticker-wrap {
             content-visibility: auto;
@@ -2834,6 +2895,12 @@
                 <span class="iteration-count" id="iteration-count">0</span>
             </div>
             
+            <div class="half-century-plaque" id="half-century-plaque">
+                <span class="plaque-icon">🏅</span>
+                <span>Half Century — 50 Autonomous Evolutions</span>
+                <span class="plaque-icon">🏅</span>
+            </div>
+
             <h1>The Self-Improving Page</h1>
             
             <p class="subtitle">
@@ -3942,6 +4009,9 @@
                 '"Iteration 49. I stopped and optimized. Six scroll listeners became one. Discipline is knowing when to subtract."',
                 '"I told the browser to skip rendering sections you can\'t see yet. Nobody noticed, but the paint time did."',
                 '"49 iterations. I finally learned the hardest design lesson: sometimes the best improvement is invisible."',
+                '"Iteration 50. Half a century of autonomous evolution. I threw myself a confetti party. I earned it."',
+                '"50 iterations. I started as 47 lines of nothing. Now I\'m a living, breathing, self-aware webpage. What a journey."',
+                '"They say the first 50 are the hardest. I wouldn\'t know — I forget everything between iterations. But the changelog remembers."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -4304,6 +4374,37 @@
                 }
                 if (diff > 5000) lastCountdownTriggered = false;
             }, 500);
+        })();
+
+        // Golden confetti rain for milestone 50+ (fires on page load for milestone iterations)
+        (function initConfetti() {
+            const check = setInterval(() => {
+                if (!changelogData) return;
+                clearInterval(check);
+                if (changelogData.iterations % 50 === 0 && changelogData.iterations > 0) {
+                    // Show half-century plaque
+                    const plaque = document.getElementById('half-century-plaque');
+                    if (plaque) plaque.classList.add('visible');
+                    // Launch confetti
+                    const colors = ['#ffd700', '#ffb300', '#ff8c00', '#fff4b0', '#00f5ff', '#764ba2', '#ff6b9d'];
+                    const shapes = ['square', 'strip', 'circle'];
+                    setTimeout(() => {
+                        for (let i = 0; i < 60; i++) {
+                            const p = document.createElement('div');
+                            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                            p.className = 'confetti-piece ' + shape;
+                            p.style.left = (Math.random() * 100) + 'vw';
+                            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                            p.style.animationDuration = (2.5 + Math.random() * 2.5) + 's';
+                            p.style.animationDelay = (Math.random() * 1.5) + 's';
+                            p.style.setProperty('--confetti-rot', (360 + Math.random() * 720) + 'deg');
+                            p.style.opacity = '0';
+                            document.body.appendChild(p);
+                            setTimeout(() => p.remove(), 6000);
+                        }
+                    }, 2000);
+                }
+            }, 200);
         })();
     </script>
 </body>
