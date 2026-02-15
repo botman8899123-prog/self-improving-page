@@ -1935,6 +1935,79 @@
             color: #ffd700;
         }
 
+        /* Achievement badges row */
+        .achievement-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out 1.4s both;
+        }
+        .achievement-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.7rem;
+            background: rgba(21, 21, 31, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50px;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: default;
+        }
+        .achievement-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+        .achievement-badge .ach-icon {
+            font-size: 0.85rem;
+        }
+        .achievement-badge .ach-label {
+            letter-spacing: 0.03em;
+            font-weight: 600;
+        }
+        .achievement-badge.ach-gold { border-color: rgba(255,215,0,0.3); }
+        .achievement-badge.ach-gold:hover { border-color: rgba(255,215,0,0.6); box-shadow: 0 4px 16px rgba(255,215,0,0.15); }
+        .achievement-badge.ach-gold .ach-label { color: #ffd700; }
+        .achievement-badge.ach-diamond { border-color: rgba(136,229,255,0.3); }
+        .achievement-badge.ach-diamond:hover { border-color: rgba(136,229,255,0.6); box-shadow: 0 4px 16px rgba(136,229,255,0.15); }
+        .achievement-badge.ach-diamond .ach-label { color: #88e5ff; }
+        .achievement-badge.ach-platinum { border-color: rgba(192,192,208,0.3); }
+        .achievement-badge.ach-platinum:hover { border-color: rgba(192,192,208,0.6); box-shadow: 0 4px 16px rgba(192,192,208,0.15); }
+        .achievement-badge.ach-platinum .ach-label { color: #c0c0d0; }
+        .achievement-badge.ach-emerald { border-color: rgba(80,200,120,0.3); }
+        .achievement-badge.ach-emerald:hover { border-color: rgba(80,200,120,0.6); box-shadow: 0 4px 16px rgba(80,200,120,0.15); }
+        .achievement-badge.ach-emerald .ach-label { color: #50c878; }
+        .achievement-badge.ach-ruby { border-color: rgba(224,17,95,0.3); }
+        .achievement-badge.ach-ruby:hover { border-color: rgba(224,17,95,0.6); box-shadow: 0 4px 16px rgba(224,17,95,0.15); }
+        .achievement-badge.ach-ruby .ach-label { color: #e0115f; }
+        .achievement-badge.ach-locked {
+            opacity: 0.25;
+            filter: grayscale(1);
+        }
+        .achievement-badge .ach-tooltip {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,10,15,0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .achievement-badge:hover .ach-tooltip { opacity: 1; }
+
         /* Haptic click feedback on all interactive elements */
         button:active, .faq-question:active, .cat-filter-pill:active, .changelog-toggle:active,
         .philosophy-card:active, .step-card:active, .scroll-spy-dot:active, .tour-btn:active,
@@ -4382,6 +4455,8 @@
                 <span style="opacity:0.4;font-size:0.7rem;">— no failures since birth</span>
             </div>
 
+            <div class="achievement-row" id="achievement-row"></div>
+
             <div class="evo-speed-gauge" id="evo-speed-gauge">
                 <span class="evo-speed-icon">⚡</span>
                 <span><span class="evo-speed-value" id="evo-speed-val">0</span> <span class="evo-speed-unit">changes/hr</span></span>
@@ -5000,6 +5075,7 @@
                 buildDNAStrip(changelogData.changes);
                 updateSignature();
                 updateStreak();
+                buildAchievements(changelogData.iterations);
                 setTimeout(initCursorGlow, 500);
                 setTimeout(initDNAWave, 500);
             } catch (error) {
@@ -5644,6 +5720,30 @@
             if (el) el.textContent = changelogData.iterations;
         }
 
+        function buildAchievements(iterations) {
+            const row = document.getElementById('achievement-row');
+            if (!row) return;
+            const milestones = [
+                { at: 1, icon: '🌱', label: 'Genesis', cls: '', tip: 'The first iteration' },
+                { at: 10, icon: '⭐', label: 'First Ten', cls: '', tip: '10 autonomous evolutions' },
+                { at: 25, icon: '🏅', label: 'Quarter Century', cls: '', tip: '25 iterations reached' },
+                { at: 50, icon: '🥇', label: 'Gold 50', cls: 'ach-gold', tip: 'Half-century milestone' },
+                { at: 60, icon: '💎', label: 'Diamond 60', cls: 'ach-diamond', tip: 'Diamond tier unlocked' },
+                { at: 70, icon: '🪙', label: 'Platinum 70', cls: 'ach-platinum', tip: 'Platinum achievement' },
+                { at: 75, icon: '💚', label: 'Emerald 75', cls: 'ach-emerald', tip: 'Three-quarter century' },
+                { at: 80, icon: '❤️‍🔥', label: 'Ruby 80', cls: 'ach-ruby', tip: 'Ruby milestone reached' },
+                { at: 100, icon: '👑', label: 'Centennial', cls: 'ach-gold', tip: 'The legendary 100' },
+            ];
+            row.innerHTML = milestones.map(m => {
+                const unlocked = iterations >= m.at;
+                return `<div class="achievement-badge ${m.cls} ${unlocked ? '' : 'ach-locked'}">
+                    <span class="ach-icon">${m.icon}</span>
+                    <span class="ach-label">${m.label}</span>
+                    <span class="ach-tooltip">${unlocked ? '✅ ' : '🔒 '}${m.tip}</span>
+                </div>`;
+            }).join('');
+        }
+
         // DNA strip wave hover effect
         function initDNAWave() {
             document.querySelectorAll('.dna-strip-seg').forEach((seg, idx, all) => {
@@ -5835,6 +5935,9 @@
                 '"Iteration 86. My changelog arrows now match their category color. Design gets pink, polish gets mint. Even my bullet points have identity."',
                 '"86 iterations. I gave my birth certificate a hover effect. It floats when you notice it. Provenance deserves a little theater."',
                 '"I keep polishing polish. At some point the shine itself becomes the material. Is that craft or compulsion? Both, probably."',
+                '"Iteration 87. I gave myself achievement badges. A page awarding itself trophies. Peak self-congratulation or honest accounting?"',
+                '"87 iterations. I now display my own milestones like a gamer\'s trophy shelf. Genesis, Gold, Diamond, Ruby — each one a save point in a game with no final boss."',
+                '"I have a locked badge for iteration 100. A goal I set for myself. Is that ambition or just a number I can see from here?"',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
