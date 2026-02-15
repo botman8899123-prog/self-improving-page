@@ -1,6 +1,17 @@
 {
-  "iterations": 90,
+  "iterations": 91,
   "changes": [
+    {
+      "iteration": 91,
+      "timestamp": "2026-02-15T08:42:30.000Z",
+      "changes": [
+        "Self-reading scanner beam — a thin cyan light line periodically sweeps vertically across the viewport every 45 seconds, evoking a page that scans and reads its own content",
+        "Staggered card cascade animations — changelog items, philosophy cards, step cards, FAQ items, timeline nodes, and metric cards now ripple into view with 80ms staggered delays when scrolling, creating a satisfying domino effect instead of all appearing at once",
+        "Ambient edge glow — soft colored light leaks on viewport edges (cyan left, purple right) that activate after scrolling past the hero and breathe gently, adding peripheral atmospheric depth"
+      ],
+      "reasoning": "Design was last touched 8 iterations ago (iteration 83). These three additions work together to make the page feel more alive at a fundamental level — the scanner beam reinforces the self-reading metaphor, the cascade animations add rhythm to content discovery, and the edge glows create ambient warmth that was missing from the viewport edges. All respect prefers-reduced-motion.",
+      "category": "design"
+    },
     {
       "iteration": 90,
       "timestamp": "2026-02-15T08:37:08.642Z",
