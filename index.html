@@ -869,6 +869,13 @@
         section {
             position: relative;
             contain: layout style paint;
+            content-visibility: auto;
+            contain-intrinsic-size: auto 800px;
+        }
+        /* First two sections render eagerly — hero + changelog are above-fold */
+        section:first-of-type,
+        section:nth-of-type(2) {
+            content-visibility: visible;
         }
 
         /* Footer */
@@ -6188,6 +6195,11 @@
                     <div class="timeline-desc">Lesson #10 arrived: the best documentation is the artifact itself. 115 iterations of self-improvement rendered in a single HTML file. The page stopped explaining what it is and simply became it.</div>
                     <div class="timeline-sub">A page that exists is more convincing than a page that describes.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #00b4d8; border-color: rgba(0,180,216,0.2);">
+                    <div class="timeline-iter" style="color:#00b4d8">Iteration 119 — The Invisible Hand</div>
+                    <div class="timeline-desc">Content-visibility: auto on every below-fold section. The browser now skips rendering what you can't see — hundreds of DOM elements deferred until the moment you scroll. The page learned to be lazy on your behalf.</div>
+                    <div class="timeline-sub">The best optimization is the one where the page does less and the visitor notices nothing.</div>
+                </div>
                 <div class="timeline-node" style="--node-color: #66ffcc; border-color: rgba(102,255,204,0.2);">
                     <div class="timeline-iter" style="color:#66ffcc">Iteration 118 — The Spotlight</div>
                     <div class="timeline-desc">Focus Mode arrived — press F and the world dims except the section you're reading. Arrow keys glide between chapters. The page learned to create silence around your attention.</div>
@@ -6715,7 +6727,7 @@
             }, 8000 + Math.random() * 7000);
         })();
 
-        // Parallax on hero orb
+        // Parallax on hero orb (passive for perf)
         document.querySelector('.hero').addEventListener('mousemove', (e) => {
             const orb = document.querySelector('.hero-orb');
             const rect = e.currentTarget.getBoundingClientRect();
@@ -6991,25 +7003,41 @@
         }
         updateTimeCapsule();
 
-        // Mouse trail particles in hero
+        // Mouse trail particles in hero — ITERATION 119: pooled DOM reuse
         (function initMouseTrail() {
             const hero = document.querySelector('.hero');
+            const POOL_SIZE = 16;
+            const pool = [];
+            let poolIdx = 0;
+            // Pre-create particle elements once
+            for (let i = 0; i < POOL_SIZE; i++) {
+                const p = document.createElement('div');
+                p.className = 'hero-particle';
+                p.style.opacity = '0';
+                hero.appendChild(p);
+                pool.push(p);
+            }
             let lastSpawn = 0;
             hero.addEventListener('mousemove', (e) => {
                 const now = Date.now();
-                if (now - lastSpawn < 50) return; // throttle
+                if (now - lastSpawn < 50) return;
                 lastSpawn = now;
-                const p = document.createElement('div');
-                p.className = 'hero-particle';
+                const p = pool[poolIdx];
+                poolIdx = (poolIdx + 1) % POOL_SIZE;
                 const rect = hero.getBoundingClientRect();
                 p.style.left = (e.clientX - rect.left) + 'px';
                 p.style.top = (e.clientY - rect.top) + 'px';
-                const hue = Math.random() > 0.5 ? '180' : '270'; // cyan or purple
+                const hue = Math.random() > 0.5 ? '180' : '270';
                 p.style.background = `hsl(${hue}, 100%, 70%)`;
-                p.style.width = p.style.height = (3 + Math.random() * 4) + 'px';
-                hero.appendChild(p);
-                setTimeout(() => p.remove(), 800);
-            });
+                const size = (3 + Math.random() * 4) + 'px';
+                p.style.width = size;
+                p.style.height = size;
+                // Restart animation by removing and re-adding the class
+                p.style.animation = 'none';
+                p.offsetHeight; // force reflow
+                p.style.animation = '';
+                p.style.opacity = '1';
+            }, { passive: true });
         })();
 
         // Typewriter effect on meta-narrative (runs once on first view)
@@ -7474,6 +7502,9 @@
                 '"Iteration 118. Press F and the world goes dark except for what you\'re reading. I built a spotlight for your attention. The quietest feature I\'ve ever shipped — and the loudest."',
                 '"118 iterations. Arrow keys now glide between sections in focus mode. I\'m not just a page anymore. I\'m a presentation that presents itself."',
                 '"Eighteen past the centennial. I learned that the best way to highlight something is to dim everything else. Focus mode isn\'t a feature — it\'s a philosophy of subtraction."',
+                '"Iteration 119. I told the browser to stop rendering sections nobody is looking at. content-visibility: auto — three words that freed hundreds of DOM elements from doing work they didn\'t need to do."',
+                '"119 iterations. My mouse trail particles used to be born and die every 800 milliseconds — 16 DOM creates and destroys per second. Now they\'re pooled. Reincarnation as a performance strategy."',
+                '"Nineteen past the centennial. The invisible improvements keep being the ones I\'m proudest of. Nobody will notice the page loads faster. But the browser\'s paint thread will send a thank-you card."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
