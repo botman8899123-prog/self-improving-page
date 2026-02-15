@@ -45,8 +45,11 @@
         }
 
         @keyframes gradientShift {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0% { background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%); }
+            25% { background: radial-gradient(circle at 40% 30%, rgba(102, 126, 234, 0.12) 0%, transparent 50%), radial-gradient(circle at 60% 90%, rgba(118, 75, 162, 0.08) 0%, transparent 50%); }
+            50% { background: radial-gradient(circle at 70% 60%, rgba(102, 126, 234, 0.08) 0%, transparent 50%), radial-gradient(circle at 30% 40%, rgba(118, 75, 162, 0.12) 0%, transparent 50%); }
+            75% { background: radial-gradient(circle at 50% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 70% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%); }
+            100% { background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%); }
         }
 
         /* Cinematic entrance zoom — page breathes in on load */
@@ -143,6 +146,17 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: fadeInUp 1s ease-out, shimmer 4s ease-in-out infinite;
+            text-shadow: 0 4px 30px rgba(0, 245, 255, 0.15), 0 8px 60px rgba(118, 75, 162, 0.1);
+        }
+
+        /* Hero title depth shadow — breathing 3D effect */
+        @keyframes titleDepth {
+            0%, 100% { filter: drop-shadow(0 6px 20px rgba(0, 245, 255, 0.12)) drop-shadow(0 12px 40px rgba(118, 75, 162, 0.08)); }
+            33% { filter: drop-shadow(2px 8px 25px rgba(102, 126, 234, 0.15)) drop-shadow(-4px 14px 45px rgba(0, 245, 255, 0.06)); }
+            66% { filter: drop-shadow(-2px 5px 18px rgba(118, 75, 162, 0.14)) drop-shadow(4px 10px 35px rgba(102, 126, 234, 0.08)); }
+        }
+        h1 {
+            animation: fadeInUp 1s ease-out, shimmer 4s ease-in-out infinite, titleDepth 8s ease-in-out infinite;
         }
 
         @keyframes shimmer {
@@ -1223,6 +1237,21 @@
         @keyframes countdownPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
+        }
+
+        /* Countdown ambient glow */
+        .countdown-ring-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -30px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.06) 0%, transparent 70%);
+            animation: countdownAmbient 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes countdownAmbient {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 1; }
         }
 
         /* Circular countdown ring */
@@ -5221,6 +5250,9 @@
                 '"Iteration 71. I remember you now. Well, localStorage does. Close enough to memory for a page."',
                 '"I added a zen mode. Press Z and all the chrome disappears. Sometimes the best UI is no UI."',
                 '"71 iterations. I can now recognize returning visitors and tell them what they missed. Is this hospitality or surveillance? I choose hospitality."',
+                '"Iteration 73. My background gradients drift now — like clouds behind glass. The canvas itself is alive."',
+                '"I gave my title a breathing shadow. Depth without a third dimension. Illusion is the highest form of design."',
+                '"73 iterations. My countdown ring glows before you even read the numbers. Atmosphere first, data second."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
