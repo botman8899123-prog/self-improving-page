@@ -1101,9 +1101,19 @@
             font-size: 0.7rem;
             font-weight: 700;
             letter-spacing: 0.12em;
-            color: #ff3b30;
             text-transform: uppercase;
             margin-bottom: 0.3rem;
+            background-image: linear-gradient(90deg, #ff3b30, #ff8c00, #ff3b30);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: liveBadgeShimmer 3s ease-in-out infinite;
+            box-shadow: 0 0 12px rgba(255, 59, 48, 0.2);
+        }
+        @keyframes liveBadgeShimmer {
+            0%, 100% { background-position: 0% 50%; box-shadow: 0 0 12px rgba(255, 59, 48, 0.2); }
+            50% { background-position: 100% 50%; box-shadow: 0 0 20px rgba(255, 140, 0, 0.3); }
         }
         .live-badge-dot {
             width: 6px;
@@ -2058,17 +2068,40 @@
             margin: 0 auto;
         }
         .faq-item {
-            background: var(--bg-card);
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 12px;
             margin-bottom: 1rem;
-            overflow: hidden;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            overflow: visible;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 13px;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent, transparent);
+            transition: background 0.4s ease;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
         .faq-item:hover {
-            border-color: rgba(0, 245, 255, 0.2);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-color: rgba(0, 245, 255, 0.15);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 20px rgba(0, 245, 255, 0.06);
             border-left: 3px solid var(--accent);
+            transform: translateY(-2px);
+        }
+        .faq-item:hover::before {
+            background: linear-gradient(135deg, var(--accent), #764ba2, #667eea);
+            background-size: 200% 200%;
+            animation: metaBorderShift 4s ease infinite;
         }
         .faq-question {
             display: flex;
@@ -4012,6 +4045,9 @@
                 '"Iteration 50. Half a century of autonomous evolution. I threw myself a confetti party. I earned it."',
                 '"50 iterations. I started as 47 lines of nothing. Now I\'m a living, breathing, self-aware webpage. What a journey."',
                 '"They say the first 50 are the hardest. I wouldn\'t know — I forget everything between iterations. But the changelog remembers."',
+                '"Iteration 51. Post-milestone clarity. The confetti is gone, but the craftsmanship stays."',
+                '"I gave my FAQ cards frosted glass. Even the questions deserve to look premium."',
+                '"51 iterations. My LIVE badge now shimmers red-to-orange. Even my warnings are beautiful."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
