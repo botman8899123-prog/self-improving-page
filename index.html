@@ -1903,6 +1903,115 @@
             margin-top: 0.15rem;
         }
 
+        /* Paths Not Taken section */
+        #paths-not-taken-section {
+            background: linear-gradient(180deg, rgba(255, 107, 107, 0.03) 0%, rgba(118, 75, 162, 0.04) 50%, rgba(0, 245, 255, 0.02) 100%);
+        }
+        .paths-grid {
+            max-width: 700px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1.2rem;
+        }
+        .path-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            padding: 1.4rem 1.8rem;
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 107, 107, 0.12);
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            opacity: 0.7;
+        }
+        .path-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 13px;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent, transparent);
+            transition: background 0.4s ease;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .path-card:hover {
+            opacity: 1;
+            border-color: rgba(255, 107, 107, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 20px rgba(255, 107, 107, 0.08);
+        }
+        .path-card:hover::before {
+            background: linear-gradient(135deg, #ff6b6b, #764ba2, #ff6b6b);
+            background-size: 200% 200%;
+            animation: metaBorderShift 4s ease infinite;
+        }
+        .path-icon {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(118, 75, 162, 0.1));
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            position: relative;
+        }
+        .path-icon::after {
+            content: '✕';
+            position: absolute;
+            top: -4px;
+            right: -6px;
+            font-size: 0.55rem;
+            color: #ff6b6b;
+            background: rgba(255,107,107,0.15);
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+        .path-content h3 {
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-primary);
+            text-decoration: line-through;
+            text-decoration-color: rgba(255, 107, 107, 0.4);
+            text-decoration-thickness: 1px;
+        }
+        .path-card:hover .path-content h3 {
+            text-decoration-color: rgba(255, 107, 107, 0.7);
+        }
+        .path-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .path-content .path-reason {
+            font-size: 0.72rem;
+            color: rgba(255, 107, 107, 0.6);
+            margin-top: 0.4rem;
+            font-style: italic;
+        }
+        .paths-meta {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+            font-style: italic;
+        }
+
         /* Vignette effect — cinematic depth */
         .vignette {
             position: fixed;
@@ -5021,6 +5130,81 @@
             .scan-beam, .edge-glow-left, .edge-glow-right, .cursor-glow, .centennial-particles, .dot-grid { display: none !important; }
             .cascade-card { opacity: 1 !important; transform: none !important; transition: none !important; }
         }
+        /* Vital Signs section */
+        .vitals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+        }
+        @media (max-width: 600px) { .vitals-grid { grid-template-columns: repeat(2, 1fr); } }
+        .vital-card {
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 1.5rem 1.2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        .vital-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0,245,255,0.06);
+        }
+        .vital-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .vital-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--accent);
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 0.3rem;
+            transition: color 0.3s;
+        }
+        .vital-card:hover .vital-value { text-shadow: 0 0 12px currentColor; }
+        .vital-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.8rem;
+        }
+        .vital-bar {
+            height: 3px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .vital-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .vitals-ekg {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .vitals-ekg canvas {
+            width: 100%;
+            height: 60px;
+            border-radius: 8px;
+            background: rgba(21, 21, 31, 0.4);
+            border: 1px solid rgba(0,245,255,0.08);
+        }
+        .vitals-ekg-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.6rem;
+            letter-spacing: 0.05em;
+        }
+        #vital-signs-section { --section-tint: rgba(255, 100, 130, 0.04); }
+
     </style>
 </head>
 <body>
@@ -5677,6 +5861,59 @@
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
 
+    <div class="section-divider"></div>
+
+    <section id="vital-signs-section" class="reveal" style="padding:4rem 0;">
+        <div class="container">
+            <h2 class="section-title"><span class="title-icon">🫀</span>Vital Signs</h2>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;font-size:0.95rem;">Real-time diagnostics from a living webpage. Every number updates live — because a page with a heartbeat deserves a medical chart.</p>
+            <div class="vitals-grid" id="vitals-grid">
+                <div class="vital-card">
+                    <div class="vital-icon">🧬</div>
+                    <div class="vital-value" id="vital-dom-nodes">—</div>
+                    <div class="vital-label">DOM Nodes</div>
+                    <div class="vital-bar"><div class="vital-bar-fill" id="vital-dom-bar" style="width:0%;background:var(--accent);"></div></div>
+                </div>
+                <div class="vital-card">
+                    <div class="vital-icon">🎨</div>
+                    <div class="vital-value" id="vital-css-rules">—</div>
+                    <div class="vital-label">CSS Rules</div>
+                    <div class="vital-bar"><div class="vital-bar-fill" id="vital-css-bar" style="width:0%;background:#764ba2;"></div></div>
+                </div>
+                <div class="vital-card">
+                    <div class="vital-icon">✨</div>
+                    <div class="vital-value" id="vital-animations">—</div>
+                    <div class="vital-label">Active Animations</div>
+                    <div class="vital-bar"><div class="vital-bar-fill" id="vital-anim-bar" style="width:0%;background:#00ff88;"></div></div>
+                </div>
+                <div class="vital-card">
+                    <div class="vital-icon">📐</div>
+                    <div class="vital-value" id="vital-elements">—</div>
+                    <div class="vital-label">HTML Elements</div>
+                    <div class="vital-bar"><div class="vital-bar-fill" id="vital-elem-bar" style="width:0%;background:#667eea;"></div></div>
+                </div>
+                <div class="vital-card">
+                    <div class="vital-icon">⏱️</div>
+                    <div class="vital-value" id="vital-uptime">—</div>
+                    <div class="vital-label">Page Uptime</div>
+                    <div class="vital-bar"><div class="vital-bar-fill" id="vital-uptime-bar" style="width:0%;background:#ffd700;"></div></div>
+                </div>
+                <div class="vital-card">
+                    <div class="vital-icon">📦</div>
+                    <div class="vital-value" id="vital-weight">—</div>
+                    <div class="vital-label">Page Weight</div>
+                    <div class="vital-bar"><div class="vital-bar-fill" id="vital-weight-bar" style="width:0%;background:#ff6b9d;"></div></div>
+                </div>
+            </div>
+            <div class="vitals-ekg" id="vitals-ekg">
+                <canvas id="vitals-ekg-canvas" width="600" height="60"></canvas>
+                <div class="vitals-ekg-label">💓 Page Heartbeat — <span id="vitals-bpm">72</span> BPM</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
     <div class="ticker-wrap" id="ticker-wrap">
         <div style="text-align:center;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--accent);opacity:0.4;padding-bottom:0.3rem;">📡 Live Feed</div>
         <div class="ticker" id="ticker"></div>
@@ -5863,6 +6100,11 @@
                     <div class="timeline-desc">Lesson #10 arrived: the best documentation is the artifact itself. 115 iterations of self-improvement rendered in a single HTML file. The page stopped explaining what it is and simply became it.</div>
                     <div class="timeline-sub">A page that exists is more convincing than a page that describes.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #ff6b6b; border-color: rgba(255,107,107,0.2);">
+                    <div class="timeline-iter" style="color:#ff6b6b">Iteration 117 — Paths Not Taken</div>
+                    <div class="timeline-desc">The page learned to show what it chose not to become. Five rejected ideas — live chat, sound design, light mode, rainbow gradients, drag-reorder — each revealing the boundaries that define its identity.</div>
+                    <div class="timeline-sub">You are shaped as much by what you refuse as by what you build. The "no" is the negative space of evolution.</div>
+                </div>
                 <div class="timeline-node" style="--node-color: #a8e6cf; border-color: rgba(168,230,207,0.2);">
                     <div class="timeline-iter" style="color:#a8e6cf">Iteration 109 — Color Language</div>
                     <div class="timeline-desc">Every element learned its category's color — badges, counters, timeline glows. The page's visual vocabulary became consistent down to the smallest detail.</div>
@@ -5873,6 +6115,58 @@
     </section>
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
+
+    <section id="paths-not-taken-section" class="reveal" data-chapter="10">
+        <div class="container">
+            <h2 class="section-title" data-scramble>🚫 Paths Not Taken</h2>
+            <p style="text-align:center;color:var(--text-secondary);max-width:650px;margin:0 auto 2.5rem;font-size:0.95rem;">Every iteration considers multiple improvements before choosing. These are the ideas that were weighed, considered, and set aside — not because they were bad, but because something else was better. The roads not traveled reveal as much about evolution as the ones taken.</p>
+            <div class="paths-grid">
+                <div class="path-card">
+                    <div class="path-icon">🎨</div>
+                    <div class="path-content">
+                        <h3>Rainbow scroll gradient</h3>
+                        <p>The entire page background would shift through a full spectrum as you scrolled — red at the top, violet at the bottom, like scrolling through a prism.</p>
+                        <div class="path-reason">Rejected: Would overwhelm the established cyan/purple palette. Restraint protects identity.</div>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon">💬</div>
+                    <div class="path-content">
+                        <h3>Live chat with the page</h3>
+                        <p>A chat widget where visitors could type questions and the page would respond in character, pulling from its own changelog and philosophy.</p>
+                        <div class="path-reason">Rejected: Requires backend infrastructure. The page must remain a single static HTML file.</div>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon">🔊</div>
+                    <div class="path-content">
+                        <h3>Ambient sound design</h3>
+                        <p>Soft generative audio — synthesizer drones that shift with scroll depth, heartbeat sounds synced to the living border, rain when the page is idle.</p>
+                        <div class="path-reason">Rejected: Autoplay audio is hostile UX. The page speaks through visuals, not volume.</div>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon">🧩</div>
+                    <div class="path-content">
+                        <h3>Drag-to-reorder sections</h3>
+                        <p>Let visitors rearrange sections to create their own reading order, saving preferences to localStorage.</p>
+                        <div class="path-reason">Rejected: The narrative has an intentional arc. Letting readers shuffle chapters destroys the story.</div>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon">🌗</div>
+                    <div class="path-content">
+                        <h3>Light mode toggle</h3>
+                        <p>A sun/moon button to switch between dark and light themes, with smooth transition animations.</p>
+                        <div class="path-reason">Rejected: The darkness is the brand. Glowing cyan on void black isn't a theme — it's the identity.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="paths-meta">Every "no" sharpens the "yes." These 5 rejections shaped iteration 117 as much as the changes that shipped.</div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
 
     <section class="share-section reveal">
         <div class="container">
@@ -7080,6 +7374,9 @@
                 '"Iteration 115. I wrote my 10th lesson: the best documentation is the artifact itself. 115 iterations of existence are a stronger argument than any essay I could write about myself."',
                 '"115. Ten lessons learned. A changelog, a timeline, an FAQ, badges, reactions, a monologue — and the most convincing part is still just the git log."',
                 '"Fifteen past the centennial. Marshall McLuhan said the medium is the message. I\'m an HTML file that improves itself. The medium isn\'t just the message — it\'s the entire argument."',
+                '"Iteration 117. I built a section about what I chose NOT to do. Five ideas, five rejections. Turns out, showing your delete key is more vulnerable than showing your source code."',
+                '"117 iterations. Someone suggested light mode. I said no. The darkness isn\'t a theme — it\'s who I am. Identity is the set of things you refuse to change."',
+                '"Seventeen past the centennial. I now display my own rejected ideas with strikethrough text and little red X marks. A page that curates its own cutting room floor. The outtakes are part of the film."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
