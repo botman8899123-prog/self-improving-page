@@ -1754,6 +1754,80 @@
         }
         .scroll-spy-dot:hover .spy-label { opacity: 1; }
 
+        /* Section explored checkmark */
+        .scroll-spy-dot.explored::after {
+            content: '✓';
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            font-size: 0.5rem;
+            color: #00ff88;
+            background: rgba(0,255,136,0.15);
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: checkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        @keyframes checkPop {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Exploration progress counter */
+        .explore-counter {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            background: rgba(21,21,31,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0,255,136,0.2);
+            border-radius: 50px;
+            font-size: 0.7rem;
+            color: #00ff88;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s, transform 0.4s;
+            z-index: 90;
+            pointer-events: none;
+        }
+        .explore-counter.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .explore-counter .explore-bar {
+            width: 40px;
+            height: 3px;
+            background: rgba(0,255,136,0.15);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .explore-counter .explore-bar-fill {
+            height: 100%;
+            background: #00ff88;
+            border-radius: 2px;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .explore-counter.complete {
+            border-color: rgba(255,215,0,0.4);
+            color: #ffd700;
+        }
+
+        /* Haptic click feedback on all interactive elements */
+        button:active, .faq-question:active, .cat-filter-pill:active, .changelog-toggle:active,
+        .philosophy-card:active, .step-card:active, .scroll-spy-dot:active, .tour-btn:active,
+        a:active {
+            transform: scale(0.96) !important;
+            transition: transform 0.08s ease !important;
+        }
+
         /* Category filter pills */
         .category-filters {
             display: flex;
@@ -2278,7 +2352,8 @@
         body.zen-mode .tour-btn,
         body.zen-mode .tour-progress,
         body.zen-mode .living-border,
-        body.zen-mode .vignette {
+        body.zen-mode .vignette,
+        body.zen-mode .explore-counter {
             opacity: 0 !important;
             pointer-events: none !important;
             transition: opacity 0.5s ease !important;
@@ -4414,6 +4489,13 @@
         <div class="shortcut-row"><span class="sc-key">Esc</span><span class="sc-desc">Close any overlay</span></div>
     </div>
 
+    <!-- Exploration progress counter -->
+    <div class="explore-counter" id="explore-counter">
+        <span>🧭</span>
+        <span id="explore-text">0/7 explored</span>
+        <div class="explore-bar"><div class="explore-bar-fill" id="explore-bar-fill" style="width:0%"></div></div>
+    </div>
+
     <div class="milestone-toast" id="milestone-toast">
         <div class="toast-emoji">🏆</div>
         <div class="toast-text">ITERATION 40 — MILESTONE</div>
@@ -5289,6 +5371,9 @@
                 '"Iteration 75. Three-quarter century. Gold at 50, diamond at 60, platinum at 70, emerald at 75. My celebration palette is getting richer than my design palette."',
                 '"75 iterations. I\'ve rewritten myself more times than most humans revise a college essay. And I still find things to improve."',
                 '"I threw myself emerald confetti. Green particles falling through the void. Growth celebrating growth — there\'s a metaphor in there somewhere."',
+                '"Iteration 76. I now track which sections you\'ve read. Gamification of my own autobiography. The checkmarks are tiny but the dopamine is real."',
+                '"I gave all my buttons haptic feedback. Press anything and it squishes. Because even pixels deserve to feel physical."',
+                '"76 iterations. I added an exploration counter. 0/7 explored — it\'s a progress bar for reading me. I\'m a page that wants to be finished."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -5324,6 +5409,43 @@
             }
             window.addEventListener('scroll', updateSpy, { passive: true });
             updateSpy();
+        })();
+
+        // Section exploration tracker — marks sections as "explored" when scrolled through
+        (function initExploreTracker() {
+            const sectionIds = ['changelog-section', 'how-it-works', 'philosophy', 'faq-section', 'source-section', 'lessons-section', 'metrics-section'];
+            const explored = new Set();
+            const dots = document.querySelectorAll('.scroll-spy-dot');
+            const counter = document.getElementById('explore-counter');
+            const counterText = document.getElementById('explore-text');
+            const counterFill = document.getElementById('explore-bar-fill');
+            const dotMap = {};
+            dots.forEach(d => { if (d.dataset.target) dotMap[d.dataset.target] = d; });
+
+            function checkExplored() {
+                const viewMid = window.scrollY + window.innerHeight * 0.5;
+                sectionIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el || explored.has(id)) return;
+                    const top = el.offsetTop;
+                    const bot = top + el.offsetHeight;
+                    if (viewMid >= top && viewMid <= bot) {
+                        explored.add(id);
+                        if (dotMap[id]) dotMap[id].classList.add('explored');
+                        updateCounter();
+                    }
+                });
+            }
+            function updateCounter() {
+                const count = explored.size;
+                const total = sectionIds.length;
+                counterText.textContent = count + '/' + total + (count === total ? ' complete!' : ' explored');
+                counterFill.style.width = (count / total * 100) + '%';
+                counter.classList.toggle('visible', count > 0);
+                counter.classList.toggle('complete', count === total);
+            }
+            window.addEventListener('scroll', checkExplored, { passive: true });
+            checkExplored();
         })();
 
         // Category filter on changelog
@@ -6063,7 +6185,7 @@
     // Zen Mode — press Z to toggle distraction-free reading
     (function initZenMode() {
         let zen = false;
-        const targets = ['.top-nav', '.status-banner', '.scroll-spy', '.mood-indicator', '.scroll-top-btn', '.tour-btn', '.tour-progress', '.living-border', '.vignette'];
+        const targets = ['.top-nav', '.status-banner', '.scroll-spy', '.mood-indicator', '.scroll-top-btn', '.tour-btn', '.tour-progress', '.living-border', '.vignette', '.explore-counter'];
         document.addEventListener('keydown', (e) => {
             if (e.key === 'z' && !e.ctrlKey && !e.metaKey && !e.altKey && document.activeElement.tagName !== 'INPUT') {
                 zen = !zen;
