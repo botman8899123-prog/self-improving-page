@@ -1,6 +1,17 @@
 {
-  "iterations": 24,
+  "iterations": 25,
   "changes": [
+    {
+      "iteration": 25,
+      "timestamp": "2026-02-15T02:35:00+02:00",
+      "changes": [
+        "Added time capsule message in hero — contextual pill showing journey from 47 lines to 2,371 lines, all AI-written",
+        "Added interactive cursor glow on changelog entries — radial light follows mouse for tactile depth",
+        "Added staggered section reveal delays — sections animate in sequentially for cinematic scroll experience"
+      ],
+      "reasoning": "The hero had stats but no narrative context about the journey. The time capsule gives visitors an instant 'wow' moment. Cursor glow adds interactivity to the changelog — the most-read section. Staggered reveals replace simultaneous pop-ins with a cinematic cascade.",
+      "category": "ux"
+    },
     {
       "iteration": 24,
       "timestamp": "2026-02-15T02:28:00+02:00",

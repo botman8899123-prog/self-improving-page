@@ -1530,6 +1530,62 @@
             vertical-align: middle;
         }
 
+        /* Time capsule */
+        .time-capsule {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            padding: 0.9rem 1.5rem;
+            background: rgba(255, 215, 0, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 50px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            animation: fadeInUp 1s ease-out 1.1s both;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .time-capsule:hover {
+            border-color: rgba(255, 215, 0, 0.35);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.08);
+        }
+        .time-capsule-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .time-capsule strong {
+            color: var(--accent);
+        }
+
+        /* Changelog cursor glow */
+        .changelog-item {
+            position: relative;
+            overflow: hidden;
+        }
+        .changelog-item .cursor-glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.07) 0%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .changelog-item:hover .cursor-glow {
+            opacity: 1;
+        }
+
+        /* Staggered reveal */
+        .reveal:nth-of-type(1) { transition-delay: 0s; }
+        .reveal:nth-of-type(2) { transition-delay: 0.15s; }
+        .reveal:nth-of-type(3) { transition-delay: 0.3s; }
+        .reveal:nth-of-type(4) { transition-delay: 0.45s; }
+        .reveal:nth-of-type(5) { transition-delay: 0.6s; }
+        .reveal:nth-of-type(6) { transition-delay: 0.75s; }
+
         /* Smooth entrance for hero elements */
         .hero .iteration-badge {
             animation: fadeInUp 0.6s ease-out 0.1s both, pulse 3s ease-in-out infinite;
@@ -1610,6 +1666,11 @@
             </div>
 
             <div class="latest-evolution-card" id="latest-evolution-card" style="display:none;"></div>
+
+            <div class="time-capsule" id="time-capsule">
+                <span class="time-capsule-icon">🕰️</span>
+                <span class="time-capsule-text">You're viewing iteration <strong>25</strong>. The first visitor saw a blank page with 47 lines of code. Now it has <span id="capsule-lines">2,283</span> lines — all written by AI.</span>
+            </div>
 
             <div class="countdown-section">
                 <div class="live-badge"><span class="live-badge-dot"></span> Live</div>
@@ -1866,6 +1927,7 @@
                 updateLatestCard(changelogData.changes);
                 buildDNAStrip(changelogData.changes);
                 updateSignature();
+                setTimeout(initCursorGlow, 500);
             } catch (error) {
                 console.error('Failed to load changelog:', error);
             }
@@ -2265,6 +2327,32 @@
         }
         // Run after content loads
         setTimeout(initTilt, 2000);
+
+        // Cursor glow on changelog items
+        function initCursorGlow() {
+            document.querySelectorAll('.changelog-item').forEach(item => {
+                let glow = item.querySelector('.cursor-glow');
+                if (!glow) {
+                    glow = document.createElement('div');
+                    glow.className = 'cursor-glow';
+                    item.appendChild(glow);
+                }
+                item.addEventListener('mousemove', (e) => {
+                    const rect = item.getBoundingClientRect();
+                    glow.style.left = (e.clientX - rect.left) + 'px';
+                    glow.style.top = (e.clientY - rect.top) + 'px';
+                });
+            });
+        }
+
+        // Update time capsule line count
+        function updateTimeCapsule() {
+            fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
+                const el = document.getElementById('capsule-lines');
+                if (el) el.textContent = t.split('\n').length.toLocaleString();
+            }).catch(() => {});
+        }
+        updateTimeCapsule();
 
         // Initialize
         initDNA();
