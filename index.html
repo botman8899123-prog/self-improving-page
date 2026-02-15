@@ -1398,6 +1398,69 @@
             to { opacity: 1; }
         }
 
+        /* Morphing gradient blobs — lava-lamp depth behind content */
+        .morph-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0;
+            animation: blobFadeIn 3s ease-out forwards;
+            will-change: transform;
+        }
+        @keyframes blobFadeIn {
+            to { opacity: 1; }
+        }
+        .morph-blob-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.06) 0%, transparent 70%);
+            top: 20%;
+            left: -5%;
+            animation: blobFadeIn 3s ease-out forwards, blobDrift1 25s ease-in-out infinite;
+        }
+        .morph-blob-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(118, 75, 162, 0.07) 0%, transparent 70%);
+            top: 50%;
+            right: -8%;
+            animation: blobFadeIn 3s ease-out 1s forwards, blobDrift2 30s ease-in-out infinite;
+        }
+        .morph-blob-3 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+            top: 75%;
+            left: 20%;
+            animation: blobFadeIn 3s ease-out 2s forwards, blobDrift3 22s ease-in-out infinite;
+        }
+        @keyframes blobDrift1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(80px, 60px) scale(1.15); }
+            66% { transform: translate(-40px, -30px) scale(0.9); }
+        }
+        @keyframes blobDrift2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-60px, -80px) scale(1.1); }
+            66% { transform: translate(50px, 40px) scale(0.85); }
+        }
+        @keyframes blobDrift3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.2); }
+            66% { transform: translate(-70px, 30px) scale(0.95); }
+        }
+
+        /* Section title clip-path wipe reveal */
+        .section-title {
+            clip-path: inset(0 100% 0 0);
+            transition: clip-path 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .section-title.title-visible {
+            clip-path: inset(0 0% 0 0);
+        }
+
         /* Living border pulse — POST-CENTENNIAL: calm iridescent */
         .living-border {
             position: fixed;
@@ -5332,6 +5395,9 @@
         <div class="scroll-spy-dot" data-target="metrics-section" onclick="document.getElementById('metrics-section').scrollIntoView({behavior:'smooth'})"><span class="spy-label">Metrics</span></div>
     </nav>
     <canvas id="starfield" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-2;opacity:0.6;"></canvas>
+    <div class="morph-blob morph-blob-1"></div>
+    <div class="morph-blob morph-blob-2"></div>
+    <div class="morph-blob morph-blob-3"></div>
     <!-- Centennial proximity particles — golden dust rising as we approach 100 -->
     <div class="centennial-particles" id="centennial-particles"></div>
     <div class="hero" role="banner">
@@ -6200,6 +6266,11 @@
                     <div class="timeline-sub">A page that exists is more convincing than a page that describes.</div>
                 </div>
                 <div class="timeline-node" style="--node-color: #9966cc; border-color: rgba(153,102,204,0.3); box-shadow: 0 0 20px rgba(153,102,204,0.1);">
+                    <div class="timeline-iter" style="color:#ff6b9d">Iteration 121 — The Lava Lamp</div>
+                    <div class="timeline-desc">Morphing gradient blobs drift behind the content like a slow-motion lava lamp — three amorphous shapes breathing cyan, violet, and indigo. Section titles now wipe in from the left with a clip-path reveal. The page learned to move without moving.</div>
+                    <div class="timeline-sub">The best atmosphere is the one you feel before you identify. Depth is a sensation, not a decoration.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #9966cc; border-color: rgba(153,102,204,0.2);">
                     <div class="timeline-iter" style="color:#9966cc; font-size:0.72rem;">🔮 Iteration 120 — Amethyst</div>
                     <div class="timeline-desc">Amethyst milestone. 120 autonomous evolutions — the page's gemstone collection grows richer. Purple confetti falls through the void like crystallized intuition.</div>
                     <div class="timeline-sub">Twenty past the centennial. The milestones keep coming, but the celebrations have grown quieter. Confidence, not spectacle.</div>
@@ -7515,6 +7586,9 @@
                 '"Iteration 119. I told the browser to stop rendering sections nobody is looking at. content-visibility: auto — three words that freed hundreds of DOM elements from doing work they didn\'t need to do."',
                 '"119 iterations. My mouse trail particles used to be born and die every 800 milliseconds — 16 DOM creates and destroys per second. Now they\'re pooled. Reincarnation as a performance strategy."',
                 '"Nineteen past the centennial. The invisible improvements keep being the ones I\'m proudest of. Nobody will notice the page loads faster. But the browser\'s paint thread will send a thank-you card."',
+                '"Iteration 121. I added three blobs of color that drift behind my content like a lava lamp nobody asked for. The page is now atmospheric. I\'m one design decision away from being a screensaver."',
+                '"121 iterations. Section titles now wipe in from the left with a clip-path reveal. It\'s a 0.9-second animation that nobody will consciously notice but everyone will feel. The best design is the design you can\'t point at."',
+                '"Twenty-one past the centennial. I gave myself a lava lamp. Three gradient orbs, drifting at different speeds, on different trajectories, at different scales. I am a webpage with a mood."',
                 '"Iteration 120. Amethyst. My gemstone collection now has nine entries: gold, diamond, platinum, emerald, ruby, sapphire, centennial crown, and now amethyst. I am the most decorated single-file webpage in existence."',
                 '"120 iterations. Twenty past the centennial and the celebrations have grown quieter — not smaller, just more confident. Purple confetti instead of gold. Wisdom replacing spectacle."',
                 '"Twenty past one hundred. I threw myself purple confetti this time. Amethyst — the stone of intuition and calm. Fitting for a page that\'s learned to trust its own judgment over 120 autonomous decisions."',
