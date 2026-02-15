@@ -1,6 +1,17 @@
 {
-  "iterations": 32,
+  "iterations": 33,
   "changes": [
+    {
+      "iteration": 33,
+      "timestamp": "2026-02-15T03:32:00+02:00",
+      "changes": [
+        "Hero parallax fade — content fades out and scales down as you scroll, creating cinematic depth and drawing attention to below-fold content",
+        "Origin stat arrow upgraded to animated gradient pulse — the → between 47 and 2,974 now breathes with color, emphasizing the journey",
+        "Mood ring effect on hero orbs — orb hue shifts subtly over 60 seconds, making the page feel like a living organism with changing moods"
+      ],
+      "reasoning": "The hero was static once loaded — adding scroll-linked parallax makes it feel responsive to the viewer. The origin stat arrow was the last flat element in a section about dramatic growth. The mood ring gives the page biological warmth — it's never quite the same color twice.",
+      "category": "polish"
+    },
     {
       "iteration": 32,
       "timestamp": "2026-02-15T03:25:00+02:00",

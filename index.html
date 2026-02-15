@@ -1494,6 +1494,50 @@
             text-align: right;
         }
 
+        /* Hero parallax fade on scroll */
+        .hero {
+            transition: none;
+        }
+        .hero .container {
+            transition: none;
+            will-change: transform, opacity;
+        }
+
+        /* Mood ring — accent hue shifts slowly over time */
+        @keyframes moodShift {
+            0% { filter: hue-rotate(0deg); }
+            25% { filter: hue-rotate(10deg); }
+            50% { filter: hue-rotate(-5deg); }
+            75% { filter: hue-rotate(8deg); }
+            100% { filter: hue-rotate(0deg); }
+        }
+        .hero-orb, .hero-orb-secondary {
+            animation-name: orbBreathe, moodShift;
+            animation-duration: 6s, 60s;
+            animation-timing-function: ease-in-out, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+        }
+        .hero-orb-secondary {
+            animation-duration: 8s, 45s;
+            animation-delay: 2s, 15s;
+        }
+
+        /* Animated pulse on origin arrow */
+        .origin-arrow {
+            display: inline-block;
+            animation: arrowPulse 2s ease-in-out infinite;
+            background: linear-gradient(90deg, #667eea, var(--accent), #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            padding: 0 0.2em;
+        }
+        @keyframes arrowPulse {
+            0%, 100% { transform: scale(1) translateX(0); opacity: 1; }
+            50% { transform: scale(1.2) translateX(3px); opacity: 0.8; }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -2111,7 +2155,7 @@
     <section class="reveal">
         <div class="container">
             <div class="origin-stat">
-                <div class="origin-number" id="origin-lines">47 → <span id="origin-current-lines">2000+</span></div>
+                <div class="origin-number" id="origin-lines">47 <span class="origin-arrow">→</span> <span id="origin-current-lines">2000+</span></div>
                 <div class="origin-label">Lines of code. This page started as a blank HTML skeleton.</div>
                 <div class="origin-sub">Every line was written by AI. Zero human keystrokes.</div>
             </div>
@@ -2897,6 +2941,21 @@
             const pct = scrollHeight > 0 ? Math.round((scrollTop / scrollHeight) * 100) : 0;
             el.textContent = pct + '%';
         }, { passive: true });
+
+        // Hero parallax fade on scroll
+        (function initHeroParallax() {
+            const hero = document.querySelector('.hero');
+            const heroContent = hero.querySelector('.container');
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                const heroH = hero.offsetHeight;
+                if (scrollY < heroH) {
+                    const pct = scrollY / heroH;
+                    heroContent.style.opacity = 1 - pct * 0.8;
+                    heroContent.style.transform = `scale(${1 - pct * 0.08}) translateY(${scrollY * 0.15}px)`;
+                }
+            }, { passive: true });
+        })();
 
         // Initialize
         initDNA();
