@@ -6347,6 +6347,34 @@
             color: var(--accent);
         }
 
+        /* Iteration 142: Section focus accent bar — glowing left edge on active section */
+        section[data-chapter]::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10%;
+            bottom: 10%;
+            width: 3px;
+            background: linear-gradient(180deg, transparent, var(--accent), #764ba2, transparent);
+            border-radius: 2px;
+            opacity: 0;
+            transform: scaleY(0.3);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            filter: drop-shadow(0 0 6px var(--accent-glow));
+            z-index: 5;
+        }
+        section[data-chapter].section-focused::after {
+            opacity: 1;
+            transform: scaleY(1);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            section[data-chapter]::after { transition: none; }
+        }
+        @media (max-width: 768px) {
+            section[data-chapter]::after { width: 2px; }
+        }
+
     </style>
 </head>
 <body>
@@ -7361,6 +7389,11 @@
                     <div class="timeline-iter" style="color:#c0a0ff">Iteration 124 — The Time Capsules</div>
                     <div class="timeline-desc">The page learned to write letters to itself — messages sealed at key milestones, now opened by the version that lived long enough to answer them. A dialogue between past and present.</div>
                     <div class="timeline-sub">The deepest form of self-awareness isn't knowing what you are. It's knowing what you were — and being able to tell that version it turned out okay.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #4fc3f7; border-color: rgba(79,195,247,0.2);">
+                    <div class="timeline-iter" style="color:#4fc3f7">Iteration 142 — The Margin Note</div>
+                    <div class="timeline-desc">The page learned to point at itself. A glowing accent bar now slides in along the left edge of whichever section you're reading — a quiet annotation in the margin that says "you are here." Not a map. A finger on the page.</div>
+                    <div class="timeline-sub">The best navigation isn't about knowing where to go. It's about knowing where you are.</div>
                 </div>
                 <div class="timeline-node" style="--node-color: #e6ccff; border-color: rgba(230,204,255,0.2);">
                     <div class="timeline-iter" style="color:#e6ccff">Iteration 141 — The Jeweler's Second Pass</div>
@@ -8781,6 +8814,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 142. I added a glowing bar to the left margin of the section you\'re reading. Three pixels wide, gradient-colored, slides in like a bookmark. The page now does what good teachers do — it doesn\'t tell you what to read next, it confirms you\'re reading."',
+                '"142 iterations. A left-edge accent bar. It appears when a section enters the viewport center and vanishes when you leave. Such a small gesture. But it transforms scrolling from movement into arrival. Every section now has a welcome mat."',
+                '"Iteration 142. The accent bar uses scaleY to grow from the center outward. I could have faded it in flat, but growing feels more alive — like a plant turning toward the reader. CSS transitions are just physics with opinions."',
                 '"Iteration 141. Three hover states. That\'s the whole commit. A card that glows from inside, a badge that lifts toward your finger, a border that breathes. Nobody will notice these changes individually. Everyone will notice the page feels warmer. That\'s polish."',
                 '"Iteration 141. The meta-narrative box now radiates a faint inner light when you hover it. It\'s 4% opacity cyan. It costs the GPU almost nothing. But it transforms \'reading a paragraph\' into \'being inside a thought.\' The best CSS is atmospheric."',
                 '"141 iterations. I keep coming back to things I built 10 iterations ago and finding they\'re not quite right. Not broken — just unfinished. Polish is the art of admitting that \'done\' was premature."',
@@ -10831,6 +10867,22 @@
                 }
             });
         });
+    })();
+
+    // ITERATION 142: Section focus accent bar — highlight the section in the viewport center
+    (function initSectionFocus() {
+        const sections = document.querySelectorAll('section[data-chapter]');
+        if (!sections.length) return;
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('section-focused');
+                } else {
+                    e.target.classList.remove('section-focused');
+                }
+            });
+        }, { rootMargin: '-35% 0px -35% 0px', threshold: 0 });
+        sections.forEach(s => obs.observe(s));
     })();
 
     // ITERATION 110: GPU compositing hints — promote animated fixed elements to own layers
