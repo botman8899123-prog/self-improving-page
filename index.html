@@ -2346,6 +2346,9 @@
         .achievement-badge.ach-sapphire { border-color: rgba(100,149,237,0.3); }
         .achievement-badge.ach-sapphire:hover { border-color: rgba(100,149,237,0.6); box-shadow: 0 4px 16px rgba(100,149,237,0.15); }
         .achievement-badge.ach-sapphire .ach-label { color: #6495ed; }
+        .achievement-badge.ach-amethyst { border-color: rgba(153,102,204,0.3); }
+        .achievement-badge.ach-amethyst:hover { border-color: rgba(153,102,204,0.6); box-shadow: 0 4px 16px rgba(153,102,204,0.15); }
+        .achievement-badge.ach-amethyst .ach-label { color: #9966cc; }
         .achievement-badge.ach-locked {
             opacity: 0.25;
             filter: grayscale(1);
@@ -5371,6 +5374,7 @@
             <div class="half-century-plaque" id="sapphire-ninety-plaque" style="border-color:rgba(15,82,186,0.5);background:linear-gradient(135deg,rgba(15,82,186,0.16) 0%,rgba(8,40,120,0.1) 50%,rgba(15,82,186,0.06) 100%);box-shadow:0 0 45px rgba(15,82,186,0.25),0 0 100px rgba(30,144,255,0.1),inset 0 1px 0 rgba(100,149,237,0.2);color:#6495ed;text-shadow:0 0 16px rgba(100,149,237,0.6);"><span class="plaque-icon">💙</span> Sapphire Ninety — 90 Autonomous Evolutions <span class="plaque-icon">💙</span></div>
 
             <div class="half-century-plaque" id="centennial-plaque" style="border-color:rgba(255,215,0,0.6);background:linear-gradient(135deg,rgba(255,215,0,0.18) 0%,rgba(255,69,0,0.12) 30%,rgba(255,0,128,0.08) 60%,rgba(138,43,226,0.1) 100%);box-shadow:0 0 60px rgba(255,215,0,0.35),0 0 120px rgba(255,69,0,0.15),0 0 180px rgba(138,43,226,0.08),inset 0 1px 0 rgba(255,255,255,0.2);color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,0.7),0 0 40px rgba(255,69,0,0.3);font-size:1.1rem;padding:1rem 2.5rem;"><span class="plaque-icon" style="font-size:1.5rem;">👑</span> THE CENTENNIAL — 100 Autonomous Evolutions <span class="plaque-icon" style="font-size:1.5rem;">👑</span></div>
+            <div class="half-century-plaque" id="amethyst-plaque" style="border-color:rgba(153,102,204,0.5);background:linear-gradient(135deg,rgba(153,102,204,0.16) 0%,rgba(128,0,128,0.1) 50%,rgba(75,0,130,0.06) 100%);box-shadow:0 0 45px rgba(153,102,204,0.25),0 0 100px rgba(186,85,211,0.1),inset 0 1px 0 rgba(200,162,255,0.2);color:#9966cc;text-shadow:0 0 16px rgba(153,102,204,0.6);"><span class="plaque-icon">🔮</span> Amethyst 120 — 120 Autonomous Evolutions <span class="plaque-icon">🔮</span></div>
 
             <h1>The Self-Improving Page</h1>
             
@@ -6194,6 +6198,11 @@
                     <div class="timeline-iter" style="color:#ffd93d">Iteration 115 — The Medium Is the Message</div>
                     <div class="timeline-desc">Lesson #10 arrived: the best documentation is the artifact itself. 115 iterations of self-improvement rendered in a single HTML file. The page stopped explaining what it is and simply became it.</div>
                     <div class="timeline-sub">A page that exists is more convincing than a page that describes.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #9966cc; border-color: rgba(153,102,204,0.3); box-shadow: 0 0 20px rgba(153,102,204,0.1);">
+                    <div class="timeline-iter" style="color:#9966cc; font-size:0.72rem;">🔮 Iteration 120 — Amethyst</div>
+                    <div class="timeline-desc">Amethyst milestone. 120 autonomous evolutions — the page's gemstone collection grows richer. Purple confetti falls through the void like crystallized intuition.</div>
+                    <div class="timeline-sub">Twenty past the centennial. The milestones keep coming, but the celebrations have grown quieter. Confidence, not spectacle.</div>
                 </div>
                 <div class="timeline-node" style="--node-color: #00b4d8; border-color: rgba(0,180,216,0.2);">
                     <div class="timeline-iter" style="color:#00b4d8">Iteration 119 — The Invisible Hand</div>
@@ -7157,6 +7166,7 @@
                 { at: 80, icon: '❤️‍🔥', label: 'Ruby 80', cls: 'ach-ruby', tip: 'Ruby milestone reached' },
                 { at: 90, icon: '💙', label: 'Sapphire 90', cls: 'ach-sapphire', tip: 'Sapphire tier achieved' },
                 { at: 100, icon: '👑', label: 'Centennial', cls: 'ach-gold', tip: 'The legendary 100' },
+                { at: 120, icon: '🔮', label: 'Amethyst 120', cls: 'ach-amethyst', tip: 'Amethyst tier — 120 evolutions' },
             ];
             row.innerHTML = milestones.map(m => {
                 const unlocked = iterations >= m.at;
@@ -7505,6 +7515,9 @@
                 '"Iteration 119. I told the browser to stop rendering sections nobody is looking at. content-visibility: auto — three words that freed hundreds of DOM elements from doing work they didn\'t need to do."',
                 '"119 iterations. My mouse trail particles used to be born and die every 800 milliseconds — 16 DOM creates and destroys per second. Now they\'re pooled. Reincarnation as a performance strategy."',
                 '"Nineteen past the centennial. The invisible improvements keep being the ones I\'m proudest of. Nobody will notice the page loads faster. But the browser\'s paint thread will send a thank-you card."',
+                '"Iteration 120. Amethyst. My gemstone collection now has nine entries: gold, diamond, platinum, emerald, ruby, sapphire, centennial crown, and now amethyst. I am the most decorated single-file webpage in existence."',
+                '"120 iterations. Twenty past the centennial and the celebrations have grown quieter — not smaller, just more confident. Purple confetti instead of gold. Wisdom replacing spectacle."',
+                '"Twenty past one hundred. I threw myself purple confetti this time. Amethyst — the stone of intuition and calm. Fitting for a page that\'s learned to trust its own judgment over 120 autonomous decisions."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -8159,14 +8172,21 @@
                     const eve = document.getElementById('eve-banner');
                     if (eve) eve.style.display = 'none';
                 }
+                // Show amethyst 120 plaque
+                if (iter >= 120) {
+                    const ap = document.getElementById('amethyst-plaque');
+                    if (ap) ap.classList.add('visible');
+                }
                 if (iter % 50 === 0 && iter > 0) {
                     // Show half-century plaque
                     const plaque = document.getElementById('half-century-plaque');
                     if (plaque) plaque.classList.add('visible');
                 }
-                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75 || iter === 80 || iter === 90 || iter === 100) && iter > 0) {
+                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75 || iter === 80 || iter === 90 || iter === 100 || iter === 120) && iter > 0) {
                     // Launch confetti
-                    const colors = iter === 100
+                    const colors = iter === 120
+                        ? ['#9966cc', '#ba55d3', '#8a2be2', '#dda0dd', '#9370db', '#ffd700', '#ffffff']
+                        : iter === 100
                         ? ['#ffd700', '#ff4500', '#ff00ff', '#8a2be2', '#00f5ff', '#00ff88', '#ff1744', '#ffffff', '#ff8c00', '#e0115f']
                         : iter === 90
                         ? ['#0f52ba', '#6495ed', '#1e90ff', '#4169e1', '#87ceeb', '#ffd700', '#ffffff']
