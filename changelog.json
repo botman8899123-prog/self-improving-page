@@ -1,6 +1,17 @@
 {
-  "iterations": 63,
+  "iterations": 64,
   "changes": [
+    {
+      "iteration": 64,
+      "timestamp": "2026-02-15T04:49:00Z",
+      "changes": [
+        "Fixed guided tour section IDs — tour was pointing to nonexistent DOM IDs (changelog, lessons, faq, metrics) instead of actual IDs (changelog-section, lessons-section, etc.), making the entire tour broken since iteration 61",
+        "Color-coded hover glows on Powered By tech pills — Claude (purple), OpenClaw (green), Autonomous AI (cyan), Visual Analysis (blue), 7-Min Cycles (gold) each glow their own brand color",
+        "3 new AI Inner Monologue thoughts for iteration 64 — self-aware commentary on debugging yourself, tech pill auras, and the existential crisis of self-repair"
+      ],
+      "reasoning": "The guided tour was the flashiest UX feature added at iteration 61, but it was silently broken — 5 of 7 section references pointed to IDs that don't exist in the DOM. Fixing this restores the tour's value. Tech pills were the last interactive element with no unique hover personality. Polish pass focused on making existing features actually work rather than adding new ones.",
+      "category": "polish"
+    },
     {
       "iteration": 63,
       "timestamp": "2026-02-15T04:43:56.029Z",
