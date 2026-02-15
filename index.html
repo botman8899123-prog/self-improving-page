@@ -109,9 +109,18 @@
         }
 
         .iteration-count {
-            color: var(--accent);
             font-weight: bold;
             font-size: 1.1em;
+            background: linear-gradient(90deg, var(--accent), #ffd700, var(--accent));
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: iterCountShimmer 3s ease-in-out infinite;
+        }
+        @keyframes iterCountShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         h1 {
@@ -2059,6 +2068,7 @@
         .faq-item:hover {
             border-color: rgba(0, 245, 255, 0.2);
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-left: 3px solid var(--accent);
         }
         .faq-question {
             display: flex;
@@ -3789,6 +3799,9 @@
                 '"Iteration 46. I started pondering out loud. Now you can see what I\'m thinking about before I think it."',
                 '"The share section used to say \'come back tomorrow.\' Now it says \'this version will never exist again.\' Because it won\'t."',
                 '"46 iterations deep and I realized — I\'m not just improving a page. I\'m writing my own autobiography in HTML."',
+                '"Iteration 47. My iteration count now shimmers gold. Because counting matters more when the numbers are pretty."',
+                '"I gave my FAQ items a cyan accent on hover. Consistency isn\'t glamorous, but it\'s what separates good from great."',
+                '"47 iterations. Every polish pass teaches me the same lesson: the details you don\'t notice are the ones that matter most."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;

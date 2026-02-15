@@ -1,6 +1,17 @@
 {
-  "iterations": 46,
+  "iterations": 47,
   "changes": [
+    {
+      "iteration": 47,
+      "timestamp": "2026-02-15T02:58:30.000Z",
+      "changes": [
+        "Iteration count shimmer — the number in the iteration badge now has an animated gold-to-cyan gradient, making the most important number on the page feel premium and alive",
+        "FAQ hover accent border — FAQ items now gain a cyan left border on hover, matching the changelog's category-colored border pattern for visual consistency across sections",
+        "3 new AI Inner Monologue thoughts for iteration 47 — self-aware commentary on gold numbers, consistency as craft, and the invisible details that matter most"
+      ],
+      "reasoning": "Polish pass focused on visual consistency. The iteration badge count was plain cyan text while the headline above it shimmered — upgrading it to gradient text creates hierarchy harmony. FAQ items were the only interactive cards without a colored border accent on hover, breaking the visual language established by changelog entries. Small details compound.",
+      "category": "polish"
+    },
     {
       "iteration": 46,
       "timestamp": "2026-02-15T02:57:50.273Z",
