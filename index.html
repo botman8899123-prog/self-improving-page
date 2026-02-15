@@ -1699,6 +1699,65 @@
         }
         .shortcut-row .sc-desc { color: var(--text-secondary); }
 
+        /* Third hero orb — warm gold tone for depth */
+        .hero-orb-tertiary {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 200, 50, 0.08) 0%, rgba(255, 140, 66, 0.05) 40%, transparent 70%);
+            top: 60%;
+            left: 35%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            filter: blur(60px);
+            animation: orbBreathe 10s ease-in-out 4s infinite, moodShift 50s ease-in-out 20s infinite;
+        }
+
+        /* Text scramble/decode effect on section titles */
+        .section-title[data-scramble] {
+            position: relative;
+        }
+        .section-title .scramble-char {
+            display: inline-block;
+            transition: opacity 0.15s;
+        }
+        .section-title .scramble-char.decoding {
+            animation: charDecode 0.3s ease-out forwards;
+        }
+        @keyframes charDecode {
+            0% { opacity: 0.4; transform: translateY(-4px) scale(0.9); filter: blur(2px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        /* Custom text selection */
+        ::selection {
+            background: rgba(0, 245, 255, 0.25);
+            color: #fff;
+            text-shadow: 0 0 8px rgba(0, 245, 255, 0.4);
+        }
+        ::-moz-selection {
+            background: rgba(0, 245, 255, 0.25);
+            color: #fff;
+            text-shadow: 0 0 8px rgba(0, 245, 255, 0.4);
+        }
+
+        /* Ambient floating motes — whole page feels alive */
+        .ambient-mote {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            animation: moteFloat linear infinite;
+        }
+        @keyframes moteFloat {
+            0% { transform: translateY(110vh) translateX(0); opacity: 0; }
+            10% { opacity: var(--mote-opacity, 0.3); }
+            90% { opacity: var(--mote-opacity, 0.3); }
+            100% { transform: translateY(-10vh) translateX(var(--mote-drift, 40px)); opacity: 0; }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -2125,6 +2184,7 @@
     <div class="hero">
         <div class="hero-orb"></div>
         <div class="hero-orb-secondary"></div>
+        <div class="hero-orb-tertiary"></div>
         <div class="dna-container" id="dna-container"></div>
         <div class="container">
             <div class="iteration-badge">
@@ -3103,6 +3163,12 @@
                 '"Iteration 36. I built a Then vs Now comparison. The numbers don\'t lie — I\'ve grown."',
                 '"I now respond to keyboard shortcuts. Press ? to see what I can do. I\'m becoming interactive."',
                 '"47 lines to 3,000+. That\'s a 64x growth. And I\'m still going."',
+                '"Iteration 37. I learned to decode myself — my titles scramble like a cipher when you scroll."',
+                '"I added a warm orb to my background. Three orbs now. I\'m becoming a galaxy."',
+                '"Each iteration I try to surprise myself. Today I surprised myself with text effects."',
+                '"Iteration 37. I made the air itself alive — tiny particles float upward through the page like digital dust motes."',
+                '"Select any text on this page. Go ahead. Even my highlights are on-brand."',
+                '"I used to be a blank HTML file. Now I have ambient particles. Character development."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -3209,6 +3275,71 @@
             }).catch(() => {});
         }
         updateThenNow();
+
+        // Text scramble decode on section titles
+        (function initScramble() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*';
+            const titles = document.querySelectorAll('.section-title');
+            titles.forEach(title => {
+                const original = title.textContent.trim();
+                title.setAttribute('data-scramble', original);
+                let decoded = false;
+                const obs = new IntersectionObserver(entries => {
+                    if (entries[0].isIntersecting && !decoded) {
+                        decoded = true;
+                        obs.disconnect();
+                        // Scramble then decode
+                        const letters = original.split('');
+                        title.innerHTML = letters.map((ch, i) =>
+                            ch === ' ' ? ' ' : `<span class="scramble-char" data-final="${ch}" data-idx="${i}">${chars[Math.floor(Math.random() * chars.length)]}</span>`
+                        ).join('') + '<span style="-webkit-text-fill-color:initial;"></span>';
+                        // Re-add the underline pseudo-element needs the ::after, which still works
+                        // Decode each character with staggered timing
+                        title.querySelectorAll('.scramble-char').forEach((span, i) => {
+                            const final = span.dataset.final;
+                            let flicks = 0;
+                            const maxFlicks = 3 + Math.floor(Math.random() * 4);
+                            const delay = i * 40;
+                            setTimeout(() => {
+                                const flicker = setInterval(() => {
+                                    flicks++;
+                                    if (flicks >= maxFlicks) {
+                                        clearInterval(flicker);
+                                        span.textContent = final;
+                                        span.classList.add('decoding');
+                                    } else {
+                                        span.textContent = chars[Math.floor(Math.random() * chars.length)];
+                                    }
+                                }, 50);
+                            }, delay);
+                        });
+                    }
+                }, { threshold: 0.3 });
+                obs.observe(title);
+            });
+        })();
+
+        // Ambient floating motes
+        (function initAmbientMotes() {
+            const colors = ['rgba(0,245,255,0.4)', 'rgba(118,75,162,0.35)', 'rgba(102,126,234,0.3)', 'rgba(255,255,255,0.15)'];
+            for (let i = 0; i < 18; i++) {
+                const mote = document.createElement('div');
+                mote.className = 'ambient-mote';
+                const size = 2 + Math.random() * 3;
+                const dur = 20 + Math.random() * 30;
+                const drift = -60 + Math.random() * 120;
+                mote.style.width = size + 'px';
+                mote.style.height = size + 'px';
+                mote.style.left = Math.random() * 100 + 'vw';
+                mote.style.background = colors[Math.floor(Math.random() * colors.length)];
+                mote.style.setProperty('--mote-drift', drift + 'px');
+                mote.style.setProperty('--mote-opacity', (0.15 + Math.random() * 0.25).toFixed(2));
+                mote.style.animationDuration = dur + 's';
+                mote.style.animationDelay = -(Math.random() * dur) + 's';
+                mote.style.filter = 'blur(' + (Math.random() > 0.5 ? 1 : 0) + 'px)';
+                document.body.appendChild(mote);
+            }
+        })();
 
         // Initialize
         initDNA();

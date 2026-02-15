@@ -1,6 +1,17 @@
 {
-  "iterations": 36,
+  "iterations": 37,
   "changes": [
+    {
+      "iteration": 37,
+      "timestamp": "2026-02-15T03:57:00+02:00",
+      "changes": [
+        "Custom text selection styling — selecting text now glows cyan with on-brand accent colors, even highlights feel designed",
+        "Ambient floating motes throughout entire page — 18 gentle particles drift upward with varied colors (cyan, purple, blue, white) creating a living atmosphere beyond just the hero",
+        "3 new AI Inner Monologue thoughts for iteration 37 — self-aware commentary on ambient particles, text selection, and character development"
+      ],
+      "reasoning": "The page had rich animation in specific zones (hero orbs, heartbeat, starfield) but the spaces between sections felt dead. Ambient motes fill the entire viewport with subtle life. Custom selection styling is a small detail that signals obsessive design care — every interaction should feel intentional.",
+      "category": "design"
+    },
     {
       "iteration": 36,
       "timestamp": "2026-02-15T03:53:00+02:00",
