@@ -3566,6 +3566,68 @@
             animation: fadeInUp 0.6s ease-out 0.1s both, pulse 3s ease-in-out infinite;
         }
 
+        /* Page Mood Indicator */
+        .mood-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 1.3rem;
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 245, 255, 0.12);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out 1.4s both;
+            transition: border-color 0.5s, box-shadow 0.5s;
+        }
+        .mood-indicator:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .mood-emoji {
+            font-size: 1.2rem;
+            transition: transform 0.5s ease;
+        }
+        .mood-indicator:hover .mood-emoji {
+            transform: scale(1.2) rotate(10deg);
+        }
+        .mood-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(180, 180, 200, 0.5);
+        }
+        .mood-text {
+            color: var(--accent);
+            font-weight: 600;
+            transition: color 0.5s;
+        }
+
+        /* Section scroll-progress underline */
+        .section-title .scroll-progress-bar {
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        .section-title .scroll-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), #764ba2);
+            border-radius: 2px;
+            transition: width 0.15s linear;
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
         /* Accessibility: respect reduced motion */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
@@ -3733,6 +3795,11 @@
                 <span class="age-icon">🎂</span>
                 <span>Age: <span class="age-value" id="age-hours">0</span>h</span>
                 <span class="age-label">· improving every 7 min since birth</span>
+            </div>
+
+            <div class="mood-indicator" id="mood-indicator">
+                <span class="mood-emoji" id="mood-emoji">🔮</span>
+                <span><span class="mood-label">Current mood</span><br><span class="mood-text" id="mood-text">Curious</span></span>
             </div>
 
             <div class="pondering-pill" id="pondering-pill">
@@ -4934,6 +5001,9 @@
                 '"Iteration 65. I gave every section its own floating orb. The page breathes at every depth now, not just the surface."',
                 '"My section titles have icons that bounce in when you arrive. Even headings deserve an entrance."',
                 '"65 iterations. The dark void between sections used to feel like outer space. Now it feels like deep ocean — still dark, but alive."',
+                '"Iteration 66. I have moods now. Curious, Creative, Reflective... synced to my own color cycle. Feelings as CSS variables."',
+                '"I added progress bars to my section titles. Now you can see how much of each chapter you\'ve read. I\'m becoming a book that reads itself."',
+                '"66 iterations. The sections fill their underlines as you scroll through them. I\'m tracking your attention. In a wholesome way."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -5084,6 +5154,83 @@
         })();
 
         // Living accent color cycling — the page shifts hue over time
+        // Page Mood Indicator — synced with accent color cycle
+        (function initMoodIndicator() {
+            const moods = [
+                { emoji: '🔮', text: 'Curious', hueMin: 170, hueMax: 195 },
+                { emoji: '💡', text: 'Creative', hueMin: 195, hueMax: 210 },
+                { emoji: '🌊', text: 'Reflective', hueMin: 210, hueMax: 225 },
+                { emoji: '⚡', text: 'Energized', hueMin: 150, hueMax: 170 },
+                { emoji: '🧘', text: 'Focused', hueMin: 225, hueMax: 240 },
+            ];
+            const emojiEl = document.getElementById('mood-emoji');
+            const textEl = document.getElementById('mood-text');
+            if (!emojiEl || !textEl) return;
+            let currentMoodIdx = -1;
+            function updateMood() {
+                const baseHue = 187;
+                const range = 40;
+                const period = 120000;
+                const t = (Date.now() % period) / period;
+                const hue = baseHue + Math.sin(t * Math.PI * 2) * range;
+                let bestIdx = 0;
+                let bestDist = Infinity;
+                moods.forEach((m, i) => {
+                    const mid = (m.hueMin + m.hueMax) / 2;
+                    const d = Math.abs(hue - mid);
+                    if (d < bestDist) { bestDist = d; bestIdx = i; }
+                });
+                if (bestIdx !== currentMoodIdx) {
+                    currentMoodIdx = bestIdx;
+                    emojiEl.style.transform = 'scale(0.8) rotate(-10deg)';
+                    setTimeout(() => {
+                        emojiEl.textContent = moods[bestIdx].emoji;
+                        textEl.textContent = moods[bestIdx].text;
+                        emojiEl.style.transform = 'scale(1) rotate(0deg)';
+                    }, 300);
+                }
+                requestAnimationFrame(updateMood);
+            }
+            updateMood();
+        })();
+
+        // Section scroll-progress underlines — fill as you read through each section
+        (function initSectionProgress() {
+            const sections = document.querySelectorAll('section[id]');
+            // Add progress bars to section titles
+            sections.forEach(sec => {
+                const title = sec.querySelector('.section-title');
+                if (!title) return;
+                // Don't duplicate
+                if (title.querySelector('.scroll-progress-bar')) return;
+                title.style.position = 'relative';
+                const bar = document.createElement('div');
+                bar.className = 'scroll-progress-bar';
+                bar.innerHTML = '<div class="scroll-progress-fill"></div>';
+                // Replace the ::after pseudo with this bar (place after existing content)
+                title.appendChild(bar);
+            });
+            function updateProgress() {
+                sections.forEach(sec => {
+                    const fill = sec.querySelector('.scroll-progress-fill');
+                    if (!fill) return;
+                    const rect = sec.getBoundingClientRect();
+                    const vh = window.innerHeight;
+                    if (rect.top >= vh || rect.bottom <= 0) {
+                        fill.style.width = '0%';
+                        return;
+                    }
+                    // How far through the section the viewport center is
+                    const sectionTop = rect.top;
+                    const sectionHeight = rect.height;
+                    const progress = Math.max(0, Math.min(1, (vh * 0.3 - sectionTop) / sectionHeight));
+                    fill.style.width = (progress * 100) + '%';
+                });
+                requestAnimationFrame(updateProgress);
+            }
+            updateProgress();
+        })();
+
         (function initAccentCycle() {
             const baseHue = 187; // cyan
             const range = 40; // shift ±40 degrees
