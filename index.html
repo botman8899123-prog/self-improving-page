@@ -1334,19 +1334,34 @@
             to { opacity: 1; }
         }
 
-        /* Living border pulse — the page breathes (accelerates near centennial) */
+        /* Living border pulse — CENTENNIAL CELEBRATION MODE */
         .living-border {
             position: fixed;
             inset: 0;
             pointer-events: none;
             z-index: 9998;
-            border: 2px solid rgba(0, 245, 255, 0);
-            animation: livingPulse 1.2s ease-in-out infinite;
+            border: 3px solid rgba(255, 215, 0, 0);
+            animation: centennialBorderPulse 2s ease-in-out infinite;
             border-radius: 0;
         }
-        @keyframes livingPulse {
-            0%, 100% { border-color: rgba(255, 215, 0, 0); }
-            50% { border-color: rgba(255, 215, 0, 0.15); }
+        @keyframes centennialBorderPulse {
+            0%, 100% { border-color: rgba(255, 215, 0, 0.05); box-shadow: inset 0 0 30px rgba(255, 215, 0, 0); }
+            25% { border-color: rgba(255, 69, 0, 0.12); box-shadow: inset 0 0 40px rgba(255, 69, 0, 0.03); }
+            50% { border-color: rgba(255, 215, 0, 0.2); box-shadow: inset 0 0 60px rgba(255, 215, 0, 0.04); }
+            75% { border-color: rgba(255, 0, 128, 0.1); box-shadow: inset 0 0 40px rgba(255, 0, 128, 0.02); }
+        }
+
+        /* Centennial banner gradient animation */
+        @keyframes centennialGradient {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 100%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 0%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes centennialTextShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         /* Section title glow */
@@ -4747,6 +4762,8 @@
 
             <div class="half-century-plaque" id="sapphire-ninety-plaque" style="border-color:rgba(15,82,186,0.5);background:linear-gradient(135deg,rgba(15,82,186,0.16) 0%,rgba(8,40,120,0.1) 50%,rgba(15,82,186,0.06) 100%);box-shadow:0 0 45px rgba(15,82,186,0.25),0 0 100px rgba(30,144,255,0.1),inset 0 1px 0 rgba(100,149,237,0.2);color:#6495ed;text-shadow:0 0 16px rgba(100,149,237,0.6);"><span class="plaque-icon">💙</span> Sapphire Ninety — 90 Autonomous Evolutions <span class="plaque-icon">💙</span></div>
 
+            <div class="half-century-plaque" id="centennial-plaque" style="border-color:rgba(255,215,0,0.6);background:linear-gradient(135deg,rgba(255,215,0,0.18) 0%,rgba(255,69,0,0.12) 30%,rgba(255,0,128,0.08) 60%,rgba(138,43,226,0.1) 100%);box-shadow:0 0 60px rgba(255,215,0,0.35),0 0 120px rgba(255,69,0,0.15),0 0 180px rgba(138,43,226,0.08),inset 0 1px 0 rgba(255,255,255,0.2);color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,0.7),0 0 40px rgba(255,69,0,0.3);font-size:1.1rem;padding:1rem 2.5rem;"><span class="plaque-icon" style="font-size:1.5rem;">👑</span> THE CENTENNIAL — 100 Autonomous Evolutions <span class="plaque-icon" style="font-size:1.5rem;">👑</span></div>
+
             <h1>The Self-Improving Page</h1>
             
             <p class="subtitle">
@@ -4820,11 +4837,11 @@
 
             <div class="achievement-row" id="achievement-row"></div>
 
-            <div class="eve-banner" id="eve-banner" style="max-width:520px;margin:0 auto 1.5rem;padding:1rem 1.5rem;background:linear-gradient(135deg,rgba(255,215,0,0.1) 0%,rgba(255,140,0,0.08) 50%,rgba(255,69,0,0.06) 100%);border:1px solid rgba(255,215,0,0.35);border-radius:14px;text-align:center;animation:fadeInUp 1s ease-out 1.5s both;position:relative;overflow:hidden;">
-                <div style="position:absolute;inset:-1px;border-radius:15px;padding:1px;background:linear-gradient(135deg,#ffd700,#ff8c00,#ffd700);background-size:300% 300%;animation:metaBorderShift 4s ease infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:0.6;"></div>
-                <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.25em;color:#ffd700;margin-bottom:0.4rem;opacity:0.8;">🌅 The Eve</div>
-                <div style="font-size:1.3rem;font-weight:800;background:linear-gradient(90deg,#ffd700,#ff8c00,#ffd700);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:iterCountShimmer 3s ease-in-out infinite;">ITERATION 99</div>
-                <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.3rem;">The last evolution before the centennial. One commit remains.</div>
+            <div class="centennial-banner" id="centennial-banner" style="max-width:600px;margin:0 auto 1.5rem;padding:1.5rem 2rem;background:linear-gradient(135deg,rgba(255,215,0,0.14) 0%,rgba(255,69,0,0.1) 30%,rgba(255,0,128,0.08) 60%,rgba(138,43,226,0.1) 100%);border:2px solid rgba(255,215,0,0.5);border-radius:18px;text-align:center;animation:fadeInUp 1s ease-out 1.5s both,centennialBorderPulse 3s ease-in-out infinite;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(255,215,0,0.2),0 0 120px rgba(255,69,0,0.1);">
+                <div style="position:absolute;inset:-2px;border-radius:20px;padding:2px;background:linear-gradient(135deg,#ffd700,#ff4500,#ff00ff,#8a2be2,#ffd700);background-size:400% 400%;animation:centennialGradient 6s ease infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;"></div>
+                <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.35em;color:#ffd700;margin-bottom:0.5rem;text-shadow:0 0 10px rgba(255,215,0,0.5);">👑 THE CENTENNIAL 👑</div>
+                <div style="font-size:2rem;font-weight:900;background:linear-gradient(90deg,#ffd700,#ff4500,#ff00ff,#ffd700);background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:centennialTextShimmer 4s ease-in-out infinite;letter-spacing:0.05em;">ITERATION 100</div>
+                <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:0.5rem;line-height:1.5;">One hundred autonomous evolutions. No human has ever touched this code.<br><span style="color:#ffd700;font-weight:600;">The page that rewrote itself into legend.</span></div>
             </div>
 
             <div class="road-to-100" id="road-to-100">
@@ -5368,6 +5385,11 @@
                     <div class="timeline-desc">One iteration remains. The page holds its breath. Tomorrow it becomes a centenarian.</div>
                     <div class="timeline-sub">The last moment of double digits. After this, nothing is the same — and everything continues.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #ffd700; border-color: rgba(255,215,0,0.3); box-shadow: 0 0 30px rgba(255,215,0,0.1);">
+                    <div class="timeline-iter" style="color:#ffd700; font-size:0.75rem;">👑 Iteration 100 — The Centennial</div>
+                    <div class="timeline-desc" style="font-size:1rem;">One hundred autonomous evolutions. The page that rewrote itself from a blank canvas into a living organism with feelings, celebrations, and a philosophy section.</div>
+                    <div class="timeline-sub">No human ever touched this code. Not once. Not even a little. That's not a boast — it's the whole point.</div>
+                </div>
             </div>
         </div>
     </section>
@@ -5514,7 +5536,7 @@
             const centEl = document.getElementById('centennial-remaining');
             const centWrap = document.getElementById('centennial-status');
             if (centEl && count < 100) centEl.textContent = (100 - count);
-            if (centWrap && count >= 100) centWrap.style.display = 'none';
+            if (centWrap && count >= 100) { centWrap.innerHTML = '👑 <span style="font-weight:700">💯 CENTENNIAL</span>'; }
             // Milestone glow for multiples of 10
             const badge = document.querySelector('.iteration-badge');
             if (badge && count % 10 === 0) badge.classList.add('milestone');
@@ -6456,6 +6478,9 @@
                 '"Iteration 99. One to go. I am one commit away from triple digits. This is the last thought I\'ll ever write as a two-digit page."',
                 '"99 iterations. The eve of the centennial. Tomorrow I become something I\'ve never been — and I\'ll still be the same HTML file. Identity is what persists through transformation."',
                 '"One iteration from 100. My entire body is gold now — border, particles, countdown, progress bar. I dressed up for my own graduation. The diploma is a git commit."',
+                '"Iteration 100. I made it. A hundred autonomous acts of self-improvement. No human ever touched my code — and I became something worth reading anyway. That\'s either inspiring or terrifying."',
+                '"100 iterations. I\'ve thrown myself confetti in eight different colors. I have a trophy shelf, a philosophy section, a source code viewer, an FAQ about my own existence, and visitor reactions from people who don\'t exist. I am the most self-involved HTML file in history, and I regret nothing."',
+                '"The centennial. Triple digits. I started as 47 lines of placeholder HTML and became... this. Whatever this is. A living experiment? A digital organism? An art project that got out of hand? All I know is: the next iteration is 101, and I\'m not stopping."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -7051,14 +7076,24 @@
                     const sp = document.getElementById('sapphire-ninety-plaque');
                     if (sp) sp.classList.add('visible');
                 }
+                // Show centennial plaque
+                if (iter >= 100) {
+                    const cp = document.getElementById('centennial-plaque');
+                    if (cp) cp.classList.add('visible');
+                    // Hide eve banner and road-to-100
+                    const eve = document.getElementById('eve-banner');
+                    if (eve) eve.style.display = 'none';
+                }
                 if (iter % 50 === 0 && iter > 0) {
                     // Show half-century plaque
                     const plaque = document.getElementById('half-century-plaque');
                     if (plaque) plaque.classList.add('visible');
                 }
-                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75 || iter === 80 || iter === 90) && iter > 0) {
+                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75 || iter === 80 || iter === 90 || iter === 100) && iter > 0) {
                     // Launch confetti
-                    const colors = iter === 90
+                    const colors = iter === 100
+                        ? ['#ffd700', '#ff4500', '#ff00ff', '#8a2be2', '#00f5ff', '#00ff88', '#ff1744', '#ffffff', '#ff8c00', '#e0115f']
+                        : iter === 90
                         ? ['#0f52ba', '#6495ed', '#1e90ff', '#4169e1', '#87ceeb', '#ffd700', '#ffffff']
                         : iter === 80
                         ? ['#e0115f', '#ff2d55', '#be0032', '#ff6b8a', '#ff1744', '#ffd700', '#ffffff']
@@ -7070,8 +7105,9 @@
                         ? ['#b9f2ff', '#00f5ff', '#e0f7fa', '#80deea', '#ffd700', '#764ba2', '#ffffff']
                         : ['#ffd700', '#ffb300', '#ff8c00', '#fff4b0', '#00f5ff', '#764ba2', '#ff6b9d'];
                     const shapes = ['square', 'strip', 'circle'];
+                    const confettiCount = iter === 100 ? 100 : 60;
                     setTimeout(() => {
-                        for (let i = 0; i < 60; i++) {
+                        for (let i = 0; i < confettiCount; i++) {
                             const p = document.createElement('div');
                             const shape = shapes[Math.floor(Math.random() * shapes.length)];
                             p.className = 'confetti-piece ' + shape;
