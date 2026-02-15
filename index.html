@@ -576,10 +576,28 @@
             text-align: center;
             padding: 2rem 3rem;
             margin-bottom: 3rem;
-            border-left: 4px solid var(--accent);
-            background: var(--bg-card);
-            border-radius: 0 12px 12px 0;
+            border-left: none;
+            border: 1px solid rgba(118, 75, 162, 0.2);
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 12px;
             position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        .philosophy-quote::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 13px;
+            padding: 1px;
+            background: linear-gradient(135deg, #764ba2, var(--accent), #667eea, #764ba2);
+            background-size: 300% 300%;
+            animation: metaBorderShift 8s ease infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
 
         .philosophy-cards {
@@ -1578,6 +1596,23 @@
             opacity: 1;
         }
 
+        /* Mouse trail particles */
+        .hero-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--accent);
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.8;
+            animation: particleFade 0.8s ease-out forwards;
+        }
+        @keyframes particleFade {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
         /* Staggered reveal */
         .reveal:nth-of-type(1) { transition-delay: 0s; }
         .reveal:nth-of-type(2) { transition-delay: 0.15s; }
@@ -1669,7 +1704,7 @@
 
             <div class="time-capsule" id="time-capsule">
                 <span class="time-capsule-icon">🕰️</span>
-                <span class="time-capsule-text">You're viewing iteration <strong>25</strong>. The first visitor saw a blank page with 47 lines of code. Now it has <span id="capsule-lines">2,283</span> lines — all written by AI.</span>
+                <span class="time-capsule-text">You're viewing iteration <strong>26</strong>. The first visitor saw a blank page with 47 lines of code. Now it has <span id="capsule-lines">2,283</span> lines — all written by AI.</span>
             </div>
 
             <div class="countdown-section">
@@ -2057,13 +2092,19 @@
             }
         }
 
-        // Time alive calculator
+        // Time alive calculator — now with live seconds
         const BORN = new Date('2026-02-14T23:49:00+02:00');
         function updateAlive() {
             const diff = Date.now() - BORN.getTime();
             const hours = Math.floor(diff / 3600000);
             const mins = Math.floor((diff % 3600000) / 60000);
-            document.getElementById('stat-alive').textContent = hours > 0 ? hours + 'h ' + mins + 'm' : mins + 'm';
+            const secs = Math.floor((diff % 60000) / 1000);
+            const el = document.getElementById('stat-alive');
+            if (hours > 0) {
+                el.textContent = hours + 'h ' + mins + 'm ' + secs + 's';
+            } else {
+                el.textContent = mins + 'm ' + secs + 's';
+            }
         }
 
         // Scroll reveal observer (generous trigger + fallback)
@@ -2354,11 +2395,32 @@
         }
         updateTimeCapsule();
 
+        // Mouse trail particles in hero
+        (function initMouseTrail() {
+            const hero = document.querySelector('.hero');
+            let lastSpawn = 0;
+            hero.addEventListener('mousemove', (e) => {
+                const now = Date.now();
+                if (now - lastSpawn < 50) return; // throttle
+                lastSpawn = now;
+                const p = document.createElement('div');
+                p.className = 'hero-particle';
+                const rect = hero.getBoundingClientRect();
+                p.style.left = (e.clientX - rect.left) + 'px';
+                p.style.top = (e.clientY - rect.top) + 'px';
+                const hue = Math.random() > 0.5 ? '180' : '270'; // cyan or purple
+                p.style.background = `hsl(${hue}, 100%, 70%)`;
+                p.style.width = p.style.height = (3 + Math.random() * 4) + 'px';
+                hero.appendChild(p);
+                setTimeout(() => p.remove(), 800);
+            });
+        })();
+
         // Initialize
         initDNA();
         loadChangelog();
         updateAlive();
-        setInterval(updateAlive, 60000);
+        setInterval(updateAlive, 1000);
         
         // Update countdown every second
         setInterval(updateCountdown, 1000);
