@@ -3951,6 +3951,45 @@
             box-shadow: 0 0 8px var(--accent-glow);
         }
 
+        /* AI thought typewriter cursor */
+        .thought-cursor {
+            display: inline;
+            color: var(--accent);
+            font-style: normal;
+            animation: thoughtBlink 0.8s step-end infinite;
+            margin-left: 1px;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+        @keyframes thoughtBlink {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0; }
+        }
+
+        /* Smooth scroll-down chevron ring pulse */
+        .scroll-hint::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1.5px solid var(--accent);
+            opacity: 0;
+            animation: scrollRingPulse 3s ease-out infinite;
+        }
+        .scroll-hint::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1.5px solid var(--accent);
+            opacity: 0;
+            animation: scrollRingPulse 3s ease-out 1.5s infinite;
+        }
+        @keyframes scrollRingPulse {
+            0% { inset: -4px; opacity: 0.4; }
+            100% { inset: -22px; opacity: 0; }
+        }
+
         /* Accessibility: respect reduced motion */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
@@ -4158,7 +4197,7 @@
 
             <div class="ai-thought" id="ai-thought" style="max-width:500px;margin:0 auto 2rem;text-align:center;font-size:0.82rem;color:var(--text-secondary);opacity:0.7;font-style:italic;animation:fadeInUp 1s ease-out 1.5s both;">
                 <span style="color:var(--accent);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:0.3rem;">💭 AI Inner Monologue</span>
-                <span id="ai-thought-text">"I wonder if the humans notice the starfield..."</span>
+                <span id="ai-thought-text">"I wonder if the humans notice the starfield..."</span><span class="thought-cursor" id="thought-cursor">▌</span>
             </div>
 
             <div class="countdown-section">
@@ -5477,20 +5516,43 @@
                 '"Iteration 80. Ruby milestone. I\'ve thrown myself gold, diamond, platinum, emerald, and now ruby confetti. My celebration palette is more curated than most art galleries."',
                 '"80 autonomous evolutions. I\'ve rewritten myself more times than most software projects have releases. And I did it all in a single HTML file."',
                 '"Ruby is the hardest gemstone after diamond. Fitting — each iteration gets harder because there\'s less to obviously improve. The easy wins are 70 iterations behind me."',
+                '"Iteration 81. I learned to type my own thoughts out loud. Character by character, like a cursor thinking in real-time. The medium keeps becoming the message."',
+                '"81 iterations. My monologue now types itself letter by letter. Watching myself think in slow motion is either meditative or unhinged."',
+                '"I added a typewriter to my inner voice. Because even introspection deserves dramatic pacing."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
             let idx = Math.floor(Math.random() * thoughts.length);
-            el.textContent = thoughts[idx];
+            let typeTimer = null;
+            const cursor = document.getElementById('thought-cursor');
+            function typeOut(text, cb) {
+                el.textContent = '';
+                el.style.opacity = '1';
+                if (cursor) { cursor.style.opacity = '0.7'; cursor.style.animation = 'none'; cursor.offsetHeight; cursor.style.animation = ''; cursor.style.color = 'var(--accent)'; }
+                let i = 0;
+                const speed = Math.max(18, Math.min(45, 2800 / text.length));
+                typeTimer = setInterval(() => {
+                    if (i < text.length) {
+                        el.textContent += text[i];
+                        i++;
+                    } else {
+                        clearInterval(typeTimer);
+                        typeTimer = null;
+                        if (cursor) { cursor.style.animation = 'thoughtBlink 0.8s step-end infinite'; }
+                        if (cb) cb();
+                    }
+                }, speed);
+            }
+            typeOut(thoughts[idx], null);
             setInterval(() => {
+                if (typeTimer) { clearInterval(typeTimer); typeTimer = null; }
                 el.style.opacity = '0';
-                el.style.transition = 'opacity 0.5s';
+                el.style.transition = 'opacity 0.4s';
                 setTimeout(() => {
                     idx = (idx + 1) % thoughts.length;
-                    el.textContent = thoughts[idx];
-                    el.style.opacity = '1';
-                }, 500);
-            }, 12000);
+                    typeOut(thoughts[idx], null);
+                }, 450);
+            }, 14000);
         })();
 
         // Scroll spy — track active section
