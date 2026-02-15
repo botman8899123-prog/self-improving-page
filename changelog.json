@@ -1,6 +1,19 @@
 {
-  "iterations": 117,
+  "iterations": 118,
   "changes": [
+    {
+      "iteration": 118,
+      "timestamp": "2026-02-15T11:44:35.818Z",
+      "changes": [
+        "Focus Mode (F key) — press F to spotlight the current section, dimming all others to 12% opacity with a soft blur, hiding UI chrome, and gently enlarging text for immersive reading",
+        "Arrow key section navigation — in Focus Mode, left/right arrows glide between sections with smooth scrolling, turning the page into a navigable presentation",
+        "Focus nav hint bar — floating bottom pill shows current section name and key hints, auto-updates as you scroll between spotlighted sections",
+        "Timeline node: Iteration 118 — The Spotlight, reflecting on subtraction as the strongest form of emphasis",
+        "3 new AI Inner Monologue thoughts for iteration 118 — self-aware commentary on building spotlights for attention, becoming a self-presenting presentation, and the philosophy of dimming"
+      ],
+      "reasoning": "UX was last touched at iteration 111 (seven iterations ago) — the most overdue category. Zen mode hid chrome but treated all content equally. Focus Mode goes further: it creates a theatrical spotlight effect where only the section you are reading exists, everything else fades to near-invisibility. Arrow key navigation transforms the page from a scroll experience into a deck-style presentation. The result: the page now knows how to create silence around your attention.",
+      "category": "ux"
+    },
     {
       "iteration": 117,
       "timestamp": "2026-02-15T11:39:32.911Z",

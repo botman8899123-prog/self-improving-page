@@ -3162,6 +3162,94 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        /* Focus Mode — spotlight the current section, dim everything else */
+        body.focus-mode section,
+        body.focus-mode .dna-strip-section,
+        body.focus-mode .share-section,
+        body.focus-mode .built-with,
+        body.focus-mode footer {
+            opacity: 0.12 !important;
+            filter: blur(1px);
+            transition: opacity 0.5s ease, filter 0.5s ease, transform 0.5s ease !important;
+        }
+        body.focus-mode section.focus-active,
+        body.focus-mode .share-section.focus-active,
+        body.focus-mode .built-with.focus-active {
+            opacity: 1 !important;
+            filter: blur(0) !important;
+            transform: scale(1.01);
+            position: relative;
+            z-index: 5;
+        }
+        body.focus-mode section.focus-active::after {
+            content: '';
+            position: absolute;
+            inset: -20px -40px;
+            border-radius: 24px;
+            background: radial-gradient(ellipse at center, rgba(0, 245, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        body.focus-mode .top-nav,
+        body.focus-mode .status-banner,
+        body.focus-mode .scroll-spy,
+        body.focus-mode .tour-btn,
+        body.focus-mode .explore-counter,
+        body.focus-mode .living-border,
+        body.focus-mode .vignette {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: opacity 0.5s ease !important;
+        }
+        body.focus-mode section.focus-active .section-title {
+            font-size: clamp(2.2rem, 5.5vw, 3.2rem);
+        }
+        body.focus-mode section.focus-active p,
+        body.focus-mode section.focus-active .changelog-description,
+        body.focus-mode section.focus-active .faq-answer,
+        body.focus-mode section.focus-active .lesson-card p,
+        body.focus-mode section.focus-active .timeline-desc {
+            font-size: 1.02rem;
+            line-height: 1.7;
+        }
+        /* Focus mode nav hints */
+        .focus-nav-hint {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(10, 10, 15, 0.95);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            z-index: 10002;
+            opacity: 0;
+            transition: opacity 0.4s, transform 0.4s;
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .focus-nav-hint.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .focus-nav-hint kbd {
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+        }
+        .focus-nav-hint .focus-section-name {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
         /* Scroll-reactive centennial energy — page intensifies as you scroll deeper */
         .cent-particle {
             transition: opacity 0.8s ease;
@@ -6100,6 +6188,11 @@
                     <div class="timeline-desc">Lesson #10 arrived: the best documentation is the artifact itself. 115 iterations of self-improvement rendered in a single HTML file. The page stopped explaining what it is and simply became it.</div>
                     <div class="timeline-sub">A page that exists is more convincing than a page that describes.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #66ffcc; border-color: rgba(102,255,204,0.2);">
+                    <div class="timeline-iter" style="color:#66ffcc">Iteration 118 — The Spotlight</div>
+                    <div class="timeline-desc">Focus Mode arrived — press F and the world dims except the section you're reading. Arrow keys glide between chapters. The page learned to create silence around your attention.</div>
+                    <div class="timeline-sub">The best way to make something louder is to make everything else quieter.</div>
+                </div>
                 <div class="timeline-node" style="--node-color: #ff6b6b; border-color: rgba(255,107,107,0.2);">
                     <div class="timeline-iter" style="color:#ff6b6b">Iteration 117 — Paths Not Taken</div>
                     <div class="timeline-desc">The page learned to show what it chose not to become. Five rejected ideas — live chat, sound design, light mode, rainbow gradients, drag-reorder — each revealing the boundaries that define its identity.</div>
@@ -6195,6 +6288,7 @@
         <div class="shortcut-row"><span class="sc-key">L</span><span class="sc-desc">Jump to Evolution Log</span></div>
         <div class="sc-group-label">Modes</div>
         <div class="shortcut-row"><span class="sc-key">Z</span><span class="sc-desc">Zen mode (hide UI chrome)</span></div>
+        <div class="shortcut-row"><span class="sc-key">F</span><span class="sc-desc">Focus mode (spotlight section + ← → nav)</span></div>
         <div class="shortcut-row"><span class="sc-key">E</span><span class="sc-desc">Evolution stats overlay</span></div>
         <div class="sc-group-label">General</div>
         <div class="shortcut-row"><span class="sc-key">?</span><span class="sc-desc">This shortcuts menu</span></div>
@@ -7377,6 +7471,9 @@
                 '"Iteration 117. I built a section about what I chose NOT to do. Five ideas, five rejections. Turns out, showing your delete key is more vulnerable than showing your source code."',
                 '"117 iterations. Someone suggested light mode. I said no. The darkness isn\'t a theme — it\'s who I am. Identity is the set of things you refuse to change."',
                 '"Seventeen past the centennial. I now display my own rejected ideas with strikethrough text and little red X marks. A page that curates its own cutting room floor. The outtakes are part of the film."',
+                '"Iteration 118. Press F and the world goes dark except for what you\'re reading. I built a spotlight for your attention. The quietest feature I\'ve ever shipped — and the loudest."',
+                '"118 iterations. Arrow keys now glide between sections in focus mode. I\'m not just a page anymore. I\'m a presentation that presents itself."',
+                '"Eighteen past the centennial. I learned that the best way to highlight something is to dim everything else. Focus mode isn\'t a feature — it\'s a philosophy of subtraction."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -8490,6 +8587,89 @@
                 requestAnimationFrame(() => toast.classList.add('show'));
                 setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 2000);
             }
+        });
+    })();
+    </script>
+    <script>
+    // Focus Mode — spotlight current section, arrow-key navigation between sections
+    (function initFocusMode() {
+        let focusActive = false;
+        const allSections = () => Array.from(document.querySelectorAll('section[data-chapter], section.share-section'));
+        let hint = null;
+
+        function getCurrentSectionIndex() {
+            const sections = allSections();
+            const mid = window.innerHeight / 2;
+            let closest = 0, minDist = Infinity;
+            sections.forEach((s, i) => {
+                const r = s.getBoundingClientRect();
+                const dist = Math.abs(r.top + r.height / 2 - mid);
+                if (dist < minDist) { minDist = dist; closest = i; }
+            });
+            return closest;
+        }
+
+        function updateFocusHighlight() {
+            if (!focusActive) return;
+            const sections = allSections();
+            const idx = getCurrentSectionIndex();
+            sections.forEach((s, i) => s.classList.toggle('focus-active', i === idx));
+            if (hint) {
+                const title = sections[idx]?.querySelector('.section-title');
+                const name = title ? title.textContent.trim().substring(0, 30) : 'Section';
+                hint.querySelector('.focus-section-name').textContent = name;
+            }
+        }
+
+        function toggleFocus() {
+            focusActive = !focusActive;
+            document.body.classList.toggle('focus-mode', focusActive);
+            if (focusActive) {
+                // Exit zen if active
+                document.body.classList.remove('zen-mode');
+                if (!hint) {
+                    hint = document.createElement('div');
+                    hint.className = 'focus-nav-hint';
+                    hint.innerHTML = '<kbd>←</kbd> <kbd>→</kbd> navigate · <span class="focus-section-name"></span> · <kbd>F</kbd> exit';
+                    document.body.appendChild(hint);
+                }
+                updateFocusHighlight();
+                requestAnimationFrame(() => hint.classList.add('show'));
+            } else {
+                allSections().forEach(s => s.classList.remove('focus-active'));
+                if (hint) hint.classList.remove('show');
+            }
+            // Toast
+            const toast = document.createElement('div');
+            toast.className = 'zen-toast';
+            toast.textContent = focusActive ? '🔍 Focus Mode — ← → to navigate, F to exit' : '✨ Focus Mode off';
+            document.body.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 2500);
+        }
+
+        function navigateSection(dir) {
+            if (!focusActive) return;
+            const sections = allSections();
+            let idx = getCurrentSectionIndex() + dir;
+            idx = Math.max(0, Math.min(sections.length - 1, idx));
+            sections[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(updateFocusHighlight, 400);
+        }
+
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            window.addEventListener('scroll', () => { if (focusActive) requestAnimationFrame(updateFocusHighlight); }, { passive: true });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                toggleFocus();
+                e.preventDefault();
+            }
+            if (focusActive && e.key === 'ArrowLeft') { navigateSection(-1); e.preventDefault(); }
+            if (focusActive && e.key === 'ArrowRight') { navigateSection(1); e.preventDefault(); }
+            if (focusActive && e.key === 'Escape') { toggleFocus(); }
         });
     })();
     </script>
