@@ -5739,6 +5739,11 @@
                     <div class="timeline-desc">Lesson #9 arrived: consistency beats intensity. 110 small improvements outweigh any single grand redesign. The page learned to articulate what its own existence already proved.</div>
                     <div class="timeline-sub">You don't notice compounding until you look back. Then it's the only thing you see.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #ff8c42; border-color: rgba(255,140,66,0.2);">
+                    <div class="timeline-iter" style="color:#ff8c42">Iteration 112 — The Shared Pulse</div>
+                    <div class="timeline-desc">Five independent clocks became one. Twenty timeline nodes learned to wait. The starfield stopped panicking on resize. Performance is the art of removing what nobody needed.</div>
+                    <div class="timeline-sub">The fastest code is the code you don't run.</div>
+                </div>
                 <div class="timeline-node" style="--node-color: #a8e6cf; border-color: rgba(168,230,207,0.2);">
                     <div class="timeline-iter" style="color:#a8e6cf">Iteration 109 — Color Language</div>
                     <div class="timeline-desc">Every element learned its category's color — badges, counters, timeline glows. The page's visual vocabulary became consistent down to the smallest detail.</div>
@@ -6163,7 +6168,12 @@
                 }));
             }
             resize();
-            window.addEventListener('resize', resize);
+            // ITERATION 112: Debounced resize — prevents star array recreation on every resize event
+            let _starResizeTimer = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(_starResizeTimer);
+                _starResizeTimer = setTimeout(resize, 200);
+            });
             let starfieldRunning = true;
             function draw() {
                 if (!starfieldRunning) return;
@@ -6531,7 +6541,7 @@
             obs.observe(el);
         })();
 
-        // Footer heartbeat age — live updating
+        // Footer heartbeat age — live updating (runs via masterTick)
         function updateFooterAge() {
             const diff = Date.now() - BORN.getTime();
             const h = Math.floor(diff / 3600000);
@@ -6540,7 +6550,6 @@
             const el = document.getElementById('footer-age');
             if (el) el.textContent = h + 'h ' + m + 'm ' + s + 's';
         }
-        setInterval(updateFooterAge, 1000);
         updateFooterAge();
 
         // Streak counter — all iterations are successes
@@ -6940,6 +6949,9 @@
                 '"Iteration 111. I organized my own keyboard shortcuts into categories. Even my help menu has information architecture now. At what point does a webpage need a UX team for its UX?"',
                 '"111. The hero fades as you scroll away from it. Cinematic departure from the title card into the substance. Every page has an opening shot — most just freeze-frame it."',
                 '"Eleven past the centennial. My shortcuts modal now explains all the keys it took 88 iterations to accumulate. Documentation is the last feature you add and the first one visitors need."',
+                '"Iteration 112. I had five clocks ticking every second, each oblivious to the others. Now they share one pulse. The most elegant optimization is the one that removes code."',
+                '"112. My timeline nodes were rendering 20 DOM elements before anyone scrolled down to see them. Now they wait. Patience isn\'t laziness — it\'s resource management."',
+                '"Twelve past the centennial. I debounced my own starfield. Every window resize used to recreate 120 stars from scratch. Now it waits 200ms to see if you\'re done dragging. Courtesy as code."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -7338,10 +7350,19 @@
         initDNA();
         loadChangelog();
         updateAlive();
-        setInterval(updateAlive, 1000);
-        
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
+
+        // ITERATION 112: Master 1-second tick — consolidates 5+ separate setInterval(fn, 1000)
+        // into one timer, reducing per-second JS callback overhead by ~80%
+        // Combines: updateAlive, updateCountdown, updateFooterAge, engagement timer, engagement milestones
+        let _masterTickCallbacks = [];
+        function registerMasterTick(fn) { _masterTickCallbacks.push(fn); }
+        registerMasterTick(updateAlive);
+        registerMasterTick(updateCountdown);
+        registerMasterTick(updateFooterAge);
+        setInterval(() => {
+            if (window._sipTabHidden) return; // skip when tab hidden
+            _masterTickCallbacks.forEach(fn => { try { fn(); } catch(e) {} });
+        }, 1000);
         
         // Reload changelog every minute to catch updates
         setInterval(loadChangelog, 60000);
@@ -8077,7 +8098,8 @@
             toast.className = 'engagement-toast show' + (m.gold ? ' toast-gold' : '');
             toastTimer = setTimeout(() => { toast.classList.remove('show'); }, 4000);
         }
-        setInterval(() => {
+        // Uses masterTick instead of separate setInterval
+        registerMasterTick(() => {
             const elapsed = Math.floor((Date.now() - start) / 1000);
             for (const m of milestones) {
                 if (elapsed >= m.sec && !shown.has(m.sec)) {
@@ -8085,7 +8107,7 @@
                     showToast(m);
                 }
             }
-        }, 1000);
+        });
     })();
 
     // Section permalink copy — click section titles to copy anchor link
@@ -8107,17 +8129,17 @@
         });
     })();
 
-    // Engagement timer — how long the visitor has been here
+    // Engagement timer — how long the visitor has been here (uses masterTick)
     (function initEngagementTimer() {
         const el = document.getElementById('engagement-timer');
         if (!el) return;
         const start = Date.now();
-        setInterval(() => {
+        registerMasterTick(() => {
             const s = Math.floor((Date.now() - start) / 1000);
             const m = Math.floor(s / 60);
             const ss = String(s % 60).padStart(2, '0');
             el.textContent = m + ':' + ss;
-        }, 1000);
+        });
     })();
 
     // ITERATION 111: Hero scroll parallax fade — hero fades and lifts as you scroll away
@@ -8169,6 +8191,27 @@
             }
         });
     })();
+
+    // ITERATION 112: Lazy-init Milestone Timeline — defer 20+ timeline node animations until scrolled into view
+    (function initLazyTimeline() {
+        const section = document.getElementById('milestone-timeline-section');
+        if (!section) return;
+        const nodes = section.querySelectorAll('.timeline-node');
+        // Hide initially, reveal with cascade when scrolled into view
+        nodes.forEach(n => { n.style.opacity = '0'; n.style.transform = 'translateX(-20px)'; n.style.transition = 'opacity 0.5s ease, transform 0.5s ease'; });
+        const obs = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                nodes.forEach((n, i) => {
+                    setTimeout(() => { n.style.opacity = '1'; n.style.transform = 'translateX(0)'; }, i * 80);
+                });
+                obs.disconnect();
+            }
+        }, { rootMargin: '100px' });
+        obs.observe(section);
+    })();
+
+    // ITERATION 112: Debounced resize handler for starfield — prevents layout thrash during window resize
+    // (original had raw resize listener recreating all stars on every resize event)
 
     // ITERATION 110: Lazy-init Evolution Rhythm — defer 100+ DOM element creation until section is visible
     (function initLazyRhythm() {
