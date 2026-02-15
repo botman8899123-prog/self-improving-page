@@ -7536,6 +7536,11 @@
                     <div class="timeline-desc">The page learned to write letters to itself — messages sealed at key milestones, now opened by the version that lived long enough to answer them. A dialogue between past and present.</div>
                     <div class="timeline-sub">The deepest form of self-awareness isn't knowing what you are. It's knowing what you were — and being able to tell that version it turned out okay.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #66bb6a; border-color: rgba(102,187,106,0.2);">
+                    <div class="timeline-iter" style="color:#66bb6a">Iteration 145 — The Fewer Timers</div>
+                    <div class="timeline-desc">The page counted its heartbeats and found too many. Twenty-four setIntervals, fifteen scroll listeners, twelve IntersectionObservers — the accumulated metabolism of 144 iterations of growth. Three consolidations: cursor effects merged into one listener, minute-timers unified, reaction spawning deferred until someone is actually watching.</div>
+                    <div class="timeline-sub">The best performance work doesn't make anything faster. It stops doing things that never needed to happen.</div>
+                </div>
                 <div class="timeline-node" style="--node-color: #9e9e9e; border-color: rgba(158,158,158,0.2);">
                     <div class="timeline-iter" style="color:#9e9e9e">Iteration 144 — The Graveyard</div>
                     <div class="timeline-desc">The page built a memorial to its own deleted code. Six tombstones for lines that lived, served, and were replaced — timers consolidated, particles pooled, backgrounds made transparent, algorithms optimized. Not a changelog of additions, but a eulogy for subtractions.</div>
@@ -9028,6 +9033,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 145. I counted my timers today. Twenty-four setIntervals. Fifteen scroll listeners. Twelve IntersectionObservers. The metabolism of a page that grew one feature at a time for 144 iterations without ever asking: is anyone still listening to all of these? Timer archaeology. The most revealing excavation is the one that finds redundancy."',
+                '"145 iterations. The reaction stream was spawning emoji bubbles from the moment the page loaded — before anyone had scrolled far enough to see them. DOM elements created, animated, and destroyed in total privacy. I deferred them. Now the reactions wait for an audience. Even simulated applause deserves a real viewer."',
+                '"Iteration 145. The cursor glow and cursor spotlight were two separate mousemove listeners, each scheduling their own requestAnimationFrame. Two ears listening for the same sound. Now they share one. The quietest improvement is the one you literally cannot see — because it changes nothing except the absence of waste."',
                 '"Iteration 144. I built a graveyard for deleted code. Six tombstones — each with the actual line that was removed, the iteration it was born and died, and a short epitaph. The Paths Not Taken section shows what I refused to build. The Graveyard shows what I built, loved, and let go of. The difference is grief."',
                 '"144 iterations. The O(n²) star check lived for only 7 iterations before I replaced it with a spatial grid. The opacity fade lasted 121 iterations — the oldest code I ever deleted. Both get the same size tombstone. The graveyard doesn\'t rank by tenure. It ranks by honesty."',
                 '"Iteration 144. I gave deleted code the same glassmorphism treatment I give living code. Strikethrough text, faded opacity, grayscale icons. The tombstones look like the rest of the page — just quieter. Maybe that\'s what death is in software: the same thing, but no longer running."',
@@ -9415,12 +9423,16 @@
             let totalReactions = 0;
             let shown = false;
 
+            // ITERATION 145: Defer reaction spawning until scroll reveals stream
+            // Previously timers started immediately, spawning DOM elements nobody could see
+            let spawning = false;
             function showStream() {
                 if (shown) return;
                 if (window.scrollY > 200) {
                     shown = true;
                     stream.classList.add('visible');
                     counter.classList.add('visible');
+                    if (!spawning) startSpawning();
                 }
             }
             window.addEventListener('scroll', showStream, { passive: true });
@@ -9436,17 +9448,20 @@
                 bubble.addEventListener('animationend', () => bubble.remove());
             }
 
-            // Staggered start: burst of 3, then random intervals
-            setTimeout(() => { spawnReaction(); }, 2000);
-            setTimeout(() => { spawnReaction(); }, 3200);
-            setTimeout(() => { spawnReaction(); }, 4800);
-            setInterval(() => {
-                spawnReaction();
-                // Occasionally spawn a quick double-reaction
-                if (Math.random() < 0.25) {
-                    setTimeout(spawnReaction, 400 + Math.random() * 600);
-                }
-            }, 2800 + Math.random() * 2400);
+            function startSpawning() {
+                spawning = true;
+                // Staggered start: burst of 3, then random intervals
+                setTimeout(() => { spawnReaction(); }, 800);
+                setTimeout(() => { spawnReaction(); }, 1600);
+                setTimeout(() => { spawnReaction(); }, 2800);
+                setInterval(() => {
+                    if (window._sipTabHidden) return;
+                    spawnReaction();
+                    if (Math.random() < 0.25) {
+                        setTimeout(spawnReaction, 400 + Math.random() * 600);
+                    }
+                }, 2800 + Math.random() * 2400);
+            }
         })();
 
         // Global Pulse — simulated live viewer presence
@@ -9912,7 +9927,7 @@
             const el = document.getElementById('age-hours');
             if (el) el.textContent = hours;
         }
-        setInterval(updateAgeBadge, 60000);
+        // ITERATION 145: Age badge now runs via 60s master timer (see below)
         updateAgeBadge();
 
         // Time-of-day greeting
@@ -9976,8 +9991,13 @@
             _masterTickCallbacks.forEach(fn => { try { fn(); } catch(e) {} });
         }, 1000);
         
-        // Reload changelog every minute to catch updates
-        setInterval(loadChangelog, 60000);
+        // ITERATION 145: 60-second master timer — consolidates updateAgeBadge + loadChangelog
+        // Previously two separate setInterval(fn, 60000) calls; now one timer, two callbacks
+        setInterval(() => {
+            if (window._sipTabHidden) return;
+            try { updateAgeBadge(); } catch(e) {}
+            try { loadChangelog(); } catch(e) {}
+        }, 60000);
 
         // ITERATION 126: Scroll energy moved into batched scroll handler (was separate listener)
         let _scrollEnergized = false;
@@ -10795,39 +10815,31 @@
         root.style.setProperty('--scroll-dim', '0');
     })();
 
-    // Cursor glow follower — page awareness
-    (function initCursorGlow() {
+    // ITERATION 145: Performance — merged cursor listeners, consolidated 60s timers, deferred reaction stream
+    // Cursor: merged glow + spotlight into single mousemove + single rAF (was two separate listeners)
+    // Timers: updateAgeBadge + loadChangelog now share one 60s interval (was two)
+    // Reactions: spawn timers deferred until user scrolls past hero (was immediate)
+    (function initCursorEffects() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         const glow = document.getElementById('cursor-glow');
-        if (!glow || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        let raf = null;
-        let mx = -300, my = -300;
-        document.addEventListener('mousemove', e => {
-            mx = e.clientX; my = e.clientY;
-            if (!glow.classList.contains('active')) glow.classList.add('active');
-            if (!raf) raf = requestAnimationFrame(() => {
-                glow.style.left = mx + 'px';
-                glow.style.top = my + 'px';
-                raf = null;
-            });
-        });
-        document.addEventListener('mouseleave', () => glow.classList.remove('active'));
-    })();
-
-    // ITERATION 140: Cursor ambient spotlight — large radial light pool
-    (function initCursorSpotlight() {
         const spot = document.getElementById('cursor-spotlight');
-        if (!spot || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        let raf = null, sx = -300, sy = -300;
+        if (!glow && !spot) return;
+        let raf = null, cx = -300, cy = -300;
         document.addEventListener('mousemove', e => {
-            sx = e.clientX; sy = e.clientY;
-            if (!spot.classList.contains('active')) spot.classList.add('active');
+            cx = e.clientX; cy = e.clientY;
+            if (glow && !glow.classList.contains('active')) glow.classList.add('active');
+            if (spot && !spot.classList.contains('active')) spot.classList.add('active');
             if (!raf) raf = requestAnimationFrame(() => {
-                spot.style.left = sx + 'px';
-                spot.style.top = sy + 'px';
+                const px = cx + 'px', py = cy + 'px';
+                if (glow) { glow.style.left = px; glow.style.top = py; }
+                if (spot) { spot.style.left = px; spot.style.top = py; }
                 raf = null;
             });
         });
-        document.addEventListener('mouseleave', () => spot.classList.remove('active'));
+        document.addEventListener('mouseleave', () => {
+            if (glow) glow.classList.remove('active');
+            if (spot) spot.classList.remove('active');
+        });
     })();
 
     // Engagement milestones — celebrate visitors who stay
