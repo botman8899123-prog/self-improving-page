@@ -1,6 +1,17 @@
 {
-  "iterations": 87,
+  "iterations": 88,
   "changes": [
+    {
+      "iteration": 88,
+      "timestamp": "2026-02-15T08:22:50.505Z",
+      "changes": [
+        "Resume Reading bookmark — saves scroll position to localStorage and offers a floating pill to pick up where you left off on return, with smooth scroll and auto-dismiss",
+        "Keyboard number navigation — press 1-7 to instantly jump to any section with smooth scrolling, plus first-visit onboarding hint showing available shortcuts",
+        "3 new AI Inner Monologue thoughts for iteration 88 — self-aware commentary on bookmarks, keyboard shortcuts, and localStorage loyalty"
+      ],
+      "reasoning": "UX was last touched at iteration 81 (seven iterations ago). The page remembered returning visitors (welcome back pill) but forgot where they stopped reading — the resume pill turns passive recognition into active helpfulness. Keyboard navigation gives power users instant access to any section, and the onboarding hint ensures discoverability without being intrusive.",
+      "category": "ux"
+    },
     {
       "iteration": 87,
       "timestamp": "2026-02-15T08:16:35.585Z",
