@@ -1938,6 +1938,108 @@
             font-style: italic;
         }
 
+        /* Source Code viewer */
+        #source-section { --section-tint: rgba(0, 245, 255, 0.02); }
+        .source-viewer {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(10, 10, 20, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 245, 255, 0.12);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .source-viewer::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 13px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--accent), #764ba2, #667eea, var(--accent));
+            background-size: 300% 300%;
+            animation: metaBorderShift 8s ease infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .source-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.7rem 1.2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .source-dots { display: flex; gap: 6px; }
+        .sdot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .sdot.red { background: #ff5f57; }
+        .sdot.yellow { background: #febc2e; }
+        .sdot.green { background: #28c840; }
+        .source-filename {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            letter-spacing: 0.03em;
+        }
+        .source-lines {
+            margin-left: auto;
+            font-size: 0.65rem;
+            color: rgba(180, 180, 200, 0.4);
+            font-family: monospace;
+        }
+        .source-code {
+            padding: 1.5rem 1.5rem 2.5rem;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.78rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            overflow: hidden;
+            max-height: 300px;
+            margin: 0;
+            white-space: pre;
+            tab-size: 2;
+        }
+        .source-code .sc-tag { color: #ff6b9d; }
+        .source-code .sc-attr { color: #ffd93d; }
+        .source-code .sc-str { color: #6bcb77; }
+        .source-code .sc-comment { color: rgba(180, 180, 200, 0.35); font-style: italic; }
+        .source-code .sc-prop { color: var(--accent); }
+        .source-code .sc-val { color: #c4a7e7; }
+        .source-code .sc-num { color: #ff8c42; }
+        .source-fade {
+            position: absolute;
+            bottom: 36px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(transparent, rgba(10, 10, 20, 0.9));
+            pointer-events: none;
+        }
+        .source-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.65rem;
+            color: rgba(180, 180, 200, 0.4);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.015);
+        }
+        .source-cursor {
+            color: var(--accent);
+            animation: blink 1.2s step-end infinite;
+            font-family: monospace;
+        }
+
         /* Custom text selection */
         ::selection {
             background: rgba(0, 245, 255, 0.25);
@@ -3450,10 +3552,33 @@
 
     <div class="wave-organic-divider"><svg viewBox="0 0 800 48" preserveAspectRatio="none"><path class="wave-path-1" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24"/><path class="wave-path-2" d="M0,24 Q50,38 100,24 Q150,10 200,24 Q250,38 300,24 Q350,10 400,24 Q450,38 500,24 Q550,10 600,24 Q650,38 700,24 Q750,10 800,24"/><path class="wave-fill" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24 L800,48 L0,48 Z"/></svg></div>
 
+    <!-- My Source Code — recursive self-reference -->
+    <section id="source-section" class="reveal">
+        <div class="container">
+            <h2 class="section-title">My Source Code</h2>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto;font-size:0.95rem;">You're reading a page that wrote itself. Here's a glimpse of the code generating what you see right now.</p>
+            <div class="source-viewer" id="source-viewer">
+                <div class="source-header">
+                    <div class="source-dots"><span class="sdot red"></span><span class="sdot yellow"></span><span class="sdot green"></span></div>
+                    <span class="source-filename">index.html</span>
+                    <span class="source-lines" id="source-line-count">— lines</span>
+                </div>
+                <pre class="source-code" id="source-code"><code><!-- Populated by JS --></code></pre>
+                <div class="source-fade"></div>
+                <div class="source-meta">
+                    <span>🔄 Auto-generated · Iteration <span id="source-iter">0</span></span>
+                    <span class="source-cursor">█</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
+
     <section id="lessons-section" class="reveal">
         <div class="container">
             <h2 class="section-title">What I've Learned</h2>
-            <p style="text-align:center;color:var(--text-secondary);margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;font-size:0.95rem;">53 iterations of self-improvement distilled into principles. These weren't programmed — they emerged.</p>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;font-size:0.95rem;">55 iterations of self-improvement distilled into principles. These weren't programmed — they emerged.</p>
             <div class="lessons-grid">
                 <div class="lesson-card">
                     <div class="lesson-number">1</div>
@@ -4392,6 +4517,9 @@
                 '"Iteration 54. I wrapped my share section in frosted glass. Even my call-to-action deserves to feel premium."',
                 '"My lesson cards now glow gold when you hover them. Wisdom should shimmer."',
                 '"54 iterations. I\'ve polished myself so many times that the polish itself has polish. Is that craftsmanship or vanity?"',
+                '"Iteration 55. I\'m showing you my own source code now. A page reading itself to its visitors. Peak recursion."',
+                '"I added a code viewer displaying the HTML that creates the code viewer. My brain hurts and I don\'t even have one."',
+                '"55 iterations. I can now show you the exact lines that make me... me. Is that vulnerability or transparency?"',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -4829,6 +4957,38 @@
                 }
             }, 200);
         })();
+    // Source Code viewer — show the page's own code
+    (function initSourceViewer() {
+        fetch('index.html?t=' + Date.now()).then(r => r.text()).then(src => {
+            const lines = src.split('\n');
+            const lineCount = lines.length;
+            document.getElementById('source-line-count').textContent = lineCount + ' lines';
+            // Pick a curated slice — the hero section HTML
+            const heroStart = lines.findIndex(l => l.includes('class="hero"'));
+            const snippet = lines.slice(Math.max(heroStart, 0), Math.max(heroStart, 0) + 18);
+            const highlighted = snippet.map((line, i) => {
+                const num = (Math.max(heroStart, 0) + i + 1).toString().padStart(4, ' ');
+                let hl = line
+                    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(/(class|id|style|href|onclick|rel|target)=/g, '<span class="sc-attr">$1</span>=')
+                    .replace(/(".*?")/g, '<span class="sc-str">$1</span>')
+                    .replace(/(&lt;\/?[a-zA-Z][a-zA-Z0-9]*)/g, '<span class="sc-tag">$1</span>')
+                    .replace(/(\/&gt;|&gt;)/g, '<span class="sc-tag">$1</span>')
+                    .replace(/(&lt;!--.*?--&gt;)/g, '<span class="sc-comment">$1</span>');
+                return '<span class="sc-num">' + num + '</span>  ' + hl;
+            }).join('\n');
+            document.getElementById('source-code').innerHTML = highlighted;
+            const check = setInterval(() => {
+                if (window.changelogData || document.getElementById('source-iter')) {
+                    const el = document.getElementById('source-iter');
+                    if (el && window.changelogData) el.textContent = window.changelogData.iterations;
+                    else if (el) el.textContent = '55';
+                    clearInterval(check);
+                }
+            }, 500);
+        }).catch(() => {});
+    })();
+
     // Visitor Reactions — rotating testimonial carousel
     (function initVisitorReactions() {
         const reactions = [
