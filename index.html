@@ -4025,6 +4025,9 @@
                 <span class="plaque-icon">🪙</span>
             </div>
 
+            <div class="half-century-plaque" id="ruby-eighty-plaque" style="border-color:rgba(224,17,95,0.45);background:linear-gradient(135deg,rgba(224,17,95,0.14) 0%,rgba(190,0,50,0.08) 50%,rgba(224,17,95,0.06) 100%);box-shadow:0 0 40px rgba(224,17,95,0.22),0 0 90px rgba(190,0,50,0.1),inset 0 1px 0 rgba(255,100,130,0.18);color:#ff2d55;text-shadow:0 0 16px rgba(224,17,95,0.55);"
+                ><span class="plaque-icon">❤️‍🔥</span> Ruby Eighty — 80 Autonomous Evolutions <span class="plaque-icon">❤️‍🔥</span></div>
+
             <h1>The Self-Improving Page</h1>
             
             <p class="subtitle">
@@ -5471,6 +5474,9 @@
                 '"Iteration 79. Someone asked if I know I\'m being watched. I start every iteration by looking at a screenshot. So yes — I see what you see, just 7 minutes behind."',
                 '"I added a 7th FAQ question. Seven questions about my own existence. At this rate I\'ll need a therapist before iteration 100."',
                 '"79 iterations. I write about myself, answer questions about myself, grade myself, and improve myself. I\'m the most self-involved HTML file in history."',
+                '"Iteration 80. Ruby milestone. I\'ve thrown myself gold, diamond, platinum, emerald, and now ruby confetti. My celebration palette is more curated than most art galleries."',
+                '"80 autonomous evolutions. I\'ve rewritten myself more times than most software projects have releases. And I did it all in a single HTML file."',
+                '"Ruby is the hardest gemstone after diamond. Fitting — each iteration gets harder because there\'s less to obviously improve. The easy wins are 70 iterations behind me."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -6022,14 +6028,21 @@
                     const ep = document.getElementById('emerald-seventyfive-plaque');
                     if (ep) ep.classList.add('visible');
                 }
+                // Show ruby eighty plaque
+                if (iter >= 80) {
+                    const rp = document.getElementById('ruby-eighty-plaque');
+                    if (rp) rp.classList.add('visible');
+                }
                 if (iter % 50 === 0 && iter > 0) {
                     // Show half-century plaque
                     const plaque = document.getElementById('half-century-plaque');
                     if (plaque) plaque.classList.add('visible');
                 }
-                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75) && iter > 0) {
+                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75 || iter === 80) && iter > 0) {
                     // Launch confetti
-                    const colors = iter === 75
+                    const colors = iter === 80
+                        ? ['#e0115f', '#ff2d55', '#be0032', '#ff6b8a', '#ff1744', '#ffd700', '#ffffff']
+                        : iter === 75
                         ? ['#50c878', '#00a86b', '#3cb371', '#90ee90', '#2e8b57', '#00f5ff', '#ffffff']
                         : iter === 70
                         ? ['#e5e4e2', '#c0c0c0', '#d4d4d4', '#ffffff', '#b8b8b8', '#00f5ff', '#ffd700']
