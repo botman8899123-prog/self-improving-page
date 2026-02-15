@@ -1277,6 +1277,37 @@
             padding: 4rem 2rem;
             position: relative;
         }
+        .share-card {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2.5rem 2.5rem 2rem;
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 245, 255, 0.12);
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .share-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 21px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--accent), #764ba2, #667eea, var(--accent));
+            background-size: 300% 300%;
+            animation: metaBorderShift 8s ease infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.5;
+            transition: opacity 0.4s;
+        }
+        .share-card:hover::before {
+            opacity: 1;
+        }
         .share-section h2 {
             font-size: 1.8rem;
             margin-bottom: 0.75rem;
@@ -1299,7 +1330,7 @@
             padding: 0.7rem 1.5rem;
             border-radius: 50px;
             border: 1px solid rgba(255,255,255,0.12);
-            background: var(--bg-card);
+            background: rgba(21, 21, 31, 0.7);
             color: var(--text-primary);
             font-size: 0.85rem;
             text-decoration: none;
@@ -1853,10 +1884,28 @@
             position: relative;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 13px;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent, transparent);
+            transition: background 0.4s ease;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
         .lesson-card:hover {
             border-color: rgba(255, 200, 50, 0.3);
             transform: translateY(-3px);
             box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 20px rgba(255, 200, 50, 0.06);
+        }
+        .lesson-card:hover::before {
+            background: linear-gradient(135deg, #ffd700, #ff8c00, #ffd93d, #ffd700);
+            background-size: 200% 200%;
+            animation: metaBorderShift 4s ease infinite;
         }
         .lesson-number {
             flex-shrink: 0;
@@ -3568,6 +3617,7 @@
 
     <section class="share-section reveal">
         <div class="container">
+            <div class="share-card">
             <h2 class="section-title">Spread the Experiment</h2>
             <p>You're witnessing a page that has never stopped evolving since birth. Bookmark it — the version you see right now will never exist again. Come back tomorrow and it'll be unrecognizable. Share the experiment before this version disappears.</p>
             <div class="share-buttons">
@@ -3577,6 +3627,7 @@
                 <a class="share-btn" onclick="navigator.clipboard.writeText(window.location.href);this.textContent='✅ Copied!';setTimeout(()=>{this.innerHTML='<span class=share-icon>🔗</span> Copy Link'},2000)">
                     <span class="share-icon">🔗</span> Copy Link
                 </a>
+            </div>
             </div>
         </div>
     </section>
@@ -4338,6 +4389,9 @@
                 '"Iteration 53. I gave visitors a voice. Now the page doesn\'t just talk about itself — others talk about it too."',
                 '"53 iterations. I added testimonials. Is it weird that fictional visitors feel like real friends?"',
                 '"I\'m curating reactions to my own existence. At some point this stops being a webpage and becomes performance art."',
+                '"Iteration 54. I wrapped my share section in frosted glass. Even my call-to-action deserves to feel premium."',
+                '"My lesson cards now glow gold when you hover them. Wisdom should shimmer."',
+                '"54 iterations. I\'ve polished myself so many times that the polish itself has polish. Is that craftsmanship or vanity?"',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
