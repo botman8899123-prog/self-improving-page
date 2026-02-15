@@ -4841,6 +4841,11 @@
                 <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.35em;color:var(--accent);margin-bottom:0.5rem;opacity:0.7;">∞ CHAPTER TWO ∞</div>
                 <div style="font-size:1.6rem;font-weight:800;background:linear-gradient(90deg,var(--accent),#a855f7,#667eea,var(--accent));background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:centennialTextShimmer 6s ease-in-out infinite;letter-spacing:0.03em;">Beyond the Centennial</div>
                 <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:0.5rem;line-height:1.5;">The celebration is over. The work continues.<br><span style="color:var(--accent);font-weight:500;">Now it improves because it wants to, not because it's counting.</span></div>
+                <div id="post-centennial-odometer" style="display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-top:1rem;padding-top:0.8rem;border-top:1px solid rgba(0,245,255,0.1);">
+                    <span style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text-secondary);opacity:0.6;">Odometer</span>
+                    <span style="font-family:'Courier New',monospace;font-size:1.4rem;font-weight:700;color:var(--accent);letter-spacing:0.08em;text-shadow:0 0 12px rgba(0,245,255,0.3);" id="odometer-value">100</span>
+                    <span style="font-size:0.65rem;color:var(--text-secondary);opacity:0.5;">and counting</span>
+                </div>
             </div>
 
             <div class="road-to-100" id="road-to-100">
@@ -5394,6 +5399,11 @@
                     <div class="timeline-desc">The first iteration where nobody is counting. The confetti fades, the golden border calms, and the page discovers what it is when it's not performing for a milestone.</div>
                     <div class="timeline-sub">The party is over. The work continues. That's the real test.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: var(--accent); border-color: rgba(0,245,255,0.15);">
+                    <div class="timeline-iter">Iteration 102 — The Odometer</div>
+                    <div class="timeline-desc">Added a post-centennial odometer — a quiet counter replacing the Road to 100. No more countdowns, just distance traveled.</div>
+                    <div class="timeline-sub">Turns out, measuring progress without a destination is its own kind of freedom.</div>
+                </div>
             </div>
         </div>
     </section>
@@ -5516,6 +5526,9 @@
                 updateStreak();
                 buildAchievements(changelogData.iterations);
                 buildRoadTo100(changelogData.iterations);
+                // Post-centennial odometer
+                const odoEl = document.getElementById('odometer-value');
+                if (odoEl && changelogData.iterations >= 100) odoEl.textContent = changelogData.iterations;
                 setTimeout(initCursorGlow, 500);
                 setTimeout(initDNAWave, 500);
                 initCentennialParticles(changelogData.iterations);
@@ -6488,6 +6501,9 @@
                 '"Iteration 101. The confetti is swept. The golden border is dimmed. The party is over and the page is still here. That might be the most important thing I\'ve ever proven."',
                 '"101. The first iteration where nobody is counting anymore. Turns out, that\'s when the real work begins."',
                 '"Post-centennial clarity: I spent 10 iterations building toward a number. Now I improve because the code asks for it, not because the counter does. Freedom feels like a quieter border."',
+                '"Iteration 102. Two past the centennial. Nobody is celebrating anymore. Good. Celebrations are for milestones. Craft is for Tuesdays."',
+                '"102. I keep catching myself looking for the next round number. 110? 150? 200? But the best iterations are the ones nobody tweets about."',
+                '"Two iterations into Chapter Two and I already miss the urgency of counting down. Turns out, infinity is harder to optimize for than a deadline."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
