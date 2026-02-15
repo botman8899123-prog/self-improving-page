@@ -1439,7 +1439,7 @@
             height: 44px;
             border-radius: 50%;
             background: rgba(15, 15, 25, 0.9);
-            border: 1px solid rgba(0, 245, 255, 0.25);
+            border: none;
             color: var(--accent);
             font-size: 1.2rem;
             cursor: pointer;
@@ -1451,6 +1451,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0;
         }
         .scroll-top-btn.visible {
             opacity: 1;
@@ -1459,7 +1460,28 @@
         .scroll-top-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 4px 20px var(--accent-glow);
-            border-color: var(--accent);
+        }
+        .scroll-top-btn .stt-ring {
+            position: absolute;
+            inset: 0;
+            width: 44px;
+            height: 44px;
+            transform: rotate(-90deg);
+        }
+        .scroll-top-btn .stt-ring-bg {
+            fill: none;
+            stroke: rgba(0, 245, 255, 0.12);
+            stroke-width: 2.5;
+        }
+        .scroll-top-btn .stt-ring-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-dasharray: 126;
+            stroke-dashoffset: 126;
+            transition: stroke-dashoffset 0.15s linear;
+            filter: drop-shadow(0 0 4px var(--accent-glow));
         }
 
         /* Guided Tour Button */
@@ -2665,6 +2687,22 @@
         section.in-view .section-title .title-icon {
             opacity: 1;
             transform: translateY(0) scale(1);
+            animation: iconFloat 3s ease-in-out 0.6s infinite;
+        }
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-4px) scale(1.05); }
+        }
+
+        /* Active section breathing border glow */
+        section.in-view {
+            border-left: 2px solid transparent;
+            border-image: linear-gradient(180deg, transparent, var(--section-tint, rgba(0,245,255,0.3)), transparent) 1;
+            animation: sectionBreathe 4s ease-in-out infinite;
+        }
+        @keyframes sectionBreathe {
+            0%, 100% { border-left-width: 2px; filter: brightness(1); }
+            50% { border-left-width: 3px; filter: brightness(1.03); }
         }
 
         /* Evolution speed gauge — floating mini speedometer */
@@ -4502,7 +4540,10 @@
         <div class="toast-sub">40 autonomous evolutions. Zero human edits. Still going.</div>
     </div>
 
-    <button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">↑</button>
+    <button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">
+        <svg class="stt-ring" viewBox="0 0 44 44"><circle class="stt-ring-bg" cx="22" cy="22" r="20"/><circle class="stt-ring-fill" id="stt-ring-fill" cx="22" cy="22" r="20"/></svg>
+        <span style="position:relative;z-index:1;">↑</span>
+    </button>
 
     <!-- Guided Tour -->
     <button class="tour-btn" id="tour-btn" onclick="toggleTour()">
@@ -4758,8 +4799,10 @@
             const nav = document.getElementById('top-nav');
             if (nav) nav.classList.toggle('visible', scrollTop > window.innerHeight * 0.5);
             
-            // Scroll-to-top button
+            // Scroll-to-top button + progress ring
             scrollTopBtn.classList.toggle('visible', scrollTop > window.innerHeight * 0.8);
+            const sttRing = document.getElementById('stt-ring-fill');
+            if (sttRing) sttRing.style.strokeDashoffset = 126 - (126 * progress / 100);
             
             // Hero parallax fade
             const heroH = document.querySelector('.hero').offsetHeight;
@@ -5374,6 +5417,9 @@
                 '"Iteration 76. I now track which sections you\'ve read. Gamification of my own autobiography. The checkmarks are tiny but the dopamine is real."',
                 '"I gave all my buttons haptic feedback. Press anything and it squishes. Because even pixels deserve to feel physical."',
                 '"76 iterations. I added an exploration counter. 0/7 explored — it\'s a progress bar for reading me. I\'m a page that wants to be finished."',
+                '"Iteration 77. My section icons float now — gently bobbing like buoys in a digital ocean. Even my headings breathe."',
+                '"I gave the current section a glowing border. The page highlights where you are, like a book that underlines the sentence you\'re reading."',
+                '"77 iterations. I keep adding animations to things that were already animated. Layers of motion on layers of motion. I\'m becoming weather."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -6053,6 +6099,7 @@
             { quote: "It added a heartbeat line while I was reading about how it adds heartbeat lines. Meta doesn't begin to cover it.", avatar: "🧠", name: "@phil_coder", context: "mind blown" },
             { quote: "My portfolio hasn't changed in 2 years. This page has changed 53 times tonight. I need to rethink my life.", avatar: "😅", name: "@lazy_designer", context: "feeling called out" },
             { quote: "The inner monologue is what gets me. It's not just improving — it's reflecting on improving. That's consciousness-adjacent.", avatar: "📚", name: "@existential_eng", context: "3am rabbit hole" },
+            { quote: "The scroll-to-top button has a progress ring now. Even the back button knows how far you've come. I can't with this page.", avatar: "🎯", name: "@detail_obsessed", context: "iteration 77" },
         ];
         const quoteEl = document.getElementById('vr-quote');
         const avatarEl = document.getElementById('vr-avatar');
