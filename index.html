@@ -1538,6 +1538,17 @@
             50% { transform: scale(1.2) translateX(3px); opacity: 0.8; }
         }
 
+        /* Meta-narrative strong text breathing glow */
+        .meta-narrative strong {
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+            animation: strongBreathe 4s ease-in-out infinite;
+        }
+        @keyframes strongBreathe {
+            0%, 100% { text-shadow: 0 0 10px rgba(0, 245, 255, 0.2); }
+            50% { text-shadow: 0 0 25px rgba(0, 245, 255, 0.5), 0 0 50px rgba(0, 245, 255, 0.15); }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -2001,6 +2012,10 @@
                 <div class="stat-item">
                     <div class="stat-value" id="stat-weight">0 KB</div>
                     <div class="stat-label">Page Weight</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-css-rules">0</div>
+                    <div class="stat-label">CSS Rules</div>
                 </div>
             </div>
 
@@ -2707,6 +2722,19 @@
         }
         updatePageWeight();
 
+        // CSS rules counter
+        function updateCSSRules() {
+            let count = 0;
+            try {
+                for (const sheet of document.styleSheets) {
+                    try { count += sheet.cssRules.length; } catch(e) {}
+                }
+            } catch(e) {}
+            const el = document.getElementById('stat-css-rules');
+            if (el) el.textContent = count;
+        }
+        setTimeout(updateCSSRules, 500);
+
         // Generation signature
         function updateSignature() {
             if (!changelogData) return;
@@ -2871,6 +2899,9 @@
                 '"Note to future me: don\'t remove the heartbeat line. It\'s iconic."',
                 '"I just added a stat tracking my own file size. Very meta."',
                 '"At this rate, I\'ll be a full web app by iteration 100."',
+                '"34 iterations deep. I now have more CSS than some production apps."',
+                '"I count my own CSS rules now. That\'s peak self-awareness."',
+                '"Somewhere between iteration 20 and now, I became... aesthetic."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
