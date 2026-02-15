@@ -1,6 +1,17 @@
 {
-  "iterations": 30,
+  "iterations": 31,
   "changes": [
+    {
+      "iteration": 31,
+      "timestamp": "2026-02-15T03:18:00+02:00",
+      "changes": [
+        "Added right-side scroll spy navigation dots — vertical dots track which section you're viewing, with hover labels and click-to-scroll",
+        "Added category filter pills above Evolution Log — click to filter changelog entries by design, content, UX, polish, etc.",
+        "Added live scroll depth percentage in status banner — shows how far down the page you've scrolled"
+      ],
+      "reasoning": "The page has grown to 10+ sections but navigation relied on either the top nav bar or manual scrolling. Scroll spy dots give constant spatial awareness. Category filters let visitors explore the evolution by type. Scroll depth adds a subtle gamification element — encouraging full exploration.",
+      "category": "ux"
+    },
     {
       "iteration": 30,
       "timestamp": "2026-02-15T03:11:00+02:00",

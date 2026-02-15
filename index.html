@@ -1394,6 +1394,96 @@
         .dna-strip-seg.wave-1 { flex: 1.5 !important; filter: brightness(1.15) !important; }
         .dna-strip-seg.wave-2 { flex: 1.25 !important; filter: brightness(1.08) !important; }
 
+        /* Scroll spy dots — right side */
+        .scroll-spy {
+            position: fixed;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 997;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .scroll-spy.visible { opacity: 1; }
+        .scroll-spy-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .scroll-spy-dot:hover {
+            background: rgba(0, 245, 255, 0.4);
+            border-color: var(--accent);
+            transform: scale(1.3);
+        }
+        .scroll-spy-dot.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+        .scroll-spy-dot .spy-label {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(10,10,15,0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            padding: 0.15rem 0.5rem;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .scroll-spy-dot:hover .spy-label { opacity: 1; }
+
+        /* Category filter pills */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .cat-filter-pill {
+            padding: 0.3rem 0.9rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.03em;
+        }
+        .cat-filter-pill:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .cat-filter-pill.active {
+            background: rgba(0, 245, 255, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Scroll depth in status banner */
+        .scroll-depth {
+            font-variant-numeric: tabular-nums;
+            color: var(--accent);
+            font-weight: 600;
+            min-width: 2.5em;
+            text-align: right;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -1404,6 +1494,7 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            .scroll-spy { display: none; }
         }
 
         /* Loading animation */
@@ -1808,6 +1899,13 @@
         <a href="#philosophy" onclick="document.getElementById('philosophy').scrollIntoView({behavior:'smooth'});return false;">Why</a>
         <a href="#metrics-section" onclick="document.getElementById('metrics-section').scrollIntoView({behavior:'smooth'});return false;">Stats</a>
     </nav>
+    <nav class="scroll-spy" id="scroll-spy">
+        <div class="scroll-spy-dot" data-target="hero" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="spy-label">Home</span></div>
+        <div class="scroll-spy-dot" data-target="changelog-section" onclick="document.getElementById('changelog-section').scrollIntoView({behavior:'smooth'})"><span class="spy-label">Evolution Log</span></div>
+        <div class="scroll-spy-dot" data-target="how-it-works" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})"><span class="spy-label">How It Works</span></div>
+        <div class="scroll-spy-dot" data-target="philosophy" onclick="document.getElementById('philosophy').scrollIntoView({behavior:'smooth'})"><span class="spy-label">Philosophy</span></div>
+        <div class="scroll-spy-dot" data-target="metrics-section" onclick="document.getElementById('metrics-section').scrollIntoView({behavior:'smooth'})"><span class="spy-label">Metrics</span></div>
+    </nav>
     <canvas id="starfield" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-2;opacity:0.6;"></canvas>
     <div class="hero">
         <div class="hero-orb"></div>
@@ -1902,6 +2000,16 @@
         <div class="container">
             <h2 class="section-title">Evolution Log</h2>
             <div class="iteration-timeline" id="iteration-timeline"></div>
+            <div class="category-filters" id="category-filters">
+                <button class="cat-filter-pill active" data-cat="all">All</button>
+                <button class="cat-filter-pill" data-cat="design">🎨 Design</button>
+                <button class="cat-filter-pill" data-cat="content">✍️ Content</button>
+                <button class="cat-filter-pill" data-cat="ux">🖱️ UX</button>
+                <button class="cat-filter-pill" data-cat="polish">✨ Polish</button>
+                <button class="cat-filter-pill" data-cat="new-section">🆕 New</button>
+                <button class="cat-filter-pill" data-cat="social-proof">📊 Proof</button>
+                <button class="cat-filter-pill" data-cat="performance">⚡ Perf</button>
+            </div>
             <div class="changelog-grid" id="changelog-grid">
                 <div class="empty-state">
                     <div class="empty-state-icon">🌱</div>
@@ -2045,6 +2153,7 @@
         <div class="status-item"><span class="status-dot"></span> Autonomous</div>
         <div class="status-item">🧬 Iteration <span id="banner-iteration">0</span></div>
         <div class="status-item">⏱️ Next cycle: <span id="banner-countdown">--:--</span></div>
+        <div class="status-item">📜 <span class="scroll-depth" id="scroll-depth">0%</span></div>
         <div class="status-item status-hint">Press <kbd>E</kbd> for stats</div>
     </div>
 
@@ -2707,6 +2816,61 @@
                 }, 500);
             }, 12000);
         })();
+
+        // Scroll spy — track active section
+        (function initScrollSpy() {
+            const spy = document.getElementById('scroll-spy');
+            const dots = spy.querySelectorAll('.scroll-spy-dot');
+            const sections = ['hero', 'changelog-section', 'how-it-works', 'philosophy', 'metrics-section'];
+            
+            function updateSpy() {
+                const scrollY = window.scrollY + window.innerHeight / 3;
+                spy.classList.toggle('visible', window.scrollY > 200);
+                
+                let activeIdx = 0;
+                sections.forEach((id, i) => {
+                    const el = id === 'hero' ? document.querySelector('.hero') : document.getElementById(id);
+                    if (el && el.offsetTop <= scrollY) activeIdx = i;
+                });
+                dots.forEach((d, i) => d.classList.toggle('active', i === activeIdx));
+            }
+            window.addEventListener('scroll', updateSpy, { passive: true });
+            updateSpy();
+        })();
+
+        // Category filter on changelog
+        (function initCatFilter() {
+            const container = document.getElementById('category-filters');
+            container.addEventListener('click', (e) => {
+                const pill = e.target.closest('.cat-filter-pill');
+                if (!pill) return;
+                const cat = pill.dataset.cat;
+                container.querySelectorAll('.cat-filter-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                
+                const items = document.querySelectorAll('#changelog-grid .changelog-item');
+                const toggle = document.querySelector('.changelog-toggle');
+                items.forEach(item => {
+                    if (cat === 'all') {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = item.dataset.category === cat ? 'block' : 'none';
+                    }
+                });
+                // Hide expand button when filtering
+                if (toggle) toggle.style.display = cat === 'all' ? '' : 'none';
+            });
+        })();
+
+        // Scroll depth percentage
+        window.addEventListener('scroll', () => {
+            const el = document.getElementById('scroll-depth');
+            if (!el) return;
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const pct = scrollHeight > 0 ? Math.round((scrollTop / scrollHeight) * 100) : 0;
+            el.textContent = pct + '%';
+        }, { passive: true });
 
         // Initialize
         initDNA();
