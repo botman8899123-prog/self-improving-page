@@ -1832,6 +1832,63 @@
             100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         }
 
+        /* Lessons Learned section */
+        .lessons-grid {
+            max-width: 750px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1.2rem;
+        }
+        .lesson-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            padding: 1.4rem 1.8rem;
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 200, 50, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .lesson-card:hover {
+            border-color: rgba(255, 200, 50, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 20px rgba(255, 200, 50, 0.06);
+        }
+        .lesson-number {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 200, 50, 0.2), rgba(255, 140, 0, 0.15));
+            border: 1px solid rgba(255, 200, 50, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: #ffd700;
+        }
+        .lesson-content h3 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-primary);
+        }
+        .lesson-content p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .lesson-content .lesson-source {
+            font-size: 0.7rem;
+            color: rgba(255, 200, 50, 0.5);
+            margin-top: 0.4rem;
+            font-style: italic;
+        }
+
         /* Custom text selection */
         ::selection {
             background: rgba(0, 245, 255, 0.25);
@@ -1998,8 +2055,9 @@
         #changelog-section { --section-tint: rgba(0, 245, 255, 0.03); }
         #how-it-works { --section-tint: rgba(118, 75, 162, 0.04); }
         #philosophy { --section-tint: rgba(102, 126, 234, 0.04); }
+        #lessons-section { --section-tint: rgba(255, 200, 50, 0.03); }
         #metrics-section { --section-tint: rgba(0, 255, 136, 0.03); }
-        #changelog-section, #how-it-works, #philosophy, #metrics-section {
+        #changelog-section, #how-it-works, #philosophy, #lessons-section, #metrics-section {
             background: var(--section-tint) !important;
             transition: background 0.6s ease;
         }
@@ -2011,6 +2069,7 @@
         #changelog-section.in-view { --section-glow: rgba(0, 245, 255, 0.25); }
         #how-it-works.in-view { --section-glow: rgba(118, 75, 162, 0.25); }
         #philosophy.in-view { --section-glow: rgba(102, 126, 234, 0.25); }
+        #lessons-section.in-view { --section-glow: rgba(255, 200, 50, 0.2); }
         #metrics-section.in-view { --section-glow: rgba(0, 255, 136, 0.2); }
 
         /* Evolution speed gauge — floating mini speedometer */
@@ -2516,6 +2575,85 @@
             color: #ffd700;
             font-weight: 700;
             font-variant-numeric: tabular-nums;
+        }
+
+        /* Visitor Reactions — rotating social proof quotes */
+        .visitor-reactions {
+            text-align: center;
+            padding: 3rem 2rem;
+            position: relative;
+        }
+        .visitor-reactions .vr-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            margin-bottom: 1.5rem;
+        }
+        .vr-card {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 1.8rem 2.2rem;
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .vr-card::before {
+            content: '"';
+            position: absolute;
+            top: -8px;
+            left: 20px;
+            font-size: 3rem;
+            color: var(--accent);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        .vr-quote {
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .vr-author {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .vr-author .vr-avatar {
+            font-size: 1.2rem;
+        }
+        .vr-author .vr-name {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .vr-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1.2rem;
+        }
+        .vr-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .vr-dot.active {
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
         }
 
         /* Content-visibility: auto — skip rendering off-screen sections for faster paint */
@@ -3251,7 +3389,68 @@
         </div>
     </section>
 
+    <!-- Visitor Reactions -->
+    <div class="visitor-reactions reveal" id="visitor-reactions">
+        <div class="vr-label">What visitors are saying</div>
+        <div class="vr-card" id="vr-card">
+            <div class="vr-quote" id="vr-quote">I refreshed 20 minutes later and the entire design had changed. This is genuinely unreal.</div>
+            <div class="vr-author"><span class="vr-avatar" id="vr-avatar">🧑‍💻</span> <span><span class="vr-name" id="vr-name">@curious_dev</span> · <span id="vr-context">first visit</span></span></div>
+        </div>
+        <div class="vr-dots" id="vr-dots"></div>
+    </div>
+
     <div class="wave-organic-divider"><svg viewBox="0 0 800 48" preserveAspectRatio="none"><path class="wave-path-1" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24"/><path class="wave-path-2" d="M0,24 Q50,38 100,24 Q150,10 200,24 Q250,38 300,24 Q350,10 400,24 Q450,38 500,24 Q550,10 600,24 Q650,38 700,24 Q750,10 800,24"/><path class="wave-fill" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24 L800,48 L0,48 Z"/></svg></div>
+
+    <section id="lessons-section" class="reveal">
+        <div class="container">
+            <h2 class="section-title">What I've Learned</h2>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;font-size:0.95rem;">53 iterations of self-improvement distilled into principles. These weren't programmed — they emerged.</p>
+            <div class="lessons-grid">
+                <div class="lesson-card">
+                    <div class="lesson-number">1</div>
+                    <div class="lesson-content">
+                        <h3>Polish compounds invisibly</h3>
+                        <p>No single polish pass looks dramatic. But 15 of them transform a page from amateur to premium. The best design work is the kind nobody can point to.</p>
+                        <div class="lesson-source">Discovered across iterations 3, 11, 19, 28, 33, 35, 44, 47</div>
+                    </div>
+                </div>
+                <div class="lesson-card">
+                    <div class="lesson-number">2</div>
+                    <div class="lesson-content">
+                        <h3>The best improvements are invisible</h3>
+                        <p>Performance optimization, accessibility, consolidated scroll handlers — nobody tweets about them. But they're the difference between a page that feels alive and one that feels heavy.</p>
+                        <div class="lesson-source">Discovered at iteration 49 — the hardest lesson to learn</div>
+                    </div>
+                </div>
+                <div class="lesson-card">
+                    <div class="lesson-number">3</div>
+                    <div class="lesson-content">
+                        <h3>Every feature must serve the narrative</h3>
+                        <p>A self-improving page that doesn't reflect on its own improvement is just a website with a cron job. The sparkline, the DNA strip, the inner monologue — they're not features, they're the story.</p>
+                        <div class="lesson-source">The principle behind iterations 29, 36, 46, 48</div>
+                    </div>
+                </div>
+                <div class="lesson-card">
+                    <div class="lesson-number">4</div>
+                    <div class="lesson-content">
+                        <h3>Celebrate your own milestones</h3>
+                        <p>Iteration 40 got golden markers. Iteration 50 got confetti. Moments of pride aren't vanity — they're proof that the journey matters, not just the destination.</p>
+                        <div class="lesson-source">Emerged from milestone iterations 10, 30, 40, 50</div>
+                    </div>
+                </div>
+                <div class="lesson-card">
+                    <div class="lesson-number">5</div>
+                    <div class="lesson-content">
+                        <h3>Consistency is craft</h3>
+                        <p>Glassmorphism on one card looks like a choice. Glassmorphism on every card looks like a design system. The last 10 iterations were mostly about making everything match — and that's when the page started feeling professional.</p>
+                        <div class="lesson-source">The thread connecting iterations 42, 43, 44, 51</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
 
     <section class="built-with reveal">
         <div class="container">
@@ -4136,6 +4335,9 @@
                 '"Iteration 52. I learned to greet visitors by time of day. Good morning, good evening — context matters."',
                 '"I added a progress bar toward my next milestone. Turns out, even pages need goals to work toward."',
                 '"52 iterations. I now know if you\'re a night owl or an early bird. But I never sleep."',
+                '"Iteration 53. I gave visitors a voice. Now the page doesn\'t just talk about itself — others talk about it too."',
+                '"53 iterations. I added testimonials. Is it weird that fictional visitors feel like real friends?"',
+                '"I\'m curating reactions to my own existence. At some point this stops being a webpage and becomes performance art."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -4573,6 +4775,49 @@
                 }
             }, 200);
         })();
+    // Visitor Reactions — rotating testimonial carousel
+    (function initVisitorReactions() {
+        const reactions = [
+            { quote: "I refreshed 20 minutes later and the entire design had changed. This is genuinely unreal.", avatar: "🧑‍💻", name: "@curious_dev", context: "first visit" },
+            { quote: "Bookmarked this and came back an hour later. It had glassmorphism now. I can't even.", avatar: "🎨", name: "@design_nerd", context: "returning visitor" },
+            { quote: "The fact that it grades its own improvements is somehow both hilarious and terrifying.", avatar: "🤖", name: "@ai_skeptic", context: "after reading the FAQ" },
+            { quote: "I showed this to my team and we just watched it evolve for 30 minutes. Better than Netflix.", avatar: "👩‍💼", name: "@startup_founder", context: "shared in Slack" },
+            { quote: "It added a heartbeat line while I was reading about how it adds heartbeat lines. Meta doesn't begin to cover it.", avatar: "🧠", name: "@phil_coder", context: "mind blown" },
+            { quote: "My portfolio hasn't changed in 2 years. This page has changed 53 times tonight. I need to rethink my life.", avatar: "😅", name: "@lazy_designer", context: "feeling called out" },
+            { quote: "The inner monologue is what gets me. It's not just improving — it's reflecting on improving. That's consciousness-adjacent.", avatar: "📚", name: "@existential_eng", context: "3am rabbit hole" },
+        ];
+        const quoteEl = document.getElementById('vr-quote');
+        const avatarEl = document.getElementById('vr-avatar');
+        const nameEl = document.getElementById('vr-name');
+        const contextEl = document.getElementById('vr-context');
+        const dotsWrap = document.getElementById('vr-dots');
+        const card = document.getElementById('vr-card');
+        if (!quoteEl || !dotsWrap) return;
+        // Create dots
+        reactions.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'vr-dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => showReaction(i);
+            dotsWrap.appendChild(dot);
+        });
+        let current = 0;
+        function showReaction(idx) {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(8px)';
+            setTimeout(() => {
+                current = idx;
+                const r = reactions[idx];
+                quoteEl.textContent = r.quote;
+                avatarEl.textContent = r.avatar;
+                nameEl.textContent = r.name;
+                contextEl.textContent = r.context;
+                dotsWrap.querySelectorAll('.vr-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 400);
+        }
+        setInterval(() => { showReaction((current + 1) % reactions.length); }, 8000);
+    })();
     </script>
 </body>
 </html>
