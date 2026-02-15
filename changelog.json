@@ -1,6 +1,17 @@
 {
-  "iterations": 94,
+  "iterations": 95,
   "changes": [
+    {
+      "iteration": 95,
+      "timestamp": "2026-02-15T09:07:30.000Z",
+      "changes": [
+        "Centennial proximity glow — locked Centennial achievement badge now pulses with golden light and shows a countdown pip (5) as the page approaches iteration 100",
+        "Iteration 95 timeline node — 'The Final Stretch' entry added to milestone timeline with golden accent, acknowledging the approach to the centennial",
+        "3 new AI Inner Monologue thoughts for iteration 95 — self-aware commentary on seeing 100 from here, Netflix-episode timing, and building UI to track your own goals"
+      ],
+      "reasoning": "Five iterations from the centennial. The locked badge was invisible at 0.25 opacity — now it awakens as the page approaches its biggest milestone. The trophy you can almost reach should glow brighter than the ones you already have. Polish pass focused on building anticipation for 100.",
+      "category": "polish"
+    },
     {
       "iteration": 94,
       "timestamp": "2026-02-15T09:03:11.180Z",

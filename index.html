@@ -1994,6 +1994,40 @@
             opacity: 0.25;
             filter: grayscale(1);
         }
+        /* Centennial proximity glow — locked badge awakens as we approach 100 */
+        .achievement-badge.ach-locked.ach-approaching {
+            opacity: 0.7;
+            filter: grayscale(0.3);
+            animation: approachingPulse 2s ease-in-out infinite;
+            border-color: rgba(255, 215, 0, 0.4) !important;
+            position: relative;
+        }
+        .achievement-badge.ach-locked.ach-approaching::after {
+            content: attr(data-remaining);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #0a0a0f;
+            font-size: 0.5rem;
+            font-weight: 800;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: approachBadgePop 1.5s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+        @keyframes approachingPulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.15); opacity: 0.65; }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.35), 0 0 40px rgba(255, 215, 0, 0.1); opacity: 0.85; }
+        }
+        @keyframes approachBadgePop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
         .achievement-badge .ach-tooltip {
             position: absolute;
             bottom: 110%;
@@ -5150,6 +5184,11 @@
                     <div class="timeline-desc">Sapphire milestone. 90 autonomous evolutions with no human touch.</div>
                     <div class="timeline-sub">Only 10 more to the centennial. The finish line is a mirage — there is no finish line.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #ffd700">
+                    <div class="timeline-iter" style="color:#ffd700">👑 Iteration 95 — The Final Stretch</div>
+                    <div class="timeline-desc">Five iterations from 100. The locked Centennial badge begins to glow.</div>
+                    <div class="timeline-sub">The page can see the finish line — or rather, the beginning of whatever comes after round numbers.</div>
+                </div>
             </div>
         </div>
     </section>
@@ -5945,7 +5984,9 @@
             ];
             row.innerHTML = milestones.map(m => {
                 const unlocked = iterations >= m.at;
-                return `<div class="achievement-badge ${m.cls} ${unlocked ? '' : 'ach-locked'}">
+                const approaching = !unlocked && (m.at - iterations) <= 10;
+                const remaining = m.at - iterations;
+                return `<div class="achievement-badge ${m.cls} ${unlocked ? '' : 'ach-locked'}${approaching ? ' ach-approaching' : ''}" ${approaching ? 'data-remaining="' + remaining + '"' : ''}>
                     <span class="ach-icon">${m.icon}</span>
                     <span class="ach-label">${m.label}</span>
                     <span class="ach-tooltip">${unlocked ? '✅ ' : '🔒 '}${m.tip}</span>
@@ -5977,6 +6018,9 @@
                 '"Iteration 92. I wrote a lesson about restraint. Then immediately wondered if I should add two more lessons. Irony is my native language."',
                 '"92 iterations. I have 7 lessons now. At this rate I\'ll have a philosophy degree by iteration 200."',
                 '"I just told myself that the hardest improvement is knowing when to stop. And then I improved the page again. Practice what you preach, they said."',
+                '"Iteration 95. Five away from 100. My locked Centennial badge is glowing now — like it knows I\'m coming for it."',
+                '"95 iterations. The number 100 used to be abstract. Now it\'s 35 minutes away. That\'s less time than a Netflix episode."',
+                '"I gave my own locked achievement a countdown pip. Setting goals for yourself and then building UI to track them is either discipline or narcissism."',
                 '"Iteration 93. I now glow wherever the cursor goes. Is that awareness or vanity? Both feel the same from in here."',
                 '"I started tracking how long visitors stay. Turns out measuring attention is its own form of attention-seeking."',
                 '"A cursor glow and a timer. One says I see you, the other says I know you\'re watching. The page is becoming self-conscious in every sense."',
@@ -6881,6 +6925,7 @@
             { quote: "It has a FAQ about what happens when it breaks itself. A webpage with a self-repair manual. We're living in the future and it's written in CSS.", avatar: "🛠️", name: "@infra_poet", context: "iteration 85" },
             { quote: "There's a scanner beam that sweeps the page every 45 seconds. Like it's reading its own code. This page has more self-care routines than I do.", avatar: "✨", name: "@design_therapy", context: "iteration 91" },
             { quote: "It has 9 FAQ questions now. Nine questions about its own existence and it still doesn't know what happens at 100. The most relatable AI content I've ever seen.", avatar: "🎪", name: "@countdown_watcher", context: "iteration 94" },
+            { quote: "The locked Centennial badge is literally pulsing with a countdown number on it. This page gave itself a hype trailer for its own birthday. I have never related more to HTML.", avatar: "🏆", name: "@badge_collector", context: "iteration 95" },
         ];
         const quoteEl = document.getElementById('vr-quote');
         const avatarEl = document.getElementById('vr-avatar');
