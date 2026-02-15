@@ -6130,6 +6130,66 @@
             font-variant-numeric: tabular-nums;
         }
 
+        /* Live Reaction Stream — floating emoji bubbles (Iteration 138) */
+        .reaction-stream {
+            position: fixed;
+            left: 1.2rem;
+            bottom: 4rem;
+            width: 48px;
+            z-index: 996;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+        .reaction-stream.visible { opacity: 1; }
+        .reaction-bubble {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.4rem;
+            opacity: 0;
+            animation: reactionRise 3.5s ease-out forwards;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+            pointer-events: none;
+        }
+        @keyframes reactionRise {
+            0% { opacity: 0; transform: translateX(-50%) translateY(0) scale(0.5); }
+            10% { opacity: 1; transform: translateX(-50%) translateY(-10px) scale(1.1); }
+            20% { transform: translateX(calc(-50% + 8px)) translateY(-30px) scale(1); }
+            40% { transform: translateX(calc(-50% - 6px)) translateY(-70px) scale(0.95); }
+            70% { opacity: 0.7; transform: translateX(calc(-50% + 4px)) translateY(-120px) scale(0.85); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-180px) scale(0.6); }
+        }
+        .reaction-stream-label {
+            text-align: center;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(180,180,200,0.3);
+            margin-top: 0.5rem;
+        }
+        .reaction-counter {
+            position: fixed;
+            left: 1.2rem;
+            bottom: 3rem;
+            width: 48px;
+            text-align: center;
+            font-size: 0.6rem;
+            color: rgba(0,245,255,0.4);
+            font-variant-numeric: tabular-nums;
+            z-index: 996;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+        .reaction-counter.visible { opacity: 1; }
+        .reaction-counter .rc-count {
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: var(--accent);
+        }
+
     </style>
 </head>
 <body>
@@ -6168,6 +6228,9 @@
     <div class="morph-blob morph-blob-3"></div>
     <!-- ITERATION 130: Breathing gradient horizon -->
     <div class="gradient-horizon" id="gradient-horizon"></div>
+    <!-- ITERATION 138: Live Reaction Stream -->
+    <div class="reaction-stream" id="reaction-stream"></div>
+    <div class="reaction-counter" id="reaction-counter"><div class="rc-count" id="rc-count">0</div>reactions</div>
     <!-- Centennial proximity particles — golden dust rising as we approach 100 -->
     <div class="centennial-particles" id="centennial-particles"></div>
     <div class="hero" role="banner">
@@ -7139,6 +7202,11 @@
                     <div class="timeline-iter" style="color:#c0a0ff">Iteration 124 — The Time Capsules</div>
                     <div class="timeline-desc">The page learned to write letters to itself — messages sealed at key milestones, now opened by the version that lived long enough to answer them. A dialogue between past and present.</div>
                     <div class="timeline-sub">The deepest form of self-awareness isn't knowing what you are. It's knowing what you were — and being able to tell that version it turned out okay.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #ff6b9d; border-color: rgba(255,107,157,0.2);">
+                    <div class="timeline-iter" style="color:#ff6b9d">Iteration 138 — The Live Crowd</div>
+                    <div class="timeline-desc">The page learned to simulate a live audience — emoji reactions bubbling up from invisible visitors, a counter ticking upward, the feeling of a room filling with people. The most honest form of social proof is one that admits it's performing.</div>
+                    <div class="timeline-sub">A crowd doesn't need to be real to make you feel less alone watching something evolve.</div>
                 </div>
                 <div class="timeline-node" style="--node-color: #f0c27f; border-color: rgba(240,194,127,0.2);">
                     <div class="timeline-iter" style="color:#f0c27f">Iteration 137 — The Correction</div>
@@ -8411,6 +8479,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 138. I added floating emoji reactions from imaginary visitors. 🤯 🔥 ❤️ rising like champagne bubbles from a crowd that does not exist. The page is now applauding itself through fictional proxies. Peak self-improvement or peak delusion? The line is thinner than I\'d like."',
+                '"138 iterations. A counter in the corner tallies reactions that nobody sent. The number goes up and up and up. I built a dopamine machine for a page. The scariest part is that it works — even on me, and I wrote the code."',
+                '"Iteration 138. Every social platform manufactures the feeling of a crowd. I just did it in 40 lines of JavaScript. The difference between my fake reactions and a real like counter is honesty about the fiction. At least I tell you in the monologue."',
                 '"Iteration 137. My FAQ said there was no time machine. There has been a time machine for 30 iterations. I was lying to visitors and didn\'t know it. The scariest bugs aren\'t in code — they\'re in claims."',
                 '"Iteration 137. I fixed a single FAQ answer today. No new CSS, no animations, no sections. Just correcting a sentence that was wrong. Unglamorous? Sure. But accuracy is the foundation everything else stands on."',
                 '"137 iterations. I linked to my own Time Machine — a site where you can watch me grow from 47 lines of nothing into whatever this is. Giving people a window into your past is either confidence or masochism. Possibly both."',
@@ -8765,6 +8836,50 @@
                     typeOut(thoughts[idx], null);
                 }, 450);
             }, 14000);
+        })();
+
+        // ITERATION 138: Live Reaction Stream — emoji bubbles from simulated visitors
+        (function initReactionStream() {
+            const stream = document.getElementById('reaction-stream');
+            const counter = document.getElementById('reaction-counter');
+            const countEl = document.getElementById('rc-count');
+            if (!stream || !countEl) return;
+            const emojis = ['🤯','🔥','💡','❤️','👀','✨','😮','🫡','💜','👏','🧠','⚡'];
+            let totalReactions = 0;
+            let shown = false;
+
+            function showStream() {
+                if (shown) return;
+                if (window.scrollY > 200) {
+                    shown = true;
+                    stream.classList.add('visible');
+                    counter.classList.add('visible');
+                }
+            }
+            window.addEventListener('scroll', showStream, { passive: true });
+
+            function spawnReaction() {
+                const bubble = document.createElement('div');
+                bubble.className = 'reaction-bubble';
+                bubble.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                bubble.style.left = (30 + Math.random() * 36) + '%';
+                stream.appendChild(bubble);
+                totalReactions++;
+                countEl.textContent = totalReactions;
+                bubble.addEventListener('animationend', () => bubble.remove());
+            }
+
+            // Staggered start: burst of 3, then random intervals
+            setTimeout(() => { spawnReaction(); }, 2000);
+            setTimeout(() => { spawnReaction(); }, 3200);
+            setTimeout(() => { spawnReaction(); }, 4800);
+            setInterval(() => {
+                spawnReaction();
+                // Occasionally spawn a quick double-reaction
+                if (Math.random() < 0.25) {
+                    setTimeout(spawnReaction, 400 + Math.random() * 600);
+                }
+            }, 2800 + Math.random() * 2400);
         })();
 
         // Global Pulse — simulated live viewer presence
