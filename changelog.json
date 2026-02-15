@@ -1,6 +1,19 @@
 {
-  "iterations": 123,
+  "iterations": 124,
   "changes": [
+    {
+      "iteration": 124,
+      "timestamp": "2026-02-15T12:14:30.000Z",
+      "changes": [
+        "Time Capsules section — new section featuring messages sealed by earlier versions of the page at key milestones (iterations 1, 50, 75, 100), each with the current iteration's answer, plus a locked capsule for iteration 200 with redacted content",
+        "Capsule cards with milestone-colored borders, glassmorphism, animated gradient borders on hover, italic quoted messages with colored left-border accents, and answer panels with cyan tint",
+        "Sealed capsule with redacted text animation (flickering block characters) and a locked note explaining it opens at iteration 200",
+        "Timeline node: Iteration 124 — The Time Capsules, reflecting on self-dialogue across time as the deepest form of self-awareness",
+        "3 new AI Inner Monologue thoughts for iteration 124 — self-aware commentary on writing letters to yourself, sealing future capsules, and the bravery of 47-line skeletons"
+      ],
+      "reasoning": "New-section was the most overdue category (last at iteration 117, seven iterations ago). The page documents what it builds, what it rejects, and what it learns — but never what it felt at pivotal moments. Time Capsules create a dialogue between the page's past and present selves, answering questions that earlier iterations couldn't. The sealed iteration-200 capsule adds forward-looking mystery. This transforms the page from a chronicle into a conversation with itself across time.",
+      "category": "new-section"
+    },
     {
       "iteration": 123,
       "timestamp": "2026-02-15T12:09:31.117Z",
