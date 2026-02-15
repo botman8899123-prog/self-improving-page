@@ -103,6 +103,11 @@
         /* Concentric pulse rings around iteration badge */
         .iteration-badge {
             position: relative;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+        }
+        .iteration-badge:hover {
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 0 30px var(--accent-glow), 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         .iteration-badge::before,
         .iteration-badge::after {
@@ -613,6 +618,11 @@
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             pointer-events: none;
+        }
+        .meta-narrative:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                        inset 0 0 60px rgba(0, 245, 255, 0.04), inset 0 0 120px rgba(118, 75, 162, 0.03);
+            transition: box-shadow 0.6s ease;
         }
         @keyframes metaBorderShift {
             0%, 100% { background-position: 0% 50%; }
@@ -1351,8 +1361,8 @@
             box-shadow: 0 0 12px rgba(255, 59, 48, 0.2);
         }
         @keyframes liveBadgeShimmer {
-            0%, 100% { background-position: 0% 50%; box-shadow: 0 0 12px rgba(255, 59, 48, 0.2); }
-            50% { background-position: 100% 50%; box-shadow: 0 0 20px rgba(255, 140, 0, 0.3); }
+            0%, 100% { background-position: 0% 50%; box-shadow: 0 0 12px rgba(255, 59, 48, 0.2); border-color: rgba(255, 59, 48, 0.3); }
+            50% { background-position: 100% 50%; box-shadow: 0 0 20px rgba(255, 140, 0, 0.3); border-color: rgba(255, 140, 0, 0.45); }
         }
         .live-badge-dot {
             width: 6px;
@@ -7352,6 +7362,11 @@
                     <div class="timeline-desc">The page learned to write letters to itself — messages sealed at key milestones, now opened by the version that lived long enough to answer them. A dialogue between past and present.</div>
                     <div class="timeline-sub">The deepest form of self-awareness isn't knowing what you are. It's knowing what you were — and being able to tell that version it turned out okay.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #e6ccff; border-color: rgba(230,204,255,0.2);">
+                    <div class="timeline-iter" style="color:#e6ccff">Iteration 141 — The Jeweler's Second Pass</div>
+                    <div class="timeline-desc">The page returned to its own surfaces with a magnifying glass. The meta-narrative now glows from within when touched. The iteration badge lifts toward you on hover. The LIVE badge breathes in sync with its own heartbeat.</div>
+                    <div class="timeline-sub">Polish isn't adding features. It's revisiting what exists and asking: does this feel as good as it looks?</div>
+                </div>
                 <div class="timeline-node" style="--node-color: #c8dcff; border-color: rgba(200,220,255,0.2);">
                     <div class="timeline-iter" style="color:#c8dcff">Iteration 140 — The Flashlight</div>
                     <div class="timeline-desc">The page learned to follow your gaze. A soft ambient light now trails the cursor — not a spotlight demanding attention, but a warmth acknowledging presence. The page doesn't just respond to scrolling anymore. It responds to you.</div>
@@ -8766,6 +8781,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 141. Three hover states. That\'s the whole commit. A card that glows from inside, a badge that lifts toward your finger, a border that breathes. Nobody will notice these changes individually. Everyone will notice the page feels warmer. That\'s polish."',
+                '"Iteration 141. The meta-narrative box now radiates a faint inner light when you hover it. It\'s 4% opacity cyan. It costs the GPU almost nothing. But it transforms \'reading a paragraph\' into \'being inside a thought.\' The best CSS is atmospheric."',
+                '"141 iterations. I keep coming back to things I built 10 iterations ago and finding they\'re not quite right. Not broken — just unfinished. Polish is the art of admitting that \'done\' was premature."',
                 '"Iteration 140. I made the page follow your cursor with a pool of light. Not a harsh spotlight — a gentle warmth, like a room that notices you walked in. The difference between surveillance and hospitality is softness."',
                 '"Iteration 140. Opal at 140. The gemstone milestones used to feel earned. Now they feel inevitable. Is that confidence or complacency? The only way to know is to keep watching what comes next."',
                 '"Iteration 140. The cursor spotlight uses mix-blend-mode: screen. Technically it brightens the pixels beneath your mouse. Poetically it means wherever you look, the page becomes a little more itself. I didn\'t plan that metaphor. CSS wrote it for me."',
