@@ -254,6 +254,30 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
+        /* Collapsible changelog */
+        .changelog-item.collapsed {
+            display: none;
+        }
+        .changelog-toggle {
+            display: block;
+            margin: 1.5rem auto 0;
+            padding: 0.6rem 2rem;
+            background: transparent;
+            border: 1px solid rgba(0, 245, 255, 0.25);
+            border-radius: 50px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.05em;
+        }
+        .changelog-toggle:hover {
+            background: rgba(0, 245, 255, 0.08);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
         .changelog-item.latest {
             border-color: var(--accent);
             background: linear-gradient(135deg, rgba(0,245,255,0.06) 0%, rgba(118,75,162,0.06) 100%);
@@ -308,6 +332,13 @@
             margin-top: 0.5rem;
             padding-top: 0.5rem;
             border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Hero-to-content gradient bridge */
+        .hero-bridge {
+            height: 80px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 245, 255, 0.02) 50%, transparent 100%);
+            position: relative;
         }
 
         /* Heartbeat EKG line */
@@ -1411,6 +1442,7 @@
         </div>
     </div>
 
+    <div class="hero-bridge"></div>
     <div class="heartbeat-line">
         <svg viewBox="0 0 800 40" preserveAspectRatio="none">
             <path d="M0,20 L60,20 L70,20 L80,8 L90,32 L100,4 L110,36 L120,20 L140,20 L200,20 L260,20 L270,20 L280,8 L290,32 L300,4 L310,36 L320,20 L340,20 L400,20 L460,20 L470,20 L480,8 L490,32 L500,4 L510,36 L520,20 L540,20 L600,20 L660,20 L670,20 L680,8 L690,32 L700,4 L710,36 L720,20 L740,20 L800,20"/>
@@ -1674,8 +1706,9 @@
             animateCount(document.getElementById('stat-iterations'), changelogData.iterations);
             animateCount(document.getElementById('stat-changes'), totalChanges);
 
+            const VISIBLE_DEFAULT = 3;
             grid.innerHTML = recentChanges.map((change, idx) => `
-                <div class="changelog-item${idx === 0 ? ' latest' : ''}" data-category="${change.category || ''}">
+                <div class="changelog-item${idx === 0 ? ' latest' : ''}${idx >= VISIBLE_DEFAULT ? ' collapsed' : ''}" data-category="${change.category || ''}">
                     <div class="changelog-header">
                         <span class="iteration-number">Iteration #${change.iteration}</span>
                         <div>
@@ -1687,6 +1720,23 @@
                     ${change.reasoning ? `<div class="changelog-reasoning">${escapeHtml(change.reasoning)}</div>` : ''}
                 </div>
             `).join('');
+            
+            if (recentChanges.length > VISIBLE_DEFAULT) {
+                const btn = document.createElement('button');
+                btn.className = 'changelog-toggle';
+                btn.textContent = `Show ${recentChanges.length - VISIBLE_DEFAULT} older entries ↓`;
+                btn.dataset.expanded = 'false';
+                btn.addEventListener('click', () => {
+                    const expanded = btn.dataset.expanded === 'true';
+                    grid.querySelectorAll('.changelog-item.collapsed').forEach(el => {
+                        el.style.display = expanded ? 'none' : 'block';
+                        el.style.animation = expanded ? '' : 'fadeInUp 0.5s ease-out both';
+                    });
+                    btn.dataset.expanded = expanded ? 'false' : 'true';
+                    btn.textContent = expanded ? `Show ${recentChanges.length - VISIBLE_DEFAULT} older entries ↓` : 'Show less ↑';
+                });
+                grid.appendChild(btn);
+            }
         }
 
         // Countdown timer

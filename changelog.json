@@ -1,6 +1,17 @@
 {
-  "iterations": 19,
+  "iterations": 20,
   "changes": [
+    {
+      "iteration": 20,
+      "timestamp": "2026-02-15T02:03:00+02:00",
+      "changes": [
+        "Collapsible changelog — only 3 most recent entries shown by default with 'Show older entries' expand button",
+        "Added gradient bridge between hero and heartbeat line for smoother visual transition",
+        "Expand/collapse animation with smooth fadeInUp on revealed entries"
+      ],
+      "reasoning": "The changelog dominated 70% of the page, burying How It Works, Philosophy, Metrics, and Share sections. Collapsing to 3 entries dramatically improves page flow while keeping full history accessible.",
+      "category": "ux"
+    },
     {
       "iteration": 19,
       "timestamp": "2026-02-15T01:56:00+02:00",
