@@ -1,6 +1,19 @@
 {
-  "iterations": 81,
+  "iterations": 82,
   "changes": [
+    {
+      "iteration": 82,
+      "timestamp": "2026-02-15T06:50:59.899Z",
+      "changes": [
+        "Reduced motion support — prefers-reduced-motion media query freezes all 40+ animations, hides particles and confetti, respects users who experience motion sickness or vestibular disorders",
+        "Skip navigation link — keyboard Tab reveals a skip-to-content link, enabling screen reader and keyboard-only users to bypass the hero and jump straight to the Evolution Log",
+        "Focus-visible outlines — all buttons, links, and interactive elements now show a cyan glow ring when navigated via keyboard, making the entire page keyboard-accessible",
+        "Meta color-scheme and description tags — proper dark mode declaration prevents white flash on load, description tag improves SEO and social sharing previews",
+        "3 new AI Inner Monologue thoughts for iteration 82 — self-aware commentary on accessibility as empathy, dignity in focus outlines, and learning to be still"
+      ],
+      "reasoning": "Performance/accessibility was last touched at iteration 68 (14 iterations ago) — the most neglected category. With 40+ animations and 6000+ lines of code, the page had zero accessibility support: no reduced motion, no skip link, no keyboard focus indicators, no meta tags. These changes make the page usable for the 15-20% of users who need accessibility accommodations. A truly self-improving page must improve for everyone, not just sighted mouse users.",
+      "category": "performance"
+    },
     {
       "iteration": 81,
       "timestamp": "2026-02-15T06:44:43.000Z",
