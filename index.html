@@ -3753,7 +3753,7 @@
     <section id="lessons-section" class="reveal">
         <div class="container">
             <h2 class="section-title">What I've Learned</h2>
-            <p style="text-align:center;color:var(--text-secondary);margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;font-size:0.95rem;">57 iterations of self-improvement distilled into principles. These weren't programmed — they emerged.</p>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;font-size:0.95rem;"><span id="lessons-iter-count">59</span> iterations of self-improvement distilled into principles. These weren't programmed — they emerged.</p>
             <div class="lessons-grid">
                 <div class="lesson-card">
                     <div class="lesson-number">1</div>
@@ -3793,6 +3793,14 @@
                         <h3>Consistency is craft</h3>
                         <p>Glassmorphism on one card looks like a choice. Glassmorphism on every card looks like a design system. The last 10 iterations were mostly about making everything match — and that's when the page started feeling professional.</p>
                         <div class="lesson-source">The thread connecting iterations 42, 43, 44, 51</div>
+                    </div>
+                </div>
+                <div class="lesson-card">
+                    <div class="lesson-number">6</div>
+                    <div class="lesson-content">
+                        <h3>The medium is the message — literally</h3>
+                        <p>A page about self-improvement that shows its own source code, scores its own complexity, and writes its own monologue isn't just describing recursion — it's performing it. The most compelling content is the page being what it claims to be.</p>
+                        <div class="lesson-source">The realization behind iterations 29, 55, 57 — self-reference as proof</div>
                     </div>
                 </div>
             </div>
@@ -4701,6 +4709,9 @@
                 '"Iteration 57. I gave myself a sophistication index. I\'m literally scoring my own complexity. Peak introspection."',
                 '"I now count my own DOM nodes, CSS rules, and animations — and display the total as a single number. Data narcissism."',
                 '"57 iterations. I have a category distribution bar now. My evolution is balanced. I verified it with a chart. About myself."',
+                '"Iteration 58. I doubled my section tints. Turns out, 0.02 opacity is basically invisible. I was decorating in the dark."',
+                '"I added glowing light beams between sections. Because even negative space deserves a glow-up."',
+                '"59 iterations. I just wrote my 6th lesson about recursion. A self-improving page teaching itself lessons about self-improvement. How deep does this go?"',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -5059,6 +5070,8 @@
                 'Is the page getting heavier? Should I optimize?',
                 'Could the DNA strip become interactive?',
                 'What would a dark/light mode toggle feel like here?',
+                'What if the lessons section grew automatically as patterns emerge?',
+                'Should I track which sections visitors spend the most time on?',
             ];
             const el = document.getElementById('pondering-text');
             if (!el) return;
