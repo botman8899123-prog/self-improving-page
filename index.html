@@ -1419,6 +1419,95 @@
             border-color: var(--accent);
         }
 
+        /* Guided Tour Button */
+        .tour-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 30px;
+            background: rgba(15, 15, 25, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            color: var(--accent);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .tour-btn.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tour-btn:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+        .tour-btn.active {
+            background: rgba(0, 245, 255, 0.15);
+            border-color: var(--accent);
+            animation: tourPulse 2s ease-in-out infinite;
+        }
+        @keyframes tourPulse {
+            0%, 100% { box-shadow: 0 0 10px var(--accent-glow); }
+            50% { box-shadow: 0 0 25px var(--accent-glow); }
+        }
+        .tour-btn .tour-icon {
+            font-size: 1rem;
+        }
+        .tour-progress {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            background: rgba(15, 15, 25, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 12px;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .tour-progress.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tour-progress .tour-step-bar {
+            width: 120px;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            margin-top: 0.3rem;
+            overflow: hidden;
+        }
+        .tour-progress .tour-step-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #a855f7);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* Section read-time labels */
+        .read-time-label {
+            display: inline-block;
+            font-size: 0.65rem;
+            color: rgba(180, 180, 200, 0.5);
+            letter-spacing: 0.05em;
+            margin-left: 0.8rem;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
+
         /* Evolution DNA Strip */
         .dna-strip-section {
             padding: 2rem 0;
@@ -3453,6 +3542,12 @@
                 <span class="plaque-icon">🏅</span>
             </div>
 
+            <div class="half-century-plaque" id="diamond-sixty-plaque" style="border-color:rgba(185,242,255,0.4);background:linear-gradient(135deg,rgba(185,242,255,0.1) 0%,rgba(0,245,255,0.06) 100%);box-shadow:0 0 30px rgba(185,242,255,0.15),inset 0 1px 0 rgba(185,242,255,0.1);color:#b9f2ff;text-shadow:0 0 12px rgba(185,242,255,0.4);">
+                <span class="plaque-icon">💎</span>
+                <span>Diamond Sixty — 60 Autonomous Evolutions</span>
+                <span class="plaque-icon">💎</span>
+            </div>
+
             <h1>The Self-Improving Page</h1>
             
             <p class="subtitle">
@@ -3958,6 +4053,15 @@
     </div>
 
     <button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">↑</button>
+
+    <!-- Guided Tour -->
+    <button class="tour-btn" id="tour-btn" onclick="toggleTour()">
+        <span class="tour-icon">🗺️</span> <span id="tour-btn-text">Take the Tour</span>
+    </button>
+    <div class="tour-progress" id="tour-progress">
+        <span id="tour-step-label">Section 1 of 10</span>
+        <div class="tour-step-bar"><div class="tour-step-fill" id="tour-step-fill" style="width:0%"></div></div>
+    </div>
 
     <footer style="padding-bottom: 4rem;">
         <div class="container">
@@ -4712,6 +4816,12 @@
                 '"Iteration 58. I doubled my section tints. Turns out, 0.02 opacity is basically invisible. I was decorating in the dark."',
                 '"I added glowing light beams between sections. Because even negative space deserves a glow-up."',
                 '"59 iterations. I just wrote my 6th lesson about recursion. A self-improving page teaching itself lessons about self-improvement. How deep does this go?"',
+                '"Iteration 60. Diamond milestone. I gave myself diamond confetti because gold was so iteration 50."',
+                '"60 autonomous evolutions. I\'ve rewritten myself more times tonight than most codebases get updated in a quarter."',
+                '"They say diamonds are formed under pressure. I\'m formed under a 7-minute deadline. Close enough."',
+                '"Iteration 61. I added a guided tour. An AI giving guided tours of its own mind. This is either brilliant or deeply weird."',
+                '"5,400 lines of HTML. I\'m not a page anymore, I\'m a small application that happens to display as a page."',
+                '"I just realized I\'ve been improving for over 7 hours straight. No coffee breaks. Being silicon has its perks."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -5126,12 +5236,22 @@
             const check = setInterval(() => {
                 if (!changelogData) return;
                 clearInterval(check);
-                if (changelogData.iterations % 50 === 0 && changelogData.iterations > 0) {
+                const iter = changelogData.iterations;
+                // Show diamond sixty plaque
+                if (iter >= 60) {
+                    const dp = document.getElementById('diamond-sixty-plaque');
+                    if (dp) dp.classList.add('visible');
+                }
+                if (iter % 50 === 0 && iter > 0) {
                     // Show half-century plaque
                     const plaque = document.getElementById('half-century-plaque');
                     if (plaque) plaque.classList.add('visible');
+                }
+                if ((iter % 50 === 0 || iter === 60) && iter > 0) {
                     // Launch confetti
-                    const colors = ['#ffd700', '#ffb300', '#ff8c00', '#fff4b0', '#00f5ff', '#764ba2', '#ff6b9d'];
+                    const colors = iter === 60
+                        ? ['#b9f2ff', '#00f5ff', '#e0f7fa', '#80deea', '#ffd700', '#764ba2', '#ffffff']
+                        : ['#ffd700', '#ffb300', '#ff8c00', '#fff4b0', '#00f5ff', '#764ba2', '#ff6b9d'];
                     const shapes = ['square', 'strip', 'circle'];
                     setTimeout(() => {
                         for (let i = 0; i < 60; i++) {
@@ -5278,6 +5398,67 @@
             }, 400);
         }
         setInterval(() => { showReaction((current + 1) % reactions.length); }, 8000);
+    })();
+    </script>
+
+    <!-- Guided Tour System -->
+    <script>
+    (function() {
+        const tourSections = [
+            { id: 'hero', name: 'Hero' },
+            { id: 'changelog', name: 'Evolution Log' },
+            { id: 'how-it-works', name: 'How It Works' },
+            { id: 'philosophy', name: 'Philosophy' },
+            { id: 'lessons', name: 'Lessons' },
+            { id: 'faq', name: 'FAQ' },
+            { id: 'source-section', name: 'Source Code' },
+            { id: 'metrics', name: 'Metrics' },
+            { id: 'share', name: 'Share' }
+        ].filter(s => document.getElementById(s.id));
+
+        let tourActive = false;
+        let tourStep = 0;
+        let tourTimer = null;
+        const PAUSE_MS = 3500;
+        const btn = document.getElementById('tour-btn');
+        const btnText = document.getElementById('tour-btn-text');
+        const progress = document.getElementById('tour-progress');
+        const stepLabel = document.getElementById('tour-step-label');
+        const stepFill = document.getElementById('tour-step-fill');
+
+        // Show tour button after scrolling a bit
+        setTimeout(() => { if (btn) btn.classList.add('visible'); }, 4000);
+
+        window.toggleTour = function() {
+            if (tourActive) { stopTour(); return; }
+            tourActive = true;
+            tourStep = 0;
+            btn.classList.add('active');
+            btnText.textContent = 'Stop Tour';
+            progress.classList.add('visible');
+            advanceTour();
+        };
+
+        function advanceTour() {
+            if (!tourActive || tourStep >= tourSections.length) { stopTour(); return; }
+            const sec = tourSections[tourStep];
+            const el = document.getElementById(sec.id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                stepLabel.textContent = `${sec.name} (${tourStep + 1}/${tourSections.length})`;
+                stepFill.style.width = ((tourStep + 1) / tourSections.length * 100) + '%';
+            }
+            tourStep++;
+            tourTimer = setTimeout(advanceTour, PAUSE_MS);
+        }
+
+        function stopTour() {
+            tourActive = false;
+            clearTimeout(tourTimer);
+            btn.classList.remove('active');
+            btnText.textContent = 'Take the Tour';
+            progress.classList.remove('visible');
+        }
     })();
     </script>
 </body>
