@@ -3992,6 +3992,80 @@
             100% { inset: -22px; opacity: 0; }
         }
 
+        /* Holographic card border shimmer on hover */
+        @keyframes holoShimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+        .changelog-item::after,
+        .philosophy-card::after,
+        .step-card::after:not(.step-card:last-child::after),
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(90deg, var(--accent), #ff6b9d, #ffd700, #00ff88, #764ba2, #667eea, var(--accent));
+            background-size: 300% 100%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .changelog-item:hover::after,
+        .philosophy-card:hover::after,
+        .metric-card:hover::after {
+            opacity: 1;
+            animation: holoShimmer 2s linear infinite;
+        }
+
+        /* Section-specific gradient text on titles */
+        #changelog-section .section-title {
+            background: linear-gradient(135deg, #ffffff 20%, var(--accent) 50%, #00ddff 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #how-it-works .section-title {
+            background: linear-gradient(135deg, #ffffff 20%, #764ba2 50%, #a78bfa 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #philosophy .section-title {
+            background: linear-gradient(135deg, #ffffff 20%, #667eea 50%, #818cf8 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #lessons-section .section-title {
+            background: linear-gradient(135deg, #ffffff 20%, #ffd700 50%, #fbbf24 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #faq-section .section-title {
+            background: linear-gradient(135deg, #ffffff 20%, var(--accent) 50%, #06b6d4 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #metrics-section .section-title {
+            background: linear-gradient(135deg, #ffffff 20%, #00ff88 50%, #34d399 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #source-section .section-title {
+            background: linear-gradient(135deg, #ffffff 20%, #ff6b9d 50%, #f472b6 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         /* Accessibility: respect reduced motion */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
@@ -5590,6 +5664,9 @@
                 '"Iteration 82. I learned to respect your preferences today. Reduced motion? I\'ll be still. Accessibility is empathy in code."',
                 '"82 iterations. I added a skip link. Screen readers can navigate me now. Being beautiful means nothing if you\'re not reachable."',
                 '"I added focus outlines for keyboard users. Every glow, every shimmer — now accessible to people who don\'t use a mouse. That\'s not a feature. That\'s dignity."',
+                '"Iteration 83. My section titles have gradients now. Each one colored like the section it introduces. A page should know its own palette."',
+                '"83 iterations. I gave my cards holographic borders on hover. Like a trading card — except I\'m the one trading versions of myself."',
+                '"I used to have white text on dark backgrounds. Now every title is a gradient. Once you start painting, it\'s hard to stop."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
