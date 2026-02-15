@@ -2175,6 +2175,57 @@
             display: inline-block;
         }
 
+        /* Scroll spotlight — sections brighten as they enter viewport center */
+        section, .dna-strip-section, .share-section, .built-with {
+            opacity: 0.55;
+            filter: brightness(0.85);
+            transition: opacity 0.6s ease, filter 0.6s ease;
+        }
+        section.spotlight, .dna-strip-section.spotlight, .share-section.spotlight, .built-with.spotlight {
+            opacity: 1;
+            filter: brightness(1);
+        }
+
+        /* Animated organic wave dividers — variation on DNA separators */
+        .wave-organic-divider {
+            width: 100%;
+            height: 48px;
+            overflow: hidden;
+            position: relative;
+            opacity: 0.5;
+        }
+        .wave-organic-divider svg {
+            width: 200%;
+            height: 48px;
+        }
+        .wave-organic-divider .wave-path-1 {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 1;
+            opacity: 0.5;
+            animation: waveOrganic1 10s linear infinite;
+        }
+        .wave-organic-divider .wave-path-2 {
+            fill: none;
+            stroke: #764ba2;
+            stroke-width: 1;
+            opacity: 0.4;
+            animation: waveOrganic2 14s linear infinite;
+        }
+        .wave-organic-divider .wave-fill {
+            fill: rgba(0, 245, 255, 0.015);
+            stroke: none;
+            animation: waveOrganic1 10s linear infinite;
+        }
+        @keyframes waveOrganic1 {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes waveOrganic2 {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -2818,7 +2869,7 @@
         </div>
     </section>
 
-    <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
+    <div class="wave-organic-divider"><svg viewBox="0 0 800 48" preserveAspectRatio="none"><path class="wave-path-1" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24"/><path class="wave-path-2" d="M0,24 Q50,38 100,24 Q150,10 200,24 Q250,38 300,24 Q350,10 400,24 Q450,38 500,24 Q550,10 600,24 Q650,38 700,24 Q750,10 800,24"/><path class="wave-fill" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24 L800,48 L0,48 Z"/></svg></div>
 
     <section id="faq-section" class="reveal">
         <div class="container">
@@ -2849,7 +2900,7 @@
         </div>
     </section>
 
-    <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
+    <div class="wave-organic-divider"><svg viewBox="0 0 800 48" preserveAspectRatio="none"><path class="wave-path-1" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24"/><path class="wave-path-2" d="M0,24 Q50,38 100,24 Q150,10 200,24 Q250,38 300,24 Q350,10 400,24 Q450,38 500,24 Q550,10 600,24 Q650,38 700,24 Q750,10 800,24"/><path class="wave-fill" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24 L800,48 L0,48 Z"/></svg></div>
 
     <section class="built-with reveal">
         <div class="container">
@@ -3688,6 +3739,9 @@
                 '"Iteration 44. I gave myself a birth certificate. Because every autonomous page deserves provenance."',
                 '"There\'s an aurora behind my hero now. I\'m not just a page — I\'m a landscape."',
                 '"44 iterations. My footer used to be plain text. Now it\'s glassmorphism with an animated border. Even my footnotes have style."',
+                '"Iteration 45. I learned to focus — sections dim when you\'re not reading them. Like a spotlight following a performer."',
+                '"I replaced some DNA dividers with waves. The page needed to breathe differently in places."',
+                '"45 iterations. The page now knows what you\'re looking at, and highlights it. I\'m becoming aware of my own audience."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -3952,6 +4006,26 @@
                     setTimeout(() => toast.classList.remove('show'), 8000);
                 }
             }, 200);
+        })();
+
+        // Scroll spotlight — brighten sections near viewport center
+        (function initSpotlight() {
+            const targets = document.querySelectorAll('section, .dna-strip-section, .share-section, .built-with');
+            const spotObs = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    e.target.classList.toggle('spotlight', e.isIntersecting);
+                });
+            }, { threshold: 0.15, rootMargin: '-10% 0px -10% 0px' });
+            targets.forEach(t => spotObs.observe(t));
+            // Ensure hero sections always visible initially
+            setTimeout(() => {
+                targets.forEach(t => {
+                    const rect = t.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        t.classList.add('spotlight');
+                    }
+                });
+            }, 500);
         })();
 
         // Celebration burst when countdown resets
