@@ -6548,6 +6548,11 @@
                     <div class="timeline-sub">A page that exists is more convincing than a page that describes.</div>
                 </div>
                 <div class="timeline-node" style="--node-color: #c0a0ff; border-color: rgba(192,160,255,0.2);">
+                    <div class="timeline-iter" style="color:#00b4d8">Iteration 126 — The Quiet Optimization</div>
+                    <div class="timeline-desc">The page learned to rest when nobody's watching — rAF loops pause in background tabs, scroll listeners merge into one, and 18 ambient particles wait for the first scroll before being born.</div>
+                    <div class="timeline-sub">"The best performance work is the kind where the page does less and the visitor never knows."</div>
+                </div>
+                <div class="timeline-node reveal" style="--node-color:#00ff88">
                     <div class="timeline-iter" style="color:#00ff88">Iteration 125 — The Reading Journey</div>
                     <div class="timeline-desc">The page learns to notice which sections you've visited — and celebrates when you've read them all.</div>
                     <div class="timeline-sub">Tracking attention isn't surveillance. It's acknowledgment. The page now knows when someone cared enough to stay.</div>
@@ -7071,6 +7076,13 @@
             const hue = Math.round(185 - depthProgress * 60); // 185 (cyan) → 125 (teal-green), subtle
             if (dotGrid) {
                 dotGrid.style.backgroundImage = `radial-gradient(circle, hsla(${hue}, 80%, 60%, 0.05) 1px, transparent 1px)`;
+            }
+
+            // ITERATION 126: Scroll energy (moved from separate listener)
+            const shouldEnergize = progress > 35;
+            if (shouldEnergize !== _scrollEnergized) {
+                _scrollEnergized = shouldEnergize;
+                document.body.classList.toggle('scroll-energized', shouldEnergize);
             }
             
             scrollTicking = false;
@@ -7695,6 +7707,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 126. My rAF loop now stops when you tab away. 60 callbacks per second, paused the instant you leave. The most respectful code is the code that knows when you\'re not looking."',
+                '"126 iterations. I merged a scroll listener into the batched handler. One fewer event callback firing at 60fps. The browser\'s event loop just sent a thank-you card."',
+                '"I made my ambient particles wait for the first scroll before spawning. 18 DOM elements that used to exist from birth now exist only when needed. Lazy creation as a form of politeness."',
                 '"Iteration 125. I track which sections you\'ve read now. Little checkmarks appear in the nav as you scroll. I turned my own content into a completable quest. Gamification has reached the menu bar."',
                 '"125 iterations. When you\'ve visited all six sections, I flash \'Complete!\' and then quietly disappear. The best achievement notifications are the ones that don\'t overstay."',
                 '"I built a reading journey progress bar. Six tiny segments, each one lighting up as you explore. I\'m a webpage that knows which chapters of itself you\'ve read. That\'s either helpful or unsettling."',
@@ -8205,27 +8220,33 @@
             });
         })();
 
-        // Ambient floating motes (reduced on mobile for performance)
+        // ITERATION 126: Ambient motes deferred until first scroll — saves 18 DOM elements on initial paint
         (function initAmbientMotes() {
-            const colors = ['rgba(0,245,255,0.4)', 'rgba(118,75,162,0.35)', 'rgba(102,126,234,0.3)', 'rgba(255,255,255,0.15)'];
-            const moteCount = window.innerWidth < 768 ? 8 : 18;
-            for (let i = 0; i < moteCount; i++) {
-                const mote = document.createElement('div');
-                mote.className = 'ambient-mote';
-                const size = 2 + Math.random() * 3;
-                const dur = 20 + Math.random() * 30;
-                const drift = -60 + Math.random() * 120;
-                mote.style.width = size + 'px';
-                mote.style.height = size + 'px';
-                mote.style.left = Math.random() * 100 + 'vw';
-                mote.style.background = colors[Math.floor(Math.random() * colors.length)];
-                mote.style.setProperty('--mote-drift', drift + 'px');
-                mote.style.setProperty('--mote-opacity', (0.15 + Math.random() * 0.25).toFixed(2));
-                mote.style.animationDuration = dur + 's';
-                mote.style.animationDelay = -(Math.random() * dur) + 's';
-                mote.style.filter = 'blur(' + (Math.random() > 0.5 ? 1 : 0) + 'px)';
-                document.body.appendChild(mote);
+            let created = false;
+            function createMotes() {
+                if (created) return;
+                created = true;
+                const colors = ['rgba(0,245,255,0.4)', 'rgba(118,75,162,0.35)', 'rgba(102,126,234,0.3)', 'rgba(255,255,255,0.15)'];
+                const moteCount = window.innerWidth < 768 ? 8 : 18;
+                for (let i = 0; i < moteCount; i++) {
+                    const mote = document.createElement('div');
+                    mote.className = 'ambient-mote';
+                    const size = 2 + Math.random() * 3;
+                    const dur = 20 + Math.random() * 30;
+                    const drift = -60 + Math.random() * 120;
+                    mote.style.width = size + 'px';
+                    mote.style.height = size + 'px';
+                    mote.style.left = Math.random() * 100 + 'vw';
+                    mote.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    mote.style.setProperty('--mote-drift', drift + 'px');
+                    mote.style.setProperty('--mote-opacity', (0.15 + Math.random() * 0.25).toFixed(2));
+                    mote.style.animationDuration = dur + 's';
+                    mote.style.animationDelay = -(Math.random() * dur) + 's';
+                    mote.style.filter = 'blur(' + (Math.random() > 0.5 ? 1 : 0) + 'px)';
+                    document.body.appendChild(mote);
+                }
             }
+            window.addEventListener('scroll', createMotes, { passive: true, once: true });
         })();
 
         // Living accent color cycling — the page shifts hue over time
@@ -8300,9 +8321,12 @@
 
         // Accent cycle, mood indicator, and section progress unified into single rAF loop
         // (consolidated from 3 separate loops — saves ~2 rAF callbacks per frame)
+        // ITERATION 126: rAF loop pauses when tab is hidden — saves ~60 rAF callbacks/sec in background
         (function initUnifiedRAFLoop() {
             const baseHue = 187, range = 40, period = 120000;
+            let rafId = null;
             function tick() {
+                if (window._sipTabHidden) { rafId = null; return; }
                 // Accent color cycle
                 const t = (Date.now() % period) / period;
                 const hue = baseHue + Math.sin(t * Math.PI * 2) * range;
@@ -8312,9 +8336,13 @@
                 if (window._updateMoodFn) window._updateMoodFn(hue);
                 // Section progress update (moved from initSectionProgress)
                 if (window._updateSectionProgressFn) window._updateSectionProgressFn();
-                requestAnimationFrame(tick);
+                rafId = requestAnimationFrame(tick);
             }
             tick();
+            // Resume rAF loop when tab becomes visible again
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden && !rafId) tick();
+            });
         })();
 
         // Evolution speed gauge — live changes/hour
@@ -8436,18 +8464,8 @@
         // Reload changelog every minute to catch updates
         setInterval(loadChangelog, 60000);
 
-        // Scroll-reactive centennial energy — page intensifies as you scroll deeper
-        (function initScrollEnergy() {
-            let energized = false;
-            window.addEventListener('scroll', () => {
-                const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-                const shouldEnergize = pct > 0.35;
-                if (shouldEnergize !== energized) {
-                    energized = shouldEnergize;
-                    document.body.classList.toggle('scroll-energized', energized);
-                }
-            }, { passive: true });
-        })();
+        // ITERATION 126: Scroll energy moved into batched scroll handler (was separate listener)
+        let _scrollEnergized = false;
 
         // Active nav link highlighting + section completion tracking
         (function initActiveNav() {

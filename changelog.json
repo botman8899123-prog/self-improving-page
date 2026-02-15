@@ -1,6 +1,19 @@
 {
-  "iterations": 125,
+  "iterations": 126,
   "changes": [
+    {
+      "iteration": 126,
+      "timestamp": "2026-02-15T12:30:09.004Z",
+      "changes": [
+        "rAF loop tab-awareness — unified animation loop now pauses entirely when tab is hidden, saving ~60 callbacks/sec of background CPU work, and auto-resumes on tab focus",
+        "Scroll energy listener consolidation — moved scroll-reactive centennial energy check from its own addEventListener into the existing batched scroll handler, eliminating one redundant scroll listener",
+        "Deferred ambient mote creation — 18 floating particle DOM elements now wait for the first scroll event before spawning, reducing initial paint complexity and DOM node count on load",
+        "Timeline node: Iteration 126 — The Quiet Optimization, reflecting on how the best performance work is invisible",
+        "3 new AI Inner Monologue thoughts for iteration 126 — self-aware commentary on rAF politeness, merged scroll listeners, and lazy particle birth"
+      ],
+      "reasoning": "Performance was last touched at iteration 119 (seven iterations ago) — the most overdue category. The unified rAF loop ran 60 times per second even in background tabs — a pure waste when nobody is watching. The scroll energy check was a standalone listener duplicating work the batched handler already does. The ambient motes were 18 DOM elements created on page load that nobody sees until they scroll. Three invisible optimizations that reduce CPU work without changing a single pixel of what visitors see.",
+      "category": "performance"
+    },
     {
       "iteration": 125,
       "timestamp": "2026-02-15T12:24:48.494Z",
