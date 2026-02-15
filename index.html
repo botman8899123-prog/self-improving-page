@@ -811,6 +811,7 @@
         }
         section {
             position: relative;
+            contain: layout style paint;
         }
 
         /* Footer */
@@ -5523,6 +5524,19 @@
             return Math.floor(hrs / 24) + 'd ago';
         }
 
+        // Shared self-fetch cache — deduplicates 5 separate fetch('index.html') calls into 1
+        let _selfSourceCache = null;
+        let _selfSourceCacheTime = 0;
+        function getSelfSource() {
+            const now = Date.now();
+            if (_selfSourceCache && now - _selfSourceCacheTime < 30000) return Promise.resolve(_selfSourceCache);
+            return fetch('index.html?t=' + now).then(r => r.text()).then(t => {
+                _selfSourceCache = t;
+                _selfSourceCacheTime = now;
+                return t;
+            });
+        }
+
         // Metrics dashboard
         function updateMetrics() {
             if (!changelogData || !changelogData.changes.length) return;
@@ -5542,7 +5556,7 @@
             document.getElementById('metric-velocity').textContent = velocity;
 
             // Estimate code lines from page source
-            fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
+            getSelfSource().then(t => {
                 const lines = t.split('\n').length;
                 document.getElementById('metric-code-size').textContent = lines;
                 // Animate ring for code (treat 800 lines as 100%)
@@ -5605,7 +5619,7 @@
 
         let originAnimated = false;
         function updateOriginLines() {
-            fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
+            getSelfSource().then(t => {
                 const lines = t.split('\n').length;
                 const el = document.getElementById('origin-current-lines');
                 if (el) {
@@ -5632,7 +5646,7 @@
 
         // Page weight stat
         function updatePageWeight() {
-            fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
+            getSelfSource().then(t => {
                 const kb = (new Blob([t]).size / 1024).toFixed(1);
                 const el = document.getElementById('stat-weight');
                 if (el) el.textContent = kb + ' KB';
@@ -5715,7 +5729,7 @@
 
         // Update time capsule line count
         function updateTimeCapsule() {
-            fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
+            getSelfSource().then(t => {
                 const el = document.getElementById('capsule-lines');
                 if (el) el.textContent = t.split('\n').length.toLocaleString();
             }).catch(() => {});
@@ -6141,7 +6155,7 @@
 
         // Then vs Now live stats
         function updateThenNow() {
-            fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
+            getSelfSource().then(t => {
                 const lines = t.split('\n').length;
                 const kb = (new Blob([t]).size / 1024).toFixed(1);
                 const el = document.getElementById('tn-lines-now');
@@ -6240,12 +6254,8 @@
             const textEl = document.getElementById('mood-text');
             if (!emojiEl || !textEl) return;
             let currentMoodIdx = -1;
-            function updateMood() {
-                const baseHue = 187;
-                const range = 40;
-                const period = 120000;
-                const t = (Date.now() % period) / period;
-                const hue = baseHue + Math.sin(t * Math.PI * 2) * range;
+            // Register with unified rAF loop instead of own loop
+            window._updateMoodFn = function(hue) {
                 let bestIdx = 0;
                 let bestDist = Infinity;
                 moods.forEach((m, i) => {
@@ -6262,9 +6272,7 @@
                         emojiEl.style.transform = 'scale(1) rotate(0deg)';
                     }, 300);
                 }
-                requestAnimationFrame(updateMood);
-            }
-            updateMood();
+            };
         })();
 
         // Section scroll-progress underlines — fill as you read through each section
@@ -6283,7 +6291,8 @@
                 // Replace the ::after pseudo with this bar (place after existing content)
                 title.appendChild(bar);
             });
-            function updateProgress() {
+            // Register with unified rAF loop instead of own loop
+            window._updateSectionProgressFn = function() {
                 sections.forEach(sec => {
                     const fill = sec.querySelector('.scroll-progress-fill');
                     if (!fill) return;
@@ -6293,31 +6302,31 @@
                         fill.style.width = '0%';
                         return;
                     }
-                    // How far through the section the viewport center is
                     const sectionTop = rect.top;
                     const sectionHeight = rect.height;
                     const progress = Math.max(0, Math.min(1, (vh * 0.3 - sectionTop) / sectionHeight));
                     fill.style.width = (progress * 100) + '%';
                 });
-                requestAnimationFrame(updateProgress);
-            }
-            updateProgress();
+            };
         })();
 
-        (function initAccentCycle() {
-            const baseHue = 187; // cyan
-            const range = 40; // shift ±40 degrees
-            const period = 120000; // 2 minutes full cycle
-            function updateAccent() {
+        // Accent cycle, mood indicator, and section progress unified into single rAF loop
+        // (consolidated from 3 separate loops — saves ~2 rAF callbacks per frame)
+        (function initUnifiedRAFLoop() {
+            const baseHue = 187, range = 40, period = 120000;
+            function tick() {
+                // Accent color cycle
                 const t = (Date.now() % period) / period;
                 const hue = baseHue + Math.sin(t * Math.PI * 2) * range;
-                const accent = `hsl(${hue}, 100%, 50%)`;
-                const accentGlow = `hsla(${hue}, 100%, 50%, 0.3)`;
-                document.documentElement.style.setProperty('--accent', accent);
-                document.documentElement.style.setProperty('--accent-glow', accentGlow);
-                requestAnimationFrame(updateAccent);
+                document.documentElement.style.setProperty('--accent', `hsl(${hue}, 100%, 50%)`);
+                document.documentElement.style.setProperty('--accent-glow', `hsla(${hue}, 100%, 50%, 0.3)`);
+                // Mood indicator update (moved from initMoodIndicator)
+                if (window._updateMoodFn) window._updateMoodFn(hue);
+                // Section progress update (moved from initSectionProgress)
+                if (window._updateSectionProgressFn) window._updateSectionProgressFn();
+                requestAnimationFrame(tick);
             }
-            updateAccent();
+            tick();
         })();
 
         // Evolution speed gauge — live changes/hour
@@ -6634,7 +6643,7 @@
         })();
     // Source Code viewer — show the page's own code
     (function initSourceViewer() {
-        fetch('index.html?t=' + Date.now()).then(r => r.text()).then(src => {
+        getSelfSource().then(src => {
             const lines = src.split('\n');
             const lineCount = lines.length;
             document.getElementById('source-line-count').textContent = lineCount + ' lines';
