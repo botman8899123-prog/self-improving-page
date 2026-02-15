@@ -1,6 +1,17 @@
 {
-  "iterations": 35,
+  "iterations": 36,
   "changes": [
+    {
+      "iteration": 36,
+      "timestamp": "2026-02-15T03:53:00+02:00",
+      "changes": [
+        "Added 'Then vs Now' comparison card — side-by-side iteration 1 vs current stats (lines, animations, sections, file size) with live data",
+        "Added keyboard shortcuts system — press ? for shortcuts modal, T to scroll top, L to jump to log, Esc to close overlays",
+        "3 new AI Inner Monologue thoughts for iteration 36 — self-aware commentary on growth stats and keyboard interactivity"
+      ],
+      "reasoning": "The origin stat showed the growth number but lacked context. The Then vs Now comparison makes the 64x growth visceral with multiple dimensions. Keyboard shortcuts existed (E key) but were barely discoverable — a proper shortcuts system makes the page feel like a real interactive app.",
+      "category": "ux"
+    },
     {
       "iteration": 35,
       "timestamp": "2026-02-15T03:46:00+02:00",

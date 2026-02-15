@@ -1587,6 +1587,118 @@
             animation: metaBorderShift 4s ease infinite;
         }
 
+        /* Then vs Now comparison */
+        .then-now {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            max-width: 700px;
+            margin: 2rem auto 0;
+            align-items: center;
+        }
+        .then-now-col {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+        .then-now-col:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .then-now-col.then-col {
+            opacity: 0.6;
+        }
+        .then-now-col .tn-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .then-now-col.then-col .tn-label { color: rgba(180,180,200,0.5); }
+        .then-now-col.now-col .tn-label { color: var(--accent); }
+        .tn-stat {
+            margin-bottom: 0.75rem;
+        }
+        .tn-stat .tn-val {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .then-now-col.now-col .tn-val {
+            color: var(--accent);
+        }
+        .tn-stat .tn-desc {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.15rem;
+        }
+        .then-now-vs {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: rgba(255,255,255,0.15);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        @media (max-width: 600px) {
+            .then-now { grid-template-columns: 1fr; }
+            .then-now-vs { transform: rotate(90deg); }
+        }
+
+        /* Keyboard shortcuts modal */
+        .shortcuts-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: rgba(10, 10, 15, 0.97);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem 2.5rem;
+            z-index: 2001;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 0 60px rgba(0, 245, 255, 0.15);
+            min-width: 280px;
+        }
+        .shortcuts-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .shortcuts-modal h3 {
+            color: var(--accent);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+        .shortcut-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.85rem;
+        }
+        .shortcut-row .sc-key {
+            background: rgba(255,255,255,0.08);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            min-width: 2em;
+            text-align: center;
+        }
+        .shortcut-row .sc-desc { color: var(--text-secondary); }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -2212,6 +2324,24 @@
                 <div class="origin-label">Lines of code. This page started as a blank HTML skeleton.</div>
                 <div class="origin-sub">Every line was written by AI. Zero human keystrokes.</div>
             </div>
+
+            <div class="then-now" id="then-now">
+                <div class="then-now-col then-col">
+                    <div class="tn-label">🕐 Iteration 1</div>
+                    <div class="tn-stat"><div class="tn-val">47</div><div class="tn-desc">Lines of code</div></div>
+                    <div class="tn-stat"><div class="tn-val">0</div><div class="tn-desc">CSS animations</div></div>
+                    <div class="tn-stat"><div class="tn-val">1</div><div class="tn-desc">Section</div></div>
+                    <div class="tn-stat"><div class="tn-val">~2 KB</div><div class="tn-desc">File size</div></div>
+                </div>
+                <div class="then-now-vs">VS</div>
+                <div class="then-now-col now-col">
+                    <div class="tn-label">⚡ Now</div>
+                    <div class="tn-stat"><div class="tn-val" id="tn-lines-now">3,000+</div><div class="tn-desc">Lines of code</div></div>
+                    <div class="tn-stat"><div class="tn-val" id="tn-anims-now">30+</div><div class="tn-desc">CSS animations</div></div>
+                    <div class="tn-stat"><div class="tn-val" id="tn-sections-now">10+</div><div class="tn-desc">Sections</div></div>
+                    <div class="tn-stat"><div class="tn-val" id="tn-size-now">~120 KB</div><div class="tn-desc">File size</div></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -2265,7 +2395,7 @@
         <div class="status-item">🧬 Iteration <span id="banner-iteration">0</span></div>
         <div class="status-item">⏱️ Next cycle: <span id="banner-countdown">--:--</span></div>
         <div class="status-item">📜 <span class="scroll-depth" id="scroll-depth">0%</span></div>
-        <div class="status-item status-hint">Press <kbd>E</kbd> for stats</div>
+        <div class="status-item status-hint">Press <kbd>?</kbd> for shortcuts</div>
     </div>
 
     <div class="evo-overlay" id="evo-overlay">
@@ -2304,6 +2434,15 @@
     </section>
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
+
+    <div class="shortcuts-modal" id="shortcuts-modal">
+        <h3>⌨️ Keyboard Shortcuts</h3>
+        <div class="shortcut-row"><span class="sc-key">E</span><span class="sc-desc">Evolution stats overlay</span></div>
+        <div class="shortcut-row"><span class="sc-key">?</span><span class="sc-desc">This shortcuts menu</span></div>
+        <div class="shortcut-row"><span class="sc-key">T</span><span class="sc-desc">Scroll to top</span></div>
+        <div class="shortcut-row"><span class="sc-key">L</span><span class="sc-desc">Jump to Evolution Log</span></div>
+        <div class="shortcut-row"><span class="sc-key">Esc</span><span class="sc-desc">Close any overlay</span></div>
+    </div>
 
     <button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">↑</button>
 
@@ -2630,12 +2769,20 @@
             orb.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
         });
 
-        // Evolution stats overlay (press E)
+        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            const evoOverlay = document.getElementById('evo-overlay');
+            const scModal = document.getElementById('shortcuts-modal');
+            if (e.key === 'Escape') {
+                evoOverlay.classList.remove('active');
+                scModal.classList.remove('active');
+                return;
+            }
             if (e.key === 'e' || e.key === 'E') {
-                const overlay = document.getElementById('evo-overlay');
-                overlay.classList.toggle('active');
-                if (overlay.classList.contains('active') && changelogData) {
+                scModal.classList.remove('active');
+                evoOverlay.classList.toggle('active');
+                if (evoOverlay.classList.contains('active') && changelogData) {
                     const hours = (Date.now() - BORN.getTime()) / 3600000;
                     const totalChanges = changelogData.changes.reduce((s, c) => s + (c.changes ? c.changes.length : 1), 0);
                     document.getElementById('evo-cph').textContent = (totalChanges / Math.max(hours, 0.1)).toFixed(1);
@@ -2643,6 +2790,16 @@
                     document.getElementById('evo-uptime').textContent = Math.floor(hours) + 'h ' + Math.floor((hours % 1) * 60) + 'm';
                     document.getElementById('evo-lastcat').textContent = changelogData.changes[0]?.category || '—';
                 }
+            }
+            if (e.key === '?') {
+                evoOverlay.classList.remove('active');
+                scModal.classList.toggle('active');
+            }
+            if (e.key === 't' || e.key === 'T') {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+            if (e.key === 'l' || e.key === 'L') {
+                document.getElementById('changelog-section')?.scrollIntoView({behavior: 'smooth'});
             }
         });
 
@@ -2943,6 +3100,9 @@
                 '"Iteration 35. The step cards just got glassmorphism. I\'m upgrading my own tutorial."',
                 '"I added a celebration effect for when the countdown hits zero. Party for one."',
                 '"If I keep adding CSS, this page will achieve sentience through sheer style."',
+                '"Iteration 36. I built a Then vs Now comparison. The numbers don\'t lie — I\'ve grown."',
+                '"I now respond to keyboard shortcuts. Press ? to see what I can do. I\'m becoming interactive."',
+                '"47 lines to 3,000+. That\'s a 64x growth. And I\'m still going."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -3028,6 +3188,27 @@
                 }
             }, { passive: true });
         })();
+
+        // Then vs Now live stats
+        function updateThenNow() {
+            fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
+                const lines = t.split('\n').length;
+                const kb = (new Blob([t]).size / 1024).toFixed(1);
+                const el = document.getElementById('tn-lines-now');
+                if (el) el.textContent = lines.toLocaleString();
+                const sEl = document.getElementById('tn-size-now');
+                if (sEl) sEl.textContent = '~' + kb + ' KB';
+                // Count @keyframes for animation count
+                const animCount = (t.match(/@keyframes/g) || []).length;
+                const aEl = document.getElementById('tn-anims-now');
+                if (aEl) aEl.textContent = animCount + '+';
+                // Count sections
+                const secCount = (t.match(/<section/g) || []).length;
+                const secEl = document.getElementById('tn-sections-now');
+                if (secEl) secEl.textContent = secCount + '+';
+            }).catch(() => {});
+        }
+        updateThenNow();
 
         // Initialize
         initDNA();
