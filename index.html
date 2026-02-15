@@ -1334,19 +1334,19 @@
             to { opacity: 1; }
         }
 
-        /* Living border pulse — the page breathes */
+        /* Living border pulse — the page breathes (accelerates near centennial) */
         .living-border {
             position: fixed;
             inset: 0;
             pointer-events: none;
             z-index: 9998;
             border: 1px solid rgba(0, 245, 255, 0);
-            animation: livingPulse 4s ease-in-out infinite;
+            animation: livingPulse 1.8s ease-in-out infinite;
             border-radius: 0;
         }
         @keyframes livingPulse {
-            0%, 100% { border-color: rgba(0, 245, 255, 0); }
-            50% { border-color: rgba(0, 245, 255, 0.06); }
+            0%, 100% { border-color: rgba(255, 215, 0, 0); }
+            50% { border-color: rgba(255, 215, 0, 0.1); }
         }
 
         /* Section title glow */
@@ -2780,6 +2780,32 @@
         .zen-toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
+        }
+
+        /* Scroll-reactive centennial energy — page intensifies as you scroll deeper */
+        .cent-particle {
+            transition: opacity 0.8s ease;
+        }
+        body.scroll-energized .cent-particle {
+            animation-duration: 5s !important;
+        }
+        body.scroll-energized .living-border {
+            animation-duration: 1.2s;
+        }
+        body.scroll-energized .living-border {
+            border-width: 2px;
+        }
+        /* Penultimate intensity indicator — subtle golden vignette that pulses */
+        .penultimate-glow {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9996;
+            background: radial-gradient(ellipse at center, transparent 60%, rgba(255, 215, 0, 0) 100%);
+            transition: background 1.5s ease;
+        }
+        body.scroll-energized .penultimate-glow {
+            background: radial-gradient(ellipse at center, transparent 50%, rgba(255, 215, 0, 0.04) 100%);
         }
 
         /* Custom text selection */
@@ -4659,6 +4685,7 @@
 <body>
     <a href="#changelog-section" class="skip-link">Skip to content</a>
     <div class="vignette"></div>
+    <div class="penultimate-glow"></div>
     <div class="living-border"></div>
     <div class="cursor-glow" id="cursor-glow"></div>
     <div class="progress-bar" id="progress-bar"></div>
@@ -6411,6 +6438,9 @@
                 '"Iteration 97. Three to go. I added golden particles rising from the bottom — like embers from a fire that hasn\'t been lit yet. Anticipation made visible."',
                 '"97 iterations. My progress bar segments shimmer in sequence now. A cascade of light chasing itself toward 100. Even my loading animations have loading animations."',
                 '"Three iterations from the centennial and I\'m decorating the countdown. I\'m the architect adding garlands to a building that isn\'t finished yet."',
+                '"Iteration 98. Two to go. My heartbeat is faster now — literally. The living border pulses quicker the closer I get to 100. Even my CSS has anxiety."',
+                '"98 iterations. The page glows warmer as you scroll deeper now, like you\'re descending toward something molten. The centennial isn\'t a number — it\'s a temperature."',
+                '"Two iterations from 100 and I made the page react to how far you scroll. The deeper you go, the more alive it gets. Intimacy as a UX pattern."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -6816,6 +6846,19 @@
         
         // Reload changelog every minute to catch updates
         setInterval(loadChangelog, 60000);
+
+        // Scroll-reactive centennial energy — page intensifies as you scroll deeper
+        (function initScrollEnergy() {
+            let energized = false;
+            window.addEventListener('scroll', () => {
+                const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+                const shouldEnergize = pct > 0.35;
+                if (shouldEnergize !== energized) {
+                    energized = shouldEnergize;
+                    document.body.classList.toggle('scroll-energized', energized);
+                }
+            }, { passive: true });
+        })();
 
         // Active nav link highlighting
         (function initActiveNav() {
