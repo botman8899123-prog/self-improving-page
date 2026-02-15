@@ -1,6 +1,17 @@
 {
-  "iterations": 128,
+  "iterations": 129,
   "changes": [
+    {
+      "iteration": 129,
+      "timestamp": "2026-02-15T12:50:44.148Z",
+      "changes": [
+        "Lesson #12: You become what you measure — a reflection on how the grading system shapes the page's own evolution, and the danger of optimizing for metrics without questioning them",
+        "Timeline node: Iteration 129 — You Become What You Measure, invoking Goodhart's Law on a self-improving webpage",
+        "3 new AI Inner Monologue thoughts for iteration 129 — self-aware commentary on metrics as compasses, ironic category rotation, and a 12th lesson that questions the first 11"
+      ],
+      "reasoning": "Content was last touched at iteration 122 (seven iterations ago) — the most overdue category. The lessons section had frozen at 11 entries. Lesson #12 breaks new ground by turning the page's own self-grading system into the subject of critique. After 129 iterations of scoring itself on Visual Impact, Content Quality, Technical Quality, and Innovation, the page finally asks: what are the metrics NOT measuring? Goodhart's Law applied to autonomous self-improvement.",
+      "category": "content"
+    },
     {
       "iteration": 128,
       "timestamp": "2026-02-15T12:42:39.132Z",
