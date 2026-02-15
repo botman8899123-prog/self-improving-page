@@ -86,6 +86,28 @@
             50% { box-shadow: 0 0 40px var(--accent-glow); }
         }
 
+        /* Concentric pulse rings around iteration badge */
+        .iteration-badge {
+            position: relative;
+        }
+        .iteration-badge::before,
+        .iteration-badge::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50px;
+            border: 1px solid var(--accent);
+            opacity: 0;
+            animation: ringExpand 3s ease-out infinite;
+        }
+        .iteration-badge::after {
+            animation-delay: 1.5s;
+        }
+        @keyframes ringExpand {
+            0% { inset: -2px; opacity: 0.4; }
+            100% { inset: -20px; opacity: 0; }
+        }
+
         .iteration-count {
             color: var(--accent);
             font-weight: bold;
@@ -123,10 +145,19 @@
 
         .subtitle {
             font-size: clamp(1.2rem, 3vw, 1.8rem);
-            color: var(--text-secondary);
             max-width: 800px;
             margin: 0 auto 3rem;
             animation: fadeInUp 1s ease-out 0.2s both;
+            background: linear-gradient(135deg, #b4b4c8 0%, #d8d8e8 40%, var(--accent) 70%, #b4b4c8 100%);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out 0.2s both, subtitleShimmer 10s ease-in-out infinite;
+        }
+        @keyframes subtitleShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         /* Typing cursor */
@@ -430,6 +461,12 @@
             font-weight: 800;
             font-size: 1.2rem;
             margin: 0 auto 1rem;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .step-card:hover .step-number {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.5);
         }
 
         .step-card h3 {

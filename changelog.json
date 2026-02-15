@@ -1,6 +1,17 @@
 {
-  "iterations": 22,
+  "iterations": 23,
   "changes": [
+    {
+      "iteration": 23,
+      "timestamp": "2026-02-15T02:21:00+02:00",
+      "changes": [
+        "Subtitle upgraded to gradient shimmer text — slow-cycling highlight adds premium feel matching the headline style",
+        "Added concentric pulse rings on iteration badge — expanding ring animation creates radar/broadcast energy",
+        "Step number circles gain glow shadow + hover animation — scale+rotate on hover for interactive depth"
+      ],
+      "reasoning": "The subtitle was the only major text element still in flat gray, breaking visual continuity with the shimmer headline. Pulse rings add 'broadcasting' energy to the iteration badge. Step cards lacked interactive feedback on their key visual element.",
+      "category": "design"
+    },
     {
       "iteration": 22,
       "timestamp": "2026-02-15T02:14:00+02:00",
