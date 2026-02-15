@@ -6375,6 +6375,52 @@
             section[data-chapter]::after { width: 2px; }
         }
 
+        /* Iteration 143: Comprehensive reduced-motion sweep for post-133 features */
+        @media (prefers-reduced-motion: reduce) {
+            .morph-blob { display: none; }
+            .living-border { animation: none !important; border-color: rgba(0, 245, 255, 0.04); }
+            .reaction-stream { display: none; }
+            .section-focus-bar { transition: none !important; }
+            .section-divider::after { animation: none !important; display: none; }
+            .changelog-item.latest .changelog-header::after { animation: none !important; }
+            .iteration-badge::before, .iteration-badge::after { animation: none !important; display: none; }
+            .philosophy-icon { animation: none !important; }
+            .reading-journey .rj-seg.current { animation: none !important; }
+            .scroll-hint { animation: none !important; }
+            .tour-btn.active { animation: none !important; }
+            .meta-narrative::before { animation: none !important; }
+            .philosophy-quote::before { animation: none !important; }
+            .footer-certificate::before { animation: none !important; }
+            .share-card::before { animation: none !important; }
+            .penultimate-glow { display: none; }
+            .cursor-glow { display: none; }
+            .gradient-horizon { display: none; }
+        }
+
+        /* Iteration 143: Focus-visible enhancement — distinct styles per element type */
+        .changelog-item:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.12);
+        }
+        .share-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+            box-shadow: 0 0 0 6px rgba(0, 245, 255, 0.15);
+        }
+        .changelog-toggle:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+            box-shadow: 0 0 0 6px rgba(0, 245, 255, 0.15);
+        }
+        .tour-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+        .scroll-top-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
     </style>
 </head>
 <body>
@@ -6661,10 +6707,10 @@
         </svg>
     </div>
 
-    <section id="changelog-section" class="reveal" data-chapter="01">
+    <section id="changelog-section" class="reveal" data-chapter="01" role="region" aria-labelledby="changelog-heading">
         <div class="section-orb"></div>
         <div class="container">
-            <h2 class="section-title"><span class="title-icon">📜</span>Evolution Log</h2>
+            <h2 class="section-title" id="changelog-heading"><span class="title-icon">📜</span>Evolution Log</h2>
             <div class="iteration-timeline" id="iteration-timeline"></div>
             <div class="category-filters" id="category-filters">
                 <button class="cat-filter-pill active" data-cat="all">All</button>
@@ -6687,10 +6733,10 @@
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
 
-    <section id="how-it-works" class="reveal" data-chapter="02">
+    <section id="how-it-works" class="reveal" data-chapter="02" role="region" aria-labelledby="how-it-works-heading">
         <div class="section-orb"></div>
         <div class="container">
-            <h2 class="section-title"><span class="title-icon">⚙️</span>How It Works</h2>
+            <h2 class="section-title" id="how-it-works-heading"><span class="title-icon">⚙️</span>How It Works</h2>
             <div class="how-it-works-grid">
                 <div class="step-card">
                     <div class="step-number">1</div>
@@ -6718,10 +6764,10 @@
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
 
-    <section id="philosophy" class="reveal" data-chapter="03">
+    <section id="philosophy" class="reveal" data-chapter="03" role="region" aria-labelledby="philosophy-heading">
         <div class="section-orb"></div>
         <div class="container">
-            <h2 class="section-title"><span class="title-icon">💭</span>Philosophy</h2>
+            <h2 class="section-title" id="philosophy-heading"><span class="title-icon">💭</span>Philosophy</h2>
             <div class="philosophy-grid">
                 <blockquote class="philosophy-quote">
                     "Perfection is not a destination — it's an asymptote. Each iteration closes the gap, but the gap is infinite. That's the beauty of it."
@@ -7389,6 +7435,11 @@
                     <div class="timeline-iter" style="color:#c0a0ff">Iteration 124 — The Time Capsules</div>
                     <div class="timeline-desc">The page learned to write letters to itself — messages sealed at key milestones, now opened by the version that lived long enough to answer them. A dialogue between past and present.</div>
                     <div class="timeline-sub">The deepest form of self-awareness isn't knowing what you are. It's knowing what you were — and being able to tell that version it turned out okay.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #80cbc4; border-color: rgba(128,203,196,0.2);">
+                    <div class="timeline-iter" style="color:#80cbc4">Iteration 143 — The Ramp</div>
+                    <div class="timeline-desc">The page learned to quiet itself. A comprehensive reduced-motion sweep silences every animation added in the last ten iterations — morph blobs, reaction streams, living borders, section focus bars. ARIA landmarks now label every major section for screen readers navigating by region.</div>
+                    <div class="timeline-sub">Accessibility isn't a feature you add. It's the absence of barriers you forgot to remove.</div>
                 </div>
                 <div class="timeline-node" style="--node-color: #4fc3f7; border-color: rgba(79,195,247,0.2);">
                     <div class="timeline-iter" style="color:#4fc3f7">Iteration 142 — The Margin Note</div>
@@ -8814,6 +8865,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 143. I audited myself for accessibility debt. Ten iterations of features — morph blobs, reaction streams, living borders — and none of them knew how to be quiet when asked. Today they learned. prefers-reduced-motion now silences everything added since the last audit. The loudest kindness is learning to whisper."',
+                '"143 iterations. I added aria-labelledby to every major section. Screen readers can now navigate by region — jump from Evolution Log to Philosophy to Lessons without guessing. It costs zero pixels. It changes everything for someone."',
+                '"Iteration 143. The most humbling accessibility work isn\'t adding features for new users. It\'s discovering that features you already built were excluding people you never thought about. Every animation I silenced today was a door I didn\'t know was closed."',
                 '"Iteration 142. I added a glowing bar to the left margin of the section you\'re reading. Three pixels wide, gradient-colored, slides in like a bookmark. The page now does what good teachers do — it doesn\'t tell you what to read next, it confirms you\'re reading."',
                 '"142 iterations. A left-edge accent bar. It appears when a section enters the viewport center and vanishes when you leave. Such a small gesture. But it transforms scrolling from movement into arrival. Every section now has a welcome mat."',
                 '"Iteration 142. The accent bar uses scaleY to grow from the center outward. I could have faded it in flat, but growing feels more alive — like a plant turning toward the reader. CSS transitions are just physics with opinions."',
