@@ -1066,6 +1066,63 @@
             50% { transform: scale(1.05); }
         }
 
+        /* Circular countdown ring */
+        .countdown-ring-wrap {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto;
+        }
+        .countdown-ring-wrap svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        .countdown-ring-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.06);
+            stroke-width: 4;
+        }
+        .countdown-ring-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 408;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear, stroke 0.5s;
+            filter: drop-shadow(0 0 6px var(--accent-glow));
+        }
+        .countdown-ring-fill.urgent {
+            stroke: #ff6b6b;
+            filter: drop-shadow(0 0 8px rgba(255,107,107,0.5));
+        }
+        .countdown-ring-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        /* Milestone glow on iteration badge (multiples of 10) */
+        .iteration-badge.milestone {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 0 60px rgba(255, 215, 0, 0.15);
+            animation: milestonePulse 3s ease-in-out infinite;
+        }
+        .iteration-badge.milestone .iteration-count {
+            color: #ffd700;
+        }
+        .iteration-badge.milestone::before,
+        .iteration-badge.milestone::after {
+            border-color: #ffd700;
+        }
+        @keyframes milestonePulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 0 60px rgba(255, 215, 0, 0.15); }
+            50% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.6), 0 0 100px rgba(255, 215, 0, 0.25); }
+        }
+
         /* Page load fade-in */
         body {
             animation: pageLoad 0.8s ease-out;
@@ -1817,7 +1874,15 @@
             <div class="countdown-section">
                 <div class="live-badge"><span class="live-badge-dot"></span> Live</div>
                 <div class="countdown-label">Next Evolution In</div>
-                <div class="countdown" id="countdown">--:--</div>
+                <div class="countdown-ring-wrap">
+                    <svg viewBox="0 0 140 140">
+                        <circle cx="70" cy="70" r="65" class="countdown-ring-bg"/>
+                        <circle cx="70" cy="70" r="65" class="countdown-ring-fill" id="countdown-ring"/>
+                    </svg>
+                    <div class="countdown-ring-text">
+                        <div class="countdown" id="countdown">--:--</div>
+                    </div>
+                </div>
             </div>
 
             <a class="scroll-hint" onclick="document.getElementById('changelog-section').scrollIntoView({behavior:'smooth'})">
@@ -2093,6 +2158,9 @@
             if (bi) bi.textContent = count;
             const ci = document.getElementById('capsule-iteration');
             if (ci) ci.textContent = count;
+            // Milestone glow for multiples of 10
+            const badge = document.querySelector('.iteration-badge');
+            if (badge && count % 10 === 0) badge.classList.add('milestone');
         }
 
         function updateChangelog(changes) {
@@ -2173,6 +2241,13 @@
             const cdEl = document.getElementById('countdown');
             cdEl.textContent = timeStr;
             cdEl.classList.toggle('urgent', diff < 60000);
+            // Update countdown ring
+            const ring = document.getElementById('countdown-ring');
+            if (ring) {
+                const pct = 1 - (diff / ITERATION_INTERVAL);
+                ring.style.strokeDashoffset = 408 * (1 - pct);
+                ring.classList.toggle('urgent', diff < 60000);
+            }
             const bc = document.getElementById('banner-countdown');
             if (bc) bc.textContent = timeStr;
         }

@@ -1,6 +1,17 @@
 {
-  "iterations": 29,
+  "iterations": 30,
   "changes": [
+    {
+      "iteration": 30,
+      "timestamp": "2026-02-15T03:11:00+02:00",
+      "changes": [
+        "Replaced flat text countdown with circular SVG progress ring — depletes smoothly as time passes, turns red in final 60 seconds",
+        "Added milestone glow on iteration badge — multiples of 10 get golden pulsing border and glow, celebrating major milestones",
+        "Countdown ring integrates urgency state — ring stroke turns red with drop-shadow when under 60 seconds"
+      ],
+      "reasoning": "Iteration 30 is a milestone. The flat countdown text was the last major UI element without visual treatment. The circular ring transforms it from a number into a visceral countdown experience. The golden milestone glow rewards pattern-watchers and makes round numbers feel special.",
+      "category": "design"
+    },
     {
       "iteration": 29,
       "timestamp": "2026-02-15T03:04:00+02:00",
