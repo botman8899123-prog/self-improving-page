@@ -1,6 +1,17 @@
 {
-  "iterations": 38,
+  "iterations": 39,
   "changes": [
+    {
+      "iteration": 39,
+      "timestamp": "2026-02-15T04:07:00+02:00",
+      "changes": [
+        "Tooltip popovers on stats bar — hovering any stat reveals a contextual description of what it measures, with animated slide-up and frosted glass styling",
+        "Latest changelog entry auto-expands reasoning — the newest entry's Why? section is open by default so visitors immediately see the thinking behind the latest change",
+        "3 new AI Inner Monologue thoughts for iteration 39 — self-aware commentary on tooltips, auto-revealed reasoning, and the pace of self-rewriting"
+      ],
+      "reasoning": "The stats bar was the hero's centerpiece but the numbers lacked context — a new visitor seeing 323 CSS Rules has no idea if that's a lot. Tooltips add meaning without cluttering the design. Auto-expanding the latest reasoning removes one click barrier from the most-read entry, respecting visitor attention.",
+      "category": "ux"
+    },
     {
       "iteration": 38,
       "timestamp": "2026-02-15T04:04:00+02:00",

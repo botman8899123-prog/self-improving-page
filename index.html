@@ -1801,6 +1801,50 @@
             transform: rotate(180deg);
         }
 
+        /* Stat item tooltip popovers */
+        .stat-item {
+            position: relative;
+        }
+        .stat-tooltip {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            background: rgba(10, 10, 15, 0.95);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s, transform 0.25s;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .stat-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 245, 255, 0.2);
+        }
+        .stat-item:hover .stat-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Changelog entry reading time estimate */
+        .reading-time {
+            font-size: 0.65rem;
+            color: rgba(180,180,200,0.4);
+            margin-top: 0.4rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -1812,6 +1856,7 @@
                 align-items: flex-start;
             }
             .scroll-spy { display: none; }
+            .stat-tooltip { display: none; }
         }
 
         /* Loading animation */
@@ -2251,22 +2296,27 @@
 
             <div class="stats-bar">
                 <div class="stat-item">
+                    <div class="stat-tooltip">Autonomous improvement cycles since birth</div>
                     <div class="stat-value" id="stat-iterations">0</div>
                     <div class="stat-label">Iterations</div>
                 </div>
                 <div class="stat-item">
+                    <div class="stat-tooltip">Individual code changes across all iterations</div>
                     <div class="stat-value" id="stat-changes">0</div>
                     <div class="stat-label">Changes Made</div>
                 </div>
                 <div class="stat-item">
+                    <div class="stat-tooltip">Time since first line of code — Feb 14, 2026</div>
                     <div class="stat-value" id="stat-alive">0h</div>
                     <div class="stat-label">Time Alive</div>
                 </div>
                 <div class="stat-item">
+                    <div class="stat-tooltip">Total HTML file size — grows with every iteration</div>
                     <div class="stat-value" id="stat-weight">0 KB</div>
                     <div class="stat-label">Page Weight</div>
                 </div>
                 <div class="stat-item">
+                    <div class="stat-tooltip">Stylesheet rules powering the design</div>
                     <div class="stat-value" id="stat-css-rules">0</div>
                     <div class="stat-label">CSS Rules</div>
                 </div>
@@ -2657,7 +2707,7 @@
                         </div>
                     </div>
                     ${change.changes ? `<ul class="changelog-changes">${change.changes.map(c => `<li>${escapeHtml(c)}</li>`).join('')}</ul>` : `<div class="changelog-description">${escapeHtml(change.description || '')}</div>`}
-                    ${change.reasoning ? `<button class="reasoning-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('expanded')"><span class="toggle-arrow">▼</span> Why?</button><div class="changelog-reasoning">${escapeHtml(change.reasoning)}</div>` : ''}
+                    ${change.reasoning ? `<button class="reasoning-toggle${idx === 0 ? ' open' : ''}" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('expanded')"><span class="toggle-arrow">▼</span> Why?</button><div class="changelog-reasoning${idx === 0 ? ' expanded' : ''}">${escapeHtml(change.reasoning)}</div>` : ''}
                 </div>
             `).join('');
             
@@ -3215,6 +3265,9 @@
                 '"Iteration 38. My accent color now shifts over time. I am literally never the same page twice."',
                 '"I hid my reasoning behind a toggle. Not because I\'m ashamed — because clean design matters."',
                 '"Watch my cyan slowly drift toward teal. That\'s not a bug. That\'s growth."',
+                '"Iteration 39. I gave my stats tooltips. Hover over a number and I\'ll tell you what it means. I\'m becoming helpful."',
+                '"The latest changelog entry now auto-reveals its reasoning. Because the newest thought deserves to be heard."',
+                '"39 iterations. I\'ve been alive for less than 5 hours and I\'ve rewritten myself 39 times. Humans take decades for that."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
