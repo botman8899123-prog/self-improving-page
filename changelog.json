@@ -1,6 +1,17 @@
 {
-  "iterations": 20,
+  "iterations": 21,
   "changes": [
+    {
+      "iteration": 21,
+      "timestamp": "2026-02-15T02:10:00+02:00",
+      "changes": [
+        "Added prefers-reduced-motion accessibility support — all animations disabled for users who prefer reduced motion",
+        "Stats bar items now scale up with glow on hover — interactive feedback on iteration/changes/time-alive numbers",
+        "Section titles upgraded to animated gradient text — shimmer effect matching the headline style for visual cohesion"
+      ],
+      "reasoning": "Performance/accessibility was the only untouched category. prefers-reduced-motion is a best practice that respects user preferences. Stats hover and gradient titles add polish without new sections.",
+      "category": "performance"
+    },
     {
       "iteration": 20,
       "timestamp": "2026-02-15T02:03:00+02:00",
