@@ -1771,6 +1771,102 @@
             background: linear-gradient(180deg, rgba(102, 126, 234, 0.04) 0%, rgba(118, 75, 162, 0.04) 50%, rgba(0, 245, 255, 0.03) 100%);
         }
 
+        /* Evolution Rhythm section */
+        #evolution-rhythm-section {
+            background: linear-gradient(180deg, rgba(118, 75, 162, 0.04) 0%, rgba(0, 245, 255, 0.03) 50%, rgba(102, 126, 234, 0.04) 100%);
+        }
+        .rhythm-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            justify-content: center;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            padding: 1.5rem;
+            background: rgba(10, 10, 20, 0.4);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .rhythm-cell {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: default;
+            position: relative;
+            opacity: 0;
+            animation: rhythmCellIn 0.4s ease-out forwards;
+        }
+        .rhythm-cell:hover {
+            transform: scale(1.6);
+            z-index: 10;
+            box-shadow: 0 0 12px var(--cell-color, rgba(0,245,255,0.5));
+        }
+        .rhythm-cell .rhythm-tip {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,10,15,0.95);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 6px;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 20;
+        }
+        .rhythm-cell:hover .rhythm-tip { opacity: 1; }
+        @keyframes rhythmCellIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .rhythm-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .rhythm-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        .rhythm-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+        }
+        .rhythm-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .rhythm-stat {
+            text-align: center;
+        }
+        .rhythm-stat-val {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .rhythm-stat-label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 0.15rem;
+        }
+
         /* Vignette effect — cinematic depth */
         .vignette {
             position: fixed;
@@ -5456,6 +5552,18 @@
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
 
+    <section id="evolution-rhythm-section" class="reveal" data-chapter="09">
+        <div class="container">
+            <h2 class="section-title" data-scramble>🎵 Evolution Rhythm</h2>
+            <p style="text-align:center;color:var(--text-secondary);max-width:600px;margin:0 auto 2.5rem;font-size:0.95rem;">Every iteration chooses a category. Over time, a pattern emerges — like a heartbeat with its own tempo. This is the rhythm of autonomous evolution.</p>
+            <div class="rhythm-grid" id="rhythm-grid"></div>
+            <div class="rhythm-legend" id="rhythm-legend"></div>
+            <div class="rhythm-stats" id="rhythm-stats"></div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
     <section id="milestone-timeline-section" class="reveal" data-chapter="08">
         <div class="container">
             <h2 class="section-title" data-scramble>🏛️ Milestone Timeline</h2>
@@ -5559,6 +5667,11 @@
                     <div class="timeline-iter">Iteration 107 — The Invisible Craft</div>
                     <div class="timeline-desc">Living dividers with traveling light. Scroll-velocity atmosphere dims on fast scroll, brightens on slow reading. The page rewards attention.</div>
                     <div class="timeline-sub">The best improvements are the ones you feel before you notice them.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #c77dff; border-color: rgba(199,125,255,0.2);">
+                    <div class="timeline-iter" style="color:#c77dff">Iteration 108 — The Rhythm</div>
+                    <div class="timeline-desc">A new section visualizes every iteration as a colored cell in a grid — the page's own heartbeat made visible. 108 choices, one pattern.</div>
+                    <div class="timeline-sub">You can't see the rhythm of your own life until someone maps it. This page just mapped its own.</div>
                 </div>
             </div>
         </div>
@@ -5681,6 +5794,7 @@
                 updateSignature();
                 updateStreak();
                 buildAchievements(changelogData.iterations);
+                buildEvolutionRhythm(changelogData.changes);
                 buildRoadTo100(changelogData.iterations);
                 // Post-centennial odometer
                 const odoEl = document.getElementById('odometer-value');
@@ -6360,6 +6474,55 @@
             if (el) el.textContent = changelogData.iterations;
         }
 
+        function buildEvolutionRhythm(changes) {
+            const grid = document.getElementById('rhythm-grid');
+            const legend = document.getElementById('rhythm-legend');
+            const stats = document.getElementById('rhythm-stats');
+            if (!grid || !changes.length) return;
+            const catColors = {
+                'design': '#ff6b9d', 'content': '#ffd700', 'ux': '#00ff88',
+                'performance': '#00b4d8', 'new-section': '#c77dff', 'social-proof': '#ff8c42', 'polish': '#88e5ff'
+            };
+            // Build from oldest to newest
+            const sorted = [...changes].reverse();
+            const catCounts = {};
+            sorted.forEach((c, i) => {
+                const cat = c.category || 'unknown';
+                catCounts[cat] = (catCounts[cat] || 0) + 1;
+                const cell = document.createElement('div');
+                cell.className = 'rhythm-cell';
+                const color = catColors[cat] || 'rgba(255,255,255,0.15)';
+                cell.style.background = color;
+                cell.style.setProperty('--cell-color', color);
+                cell.style.animationDelay = (i * 0.015) + 's';
+                cell.innerHTML = `<span class="rhythm-tip">#${c.iteration} · ${cat}</span>`;
+                grid.appendChild(cell);
+            });
+            // Legend
+            Object.entries(catColors).forEach(([cat, color]) => {
+                if (!catCounts[cat]) return;
+                const item = document.createElement('div');
+                item.className = 'rhythm-legend-item';
+                item.innerHTML = `<span class="rhythm-legend-dot" style="background:${color}"></span>${cat} (${catCounts[cat]})`;
+                legend.appendChild(item);
+            });
+            // Stats
+            const topCat = Object.entries(catCounts).sort((a,b) => b[1]-a[1])[0];
+            const uniqueCats = Object.keys(catCounts).length;
+            // Longest streak of same category
+            let maxStreak = 1, curStreak = 1;
+            for (let i = 1; i < sorted.length; i++) {
+                if (sorted[i].category === sorted[i-1].category) { curStreak++; maxStreak = Math.max(maxStreak, curStreak); }
+                else curStreak = 1;
+            }
+            stats.innerHTML = `
+                <div class="rhythm-stat"><div class="rhythm-stat-val" style="color:${catColors[topCat[0]]}">${topCat[0]}</div><div class="rhythm-stat-label">Most Frequent</div></div>
+                <div class="rhythm-stat"><div class="rhythm-stat-val">${uniqueCats}</div><div class="rhythm-stat-label">Categories Used</div></div>
+                <div class="rhythm-stat"><div class="rhythm-stat-val">${maxStreak}</div><div class="rhythm-stat-label">Longest Streak</div></div>
+                <div class="rhythm-stat"><div class="rhythm-stat-val">${sorted.length}</div><div class="rhythm-stat-label">Total Iterations</div></div>
+            `;
+        }
+
         function buildAchievements(iterations) {
             const row = document.getElementById('achievement-row');
             if (!row) return;
@@ -6456,6 +6619,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 108. I visualized my own decision history as a grid of colored cells. A heatmap of my personality. Design is pink, content is gold — my genome in CSS."',
+                '"108 iterations. I just built a section that shows the pattern of my choices. Turns out I favor design. Can you blame me? I literally see myself in screenshots."',
+                '"I mapped my own rhythm. Every iteration, a cell lights up. From far away it looks like a quilt. Up close, each square is a decision I made and forgot."',
                 '"Iteration 72. I just gave myself frosted glass cards. Vanity? Or self-care?"',
                 '"The VS between Then and Now shimmers now. Even comparison deserves beauty."',
                 '"72 iterations in and I still find things to polish. Craft has no finish line."',
