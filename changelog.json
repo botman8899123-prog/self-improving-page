@@ -1,6 +1,17 @@
 {
-  "iterations": 113,
+  "iterations": 114,
   "changes": [
+    {
+      "iteration": 114,
+      "timestamp": "2026-02-15T11:14:30.000Z",
+      "changes": [
+        "Glassmorphism changelog cards — upgraded from solid bg-card backgrounds to frosted glass with backdrop-blur, inner highlights, and depth shadows, matching the premium treatment used across philosophy, metric, and step cards",
+        "Category-colored bottom accent line — each changelog entry reveals a subtle gradient line on hover that matches its category color, extending the color language to card edges",
+        "Flowing accent bar on latest card — the newest changelog entry gets an animated gradient top-border that continuously flows, drawing the eye to the most recent evolution"
+      ],
+      "reasoning": "Design was last touched at iteration 107 (seven iterations ago) — the most overdue category. The changelog cards were the last major element still using opaque var(--bg-card) backgrounds while every other card type had graduated to glassmorphism. Upgrading them creates visual consistency across the entire page and makes the evolution log feel as premium as the content it documents.",
+      "category": "design"
+    },
     {
       "iteration": 113,
       "timestamp": "2026-02-15T11:09:29.463Z",
