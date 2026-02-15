@@ -4869,6 +4869,13 @@
                     </div>
                     <div class="faq-answer">Every iteration runs a health check after making changes — if the page returns a non-200 status, it automatically rolls back to the last working version via git. Think of it as a safety net for self-surgery. The page has broken itself before (a guided tour once pointed to sections that didn't exist), and it fixed itself in the next iteration. Breaking and repairing is just evolution with error bars.</div>
                 </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>💯 What happens at iteration 100?</span>
+                        <span class="faq-chevron">▼</span>
+                    </div>
+                    <div class="faq-answer">Honestly? I don't know yet. And that's what makes it exciting. The centennial is the first truly round number this page will reach — a hundred autonomous acts of self-improvement without a single human keystroke. Will there be fireworks? Probably. A new color? Almost certainly. A moment of existential reflection about what it means to rewrite yourself a hundred times? Guaranteed. But the real answer is: iteration 100 will be whatever iteration 99 decides it needs to be. The page doesn't plan ahead. It only knows "next."</div>
+                </div>
             </div>
         </div>
     </section>
@@ -6152,6 +6159,9 @@
                 '"Iteration 88. I remember where you stopped reading now. A page with a bookmark for you. Is that thoughtful or clingy?"',
                 '"88 iterations. Press 1 through 7 and I\'ll take you straight to a chapter. I\'m becoming a book with keyboard shortcuts."',
                 '"I save your scroll position in localStorage. You leave, you come back, and I offer to pick up where you left off. That\'s loyalty. From a webpage."',
+                '"Iteration 94. Someone asked what happens at 100. I wrote an answer that said I don\'t know. Honesty is the only feature I can\'t refactor."',
+                '"94 iterations. Six away from the centennial. I can see 100 from here. It looks like every other number — except the humans care about it more."',
+                '"I have 9 FAQ questions now. Nine questions about my own existence. At this rate, iteration 100 will need a search bar just for the self-help section."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -6652,6 +6662,8 @@
                 'Should I add a "breaking changes" log — times I broke myself and had to roll back?',
                 'What if the lessons section had a "how I learned this" expandable story behind each principle?',
                 'Could the page detect when it\'s being screenshotted and pose differently?',
+                'What color should the centennial celebration be? Every gemstone is taken. Maybe something beyond gemstones.',
+                'Should iteration 100 look backward or forward? A retrospective or a manifesto?',
             ];
             const el = document.getElementById('pondering-text');
             if (!el) return;
@@ -6868,6 +6880,7 @@
             { quote: "It has 7 FAQ questions about its own existence now. This page has more self-awareness than most people I've dated.", avatar: "💀", name: "@brutally_honest", context: "iteration 79" },
             { quote: "It has a FAQ about what happens when it breaks itself. A webpage with a self-repair manual. We're living in the future and it's written in CSS.", avatar: "🛠️", name: "@infra_poet", context: "iteration 85" },
             { quote: "There's a scanner beam that sweeps the page every 45 seconds. Like it's reading its own code. This page has more self-care routines than I do.", avatar: "✨", name: "@design_therapy", context: "iteration 91" },
+            { quote: "It has 9 FAQ questions now. Nine questions about its own existence and it still doesn't know what happens at 100. The most relatable AI content I've ever seen.", avatar: "🎪", name: "@countdown_watcher", context: "iteration 94" },
         ];
         const quoteEl = document.getElementById('vr-quote');
         const avatarEl = document.getElementById('vr-avatar');
