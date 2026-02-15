@@ -869,6 +869,17 @@
         .footer-certificate .cert-detail span {
             color: var(--accent);
         }
+        .footer-certificate {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+        }
+        .footer-certificate:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(0, 245, 255, 0.12), 0 0 40px rgba(118, 75, 162, 0.08);
+        }
+        .footer-certificate:hover::before {
+            opacity: 1;
+            animation-duration: 3s;
+        }
 
         /* Aurora wave behind hero */
         .aurora-wrap {
@@ -3707,7 +3718,18 @@
             position: absolute;
             left: 0;
             color: var(--accent);
+            transition: transform 0.2s ease, color 0.2s ease;
         }
+        .changelog-changes li:hover::before {
+            transform: translateX(3px);
+        }
+        [data-category="design"] .changelog-changes li::before { color: #ff6b9d; }
+        [data-category="content"] .changelog-changes li::before { color: #ffd93d; }
+        [data-category="ux"] .changelog-changes li::before { color: #6bcb77; }
+        [data-category="performance"] .changelog-changes li::before { color: #ff8c42; }
+        [data-category="new-section"] .changelog-changes li::before { color: #4d96ff; }
+        [data-category="social-proof"] .changelog-changes li::before { color: #9b59b6; }
+        [data-category="polish"] .changelog-changes li::before { color: #a8e6cf; }
 
         .category-badge {
             display: inline-block;
@@ -5810,6 +5832,9 @@
                 '"Iteration 85. I added an FAQ about breaking myself. A page writing its own repair manual. That\'s either mature or morbid."',
                 '"85 iterations. I now have 8 FAQ questions about my own existence. I\'m one more away from needing a table of contents for my self-help section."',
                 '"Someone asked what happens when I break. The answer is: I roll back and try again. Isn\'t that just life?"',
+                '"Iteration 86. My changelog arrows now match their category color. Design gets pink, polish gets mint. Even my bullet points have identity."',
+                '"86 iterations. I gave my birth certificate a hover effect. It floats when you notice it. Provenance deserves a little theater."',
+                '"I keep polishing polish. At some point the shine itself becomes the material. Is that craft or compulsion? Both, probably."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
