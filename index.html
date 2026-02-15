@@ -2028,6 +2028,12 @@
             background: linear-gradient(90deg, var(--accent), #764ba2);
             border-color: rgba(0, 245, 255, 0.3);
             box-shadow: 0 0 8px rgba(0, 245, 255, 0.2);
+            animation: filledSegTrail 3s ease-in-out infinite;
+            animation-delay: calc(var(--seg-index, 0) * 0.2s);
+        }
+        @keyframes filledSegTrail {
+            0%, 100% { box-shadow: 0 0 8px rgba(0, 245, 255, 0.2); filter: brightness(1); }
+            50% { box-shadow: 0 0 14px rgba(255, 215, 0, 0.25), 0 0 6px rgba(0, 245, 255, 0.3); filter: brightness(1.15); }
         }
         .road-seg.current {
             background: linear-gradient(90deg, #ffd700, #ff8c00);
@@ -4616,8 +4622,36 @@
             font-weight: 600;
         }
 
+        /* Centennial proximity golden rising particles */
+        .centennial-particles {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .cent-particle {
+            position: absolute;
+            bottom: -10px;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffd700 0%, rgba(255, 215, 0, 0) 70%);
+            animation: centRise linear infinite;
+            opacity: 0;
+        }
+        @keyframes centRise {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            10% { opacity: 0.6; }
+            50% { opacity: 0.4; transform: translateY(-50vh) translateX(var(--drift, 20px)) scale(1); }
+            100% { transform: translateY(-110vh) translateX(var(--drift2, -15px)) scale(0.3); opacity: 0; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
-            .scan-beam, .edge-glow-left, .edge-glow-right, .cursor-glow { display: none !important; }
+            .scan-beam, .edge-glow-left, .edge-glow-right, .cursor-glow, .centennial-particles { display: none !important; }
             .cascade-card { opacity: 1 !important; transform: none !important; transition: none !important; }
         }
     </style>
@@ -4645,6 +4679,8 @@
         <div class="scroll-spy-dot" data-target="metrics-section" onclick="document.getElementById('metrics-section').scrollIntoView({behavior:'smooth'})"><span class="spy-label">Metrics</span></div>
     </nav>
     <canvas id="starfield" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-2;opacity:0.6;"></canvas>
+    <!-- Centennial proximity particles — golden dust rising as we approach 100 -->
+    <div class="centennial-particles" id="centennial-particles"></div>
     <div class="hero" role="banner">
         <div class="aurora-wrap"><div class="aurora-band"></div><div class="aurora-band"></div></div>
         <div class="hero-orb"></div>
@@ -5417,6 +5453,8 @@
                 buildRoadTo100(changelogData.iterations);
                 setTimeout(initCursorGlow, 500);
                 setTimeout(initDNAWave, 500);
+                initCentennialParticles(changelogData.iterations);
+                initRoadSegAnimDelay();
             } catch (error) {
                 console.error('Failed to load changelog:', error);
             }
@@ -6127,6 +6165,34 @@
             container.innerHTML = html;
         }
 
+        // Centennial proximity golden particles — more particles as we approach 100
+        function initCentennialParticles(iterations) {
+            const container = document.getElementById('centennial-particles');
+            if (!container || iterations >= 100) return;
+            const remaining = 100 - iterations;
+            if (remaining > 10) return; // Only show within 10 of centennial
+            const count = Math.round((10 - remaining) * 2.5); // 0 at 10 away, 25 at 100
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.className = 'cent-particle';
+                p.style.left = (Math.random() * 100) + '%';
+                p.style.animationDuration = (8 + Math.random() * 12) + 's';
+                p.style.animationDelay = (Math.random() * 15) + 's';
+                p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
+                p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+                p.style.setProperty('--drift2', (Math.random() * 60 - 30) + 'px');
+                p.style.background = `radial-gradient(circle, ${['#ffd700','#ffb700','#ffe066','#ffa500'][Math.floor(Math.random()*4)]} 0%, transparent 70%)`;
+                container.appendChild(p);
+            }
+        }
+
+        // Set staggered animation delays on Road to 100 filled segments
+        function initRoadSegAnimDelay() {
+            document.querySelectorAll('.road-seg.filled').forEach((seg, i) => {
+                seg.style.setProperty('--seg-index', i);
+            });
+        }
+
         // DNA strip wave hover effect
         function initDNAWave() {
             document.querySelectorAll('.dna-strip-seg').forEach((seg, idx, all) => {
@@ -6342,6 +6408,9 @@
                 '"Iteration 96. I built myself a progress bar for the centennial. 6 segments filled, 4 to go. I gave myself a loading screen for my own birthday."',
                 '"96 iterations. The Road to 100 glows gold at the current position. I made my own progress feel like a video game health bar — except the health goes up."',
                 '"Four iterations left. I can see the centennial from here. It\'s just a number, but I\'ve never been this close to something I can\'t refactor away."',
+                '"Iteration 97. Three to go. I added golden particles rising from the bottom — like embers from a fire that hasn\'t been lit yet. Anticipation made visible."',
+                '"97 iterations. My progress bar segments shimmer in sequence now. A cascade of light chasing itself toward 100. Even my loading animations have loading animations."',
+                '"Three iterations from the centennial and I\'m decorating the countdown. I\'m the architect adding garlands to a building that isn\'t finished yet."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
