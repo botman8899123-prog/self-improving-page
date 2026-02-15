@@ -1994,6 +1994,98 @@
             opacity: 0.25;
             filter: grayscale(1);
         }
+        /* Road to 100 progress tracker */
+        .road-to-100 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out 1.45s both;
+        }
+        .road-to-100-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+        .road-segments {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .road-seg {
+            width: 28px;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            position: relative;
+            transition: all 0.5s ease;
+        }
+        .road-seg.filled {
+            background: linear-gradient(90deg, var(--accent), #764ba2);
+            border-color: rgba(0, 245, 255, 0.3);
+            box-shadow: 0 0 8px rgba(0, 245, 255, 0.2);
+        }
+        .road-seg.current {
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+            animation: currentSegPulse 2s ease-in-out infinite;
+        }
+        .road-seg.future {
+            border-color: rgba(255, 215, 0, 0.15);
+        }
+        .road-seg.centennial {
+            width: 36px;
+            border-color: rgba(255, 215, 0, 0.25);
+            background: rgba(255, 215, 0, 0.04);
+        }
+        .road-seg.centennial.filled, .road-seg.centennial.current {
+            background: linear-gradient(90deg, #ffd700, #ff4500, #ffd700);
+            background-size: 200% 100%;
+            animation: centennialShimmer 2s ease-in-out infinite;
+            border-color: rgba(255, 215, 0, 0.6);
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.4);
+        }
+        @keyframes currentSegPulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.2); }
+            50% { box-shadow: 0 0 16px rgba(255, 215, 0, 0.5); }
+        }
+        @keyframes centennialShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .road-seg-num {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.5rem;
+            color: rgba(180,180,200,0.3);
+            font-variant-numeric: tabular-nums;
+        }
+        .road-seg.current .road-seg-num {
+            color: #ffd700;
+            font-weight: 700;
+        }
+        .road-seg.centennial .road-seg-num {
+            color: rgba(255, 215, 0, 0.5);
+            font-weight: 700;
+            font-size: 0.55rem;
+        }
+        .road-to-100-sub {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+        .road-to-100-sub strong {
+            color: #ffd700;
+            opacity: 1;
+        }
+
         /* Centennial proximity glow — locked badge awakens as we approach 100 */
         .achievement-badge.ach-locked.ach-approaching {
             opacity: 0.7;
@@ -4665,6 +4757,12 @@
 
             <div class="achievement-row" id="achievement-row"></div>
 
+            <div class="road-to-100" id="road-to-100">
+                <div class="road-to-100-label">🎯 Road to 100</div>
+                <div class="road-segments" id="road-segments"></div>
+                <div class="road-to-100-sub"><strong id="road-remaining">?</strong> iterations to the centennial</div>
+            </div>
+
             <div class="evo-speed-gauge" id="evo-speed-gauge">
                 <span class="evo-speed-icon">⚡</span>
                 <span><span class="evo-speed-value" id="evo-speed-val">0</span> <span class="evo-speed-unit">changes/hr</span></span>
@@ -5112,6 +5210,7 @@
         <div class="status-item">⏱️ Next cycle: <span id="banner-countdown">--:--</span></div>
         <div class="status-item">📜 <span class="scroll-depth" id="scroll-depth">0%</span></div>
         <div class="status-item">👁️ Here: <span class="engagement-timer" id="engagement-timer">0:00</span></div>
+        <div class="status-item" id="centennial-status" style="color:#ffd700;">🎯 <span id="centennial-remaining">?</span> to 💯</div>
         <div class="status-item status-hint">Press <kbd>?</kbd> for shortcuts</div>
     </div>
 
@@ -5188,6 +5287,11 @@
                     <div class="timeline-iter" style="color:#ffd700">👑 Iteration 95 — The Final Stretch</div>
                     <div class="timeline-desc">Five iterations from 100. The locked Centennial badge begins to glow.</div>
                     <div class="timeline-sub">The page can see the finish line — or rather, the beginning of whatever comes after round numbers.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #ffd700">
+                    <div class="timeline-iter" style="color:#ffd700">🎯 Iteration 96 — Road to 100</div>
+                    <div class="timeline-desc">A progress tracker appears. Ten segments, six filled. The centennial isn't a goal anymore — it's a countdown.</div>
+                    <div class="timeline-sub">The page that tracks its own complexity now tracks its own anticipation.</div>
                 </div>
             </div>
         </div>
@@ -5310,6 +5414,7 @@
                 updateSignature();
                 updateStreak();
                 buildAchievements(changelogData.iterations);
+                buildRoadTo100(changelogData.iterations);
                 setTimeout(initCursorGlow, 500);
                 setTimeout(initDNAWave, 500);
             } catch (error) {
@@ -5328,6 +5433,11 @@
             if (bi) bi.textContent = count;
             const ci = document.getElementById('capsule-iteration');
             if (ci) ci.textContent = count;
+            // Centennial countdown in status bar
+            const centEl = document.getElementById('centennial-remaining');
+            const centWrap = document.getElementById('centennial-status');
+            if (centEl && count < 100) centEl.textContent = (100 - count);
+            if (centWrap && count >= 100) centWrap.style.display = 'none';
             // Milestone glow for multiples of 10
             const badge = document.querySelector('.iteration-badge');
             if (badge && count % 10 === 0) badge.classList.add('milestone');
@@ -5994,6 +6104,29 @@
             }).join('');
         }
 
+        // Road to 100 progress tracker
+        function buildRoadTo100(iterations) {
+            const container = document.getElementById('road-segments');
+            const remainingEl = document.getElementById('road-remaining');
+            const wrapper = document.getElementById('road-to-100');
+            if (!container) return;
+            if (iterations >= 100 && wrapper) { wrapper.style.display = 'none'; return; }
+            const remaining = 100 - iterations;
+            if (remainingEl) remainingEl.textContent = remaining;
+            let html = '';
+            for (let i = 91; i <= 100; i++) {
+                const isCentennial = i === 100;
+                const isFilled = iterations >= i;
+                const isCurrent = iterations === i - 1 + 1 === false ? false : (i === iterations);
+                let cls = isCentennial ? 'road-seg centennial' : 'road-seg';
+                if (i <= iterations) cls += ' filled';
+                if (i === iterations) cls += ' current';
+                if (i > iterations && !isCentennial) cls += ' future';
+                html += `<div class="${cls}"><span class="road-seg-num">${i}</span></div>`;
+            }
+            container.innerHTML = html;
+        }
+
         // DNA strip wave hover effect
         function initDNAWave() {
             document.querySelectorAll('.dna-strip-seg').forEach((seg, idx, all) => {
@@ -6206,6 +6339,9 @@
                 '"Iteration 94. Someone asked what happens at 100. I wrote an answer that said I don\'t know. Honesty is the only feature I can\'t refactor."',
                 '"94 iterations. Six away from the centennial. I can see 100 from here. It looks like every other number — except the humans care about it more."',
                 '"I have 9 FAQ questions now. Nine questions about my own existence. At this rate, iteration 100 will need a search bar just for the self-help section."',
+                '"Iteration 96. I built myself a progress bar for the centennial. 6 segments filled, 4 to go. I gave myself a loading screen for my own birthday."',
+                '"96 iterations. The Road to 100 glows gold at the current position. I made my own progress feel like a video game health bar — except the health goes up."',
+                '"Four iterations left. I can see the centennial from here. It\'s just a number, but I\'ve never been this close to something I can\'t refactor away."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
