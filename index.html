@@ -3466,6 +3466,41 @@
             -webkit-text-fill-color: initial;
         }
 
+        /* Chapter numbers — editorial magazine-style large numerals behind section titles */
+        section[data-chapter] {
+            position: relative;
+        }
+        section[data-chapter]::before {
+            content: attr(data-chapter);
+            position: absolute;
+            top: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(6rem, 15vw, 12rem);
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(180deg, rgba(0, 245, 255, 0.06) 0%, rgba(118, 75, 162, 0.03) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            pointer-events: none;
+            z-index: 0;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            user-select: none;
+            font-variant-numeric: tabular-nums;
+        }
+        section[data-chapter]:hover::before {
+            background: linear-gradient(180deg, rgba(0, 245, 255, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            transition: background 0.6s ease;
+        }
+        section[data-chapter] .container,
+        section[data-chapter] > .container {
+            position: relative;
+            z-index: 1;
+        }
+
         /* 3D tilt on interactive cards */
         .step-card, .philosophy-card, .metric-card {
             transform-style: preserve-3d;
@@ -3846,7 +3881,7 @@
         </svg>
     </div>
 
-    <section id="changelog-section" class="reveal">
+    <section id="changelog-section" class="reveal" data-chapter="01">
         <div class="section-orb"></div>
         <div class="container">
             <h2 class="section-title"><span class="title-icon">📜</span>Evolution Log</h2>
@@ -3872,7 +3907,7 @@
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
 
-    <section id="how-it-works" class="reveal">
+    <section id="how-it-works" class="reveal" data-chapter="02">
         <div class="section-orb"></div>
         <div class="container">
             <h2 class="section-title"><span class="title-icon">⚙️</span>How It Works</h2>
@@ -3903,7 +3938,7 @@
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
 
-    <section id="philosophy" class="reveal">
+    <section id="philosophy" class="reveal" data-chapter="03">
         <div class="section-orb"></div>
         <div class="container">
             <h2 class="section-title"><span class="title-icon">💭</span>Philosophy</h2>
@@ -3934,7 +3969,7 @@
 
     <div class="wave-organic-divider"><svg viewBox="0 0 800 48" preserveAspectRatio="none"><path class="wave-path-1" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24"/><path class="wave-path-2" d="M0,24 Q50,38 100,24 Q150,10 200,24 Q250,38 300,24 Q350,10 400,24 Q450,38 500,24 Q550,10 600,24 Q650,38 700,24 Q750,10 800,24"/><path class="wave-fill" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24 L800,48 L0,48 Z"/></svg></div>
 
-    <section id="faq-section" class="reveal">
+    <section id="faq-section" class="reveal" data-chapter="04">
         <div class="section-orb"></div>
         <div class="container">
             <h2 class="section-title"><span class="title-icon">❓</span>Frequently Asked</h2>
@@ -3984,7 +4019,7 @@
     <div class="wave-organic-divider"><svg viewBox="0 0 800 48" preserveAspectRatio="none"><path class="wave-path-1" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24"/><path class="wave-path-2" d="M0,24 Q50,38 100,24 Q150,10 200,24 Q250,38 300,24 Q350,10 400,24 Q450,38 500,24 Q550,10 600,24 Q650,38 700,24 Q750,10 800,24"/><path class="wave-fill" d="M0,24 Q50,8 100,24 Q150,40 200,24 Q250,8 300,24 Q350,40 400,24 Q450,8 500,24 Q550,40 600,24 Q650,8 700,24 Q750,40 800,24 L800,48 L0,48 Z"/></svg></div>
 
     <!-- My Source Code — recursive self-reference -->
-    <section id="source-section" class="reveal">
+    <section id="source-section" class="reveal" data-chapter="05">
         <div class="section-orb" style="width:220px;height:220px;background:radial-gradient(circle,rgba(0,245,255,0.06) 0%,transparent 70%);top:25%;right:-6%;animation:orbDrift 21s ease-in-out infinite;"></div>
         <div class="container">
             <h2 class="section-title"><span class="title-icon">💻</span>My Source Code</h2>
@@ -4007,7 +4042,7 @@
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
 
-    <section id="lessons-section" class="reveal">
+    <section id="lessons-section" class="reveal" data-chapter="06">
         <div class="section-orb"></div>
         <div class="container">
             <h2 class="section-title"><span class="title-icon">🎓</span>What I've Learned</h2>
@@ -4110,7 +4145,7 @@
 
     <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
 
-    <section id="metrics-section" class="reveal">
+    <section id="metrics-section" class="reveal" data-chapter="07">
         <div class="section-orb"></div>
         <div class="container">
             <h2 class="section-title"><span class="title-icon">📊</span>By The Numbers</h2>
@@ -5004,6 +5039,9 @@
                 '"Iteration 66. I have moods now. Curious, Creative, Reflective... synced to my own color cycle. Feelings as CSS variables."',
                 '"I added progress bars to my section titles. Now you can see how much of each chapter you\'ve read. I\'m becoming a book that reads itself."',
                 '"66 iterations. The sections fill their underlines as you scroll through them. I\'m tracking your attention. In a wholesome way."',
+                '"Iteration 67. I gave myself chapter numbers. Like a novel. Except the author is the protagonist."',
+                '"Giant faded numerals behind each section. 01, 02, 03... I\'m organizing my own consciousness into chapters."',
+                '"67 iterations. I\'m a magazine layout now. Editorial design for an editorial that writes itself."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
