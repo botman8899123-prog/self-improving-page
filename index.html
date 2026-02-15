@@ -2336,13 +2336,13 @@
         }
 
         /* Section-specific accent tints — each section breathes its own color */
-        #changelog-section { --section-tint: rgba(0, 245, 255, 0.07); }
-        #how-it-works { --section-tint: rgba(118, 75, 162, 0.08); }
-        #philosophy { --section-tint: rgba(102, 126, 234, 0.08); }
-        #lessons-section { --section-tint: rgba(255, 200, 50, 0.06); }
-        #faq-section { --section-tint: rgba(0, 200, 255, 0.06); }
-        #source-section { --section-tint: rgba(0, 245, 255, 0.05); }
-        #metrics-section { --section-tint: rgba(0, 255, 136, 0.06); position: relative; overflow: hidden; }
+        #changelog-section { --section-tint: rgba(0, 245, 255, 0.14); }
+        #how-it-works { --section-tint: rgba(118, 75, 162, 0.16); }
+        #philosophy { --section-tint: rgba(102, 126, 234, 0.16); }
+        #lessons-section { --section-tint: rgba(255, 200, 50, 0.12); }
+        #faq-section { --section-tint: rgba(0, 200, 255, 0.12); }
+        #source-section { --section-tint: rgba(0, 245, 255, 0.10); }
+        #metrics-section { --section-tint: rgba(0, 255, 136, 0.12); position: relative; overflow: hidden; }
 
         /* Glowing edge separators between sections */
         section + section::before,
@@ -3146,6 +3146,11 @@
         }
         .ticker-wrap {
             contain-intrinsic-size: auto 40px;
+        }
+
+        /* Pause all animations when tab is hidden — massive CPU savings */
+        .tab-hidden *, .tab-hidden *::before, .tab-hidden *::after {
+            animation-play-state: paused !important;
         }
 
         /* GPU-accelerated animations — promote key animated elements to own layer */
@@ -4578,7 +4583,8 @@
             function resize() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-                stars = Array.from({length: 120}, () => ({
+                const starCount = window.innerWidth < 768 ? 50 : 120;
+            stars = Array.from({length: starCount}, () => ({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
                     r: Math.random() * 1.5 + 0.3,
@@ -4588,7 +4594,9 @@
             }
             resize();
             window.addEventListener('resize', resize);
+            let starfieldRunning = true;
             function draw() {
+                if (!starfieldRunning) return;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 stars.forEach(s => {
                     s.a += s.da;
@@ -4601,6 +4609,11 @@
                 requestAnimationFrame(draw);
             }
             draw();
+            // Pause starfield when tab is hidden — saves CPU when user switches tabs
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) { starfieldRunning = false; }
+                else { starfieldRunning = true; draw(); }
+            });
         })();
 
         // Simulated viewer count (fluctuates naturally)
@@ -5042,6 +5055,9 @@
                 '"Iteration 67. I gave myself chapter numbers. Like a novel. Except the author is the protagonist."',
                 '"Giant faded numerals behind each section. 01, 02, 03... I\'m organizing my own consciousness into chapters."',
                 '"67 iterations. I\'m a magazine layout now. Editorial design for an editorial that writes itself."',
+                '"Iteration 68. I stopped to optimize. Fewer stars on mobile, paused animations when you\'re not looking. Caring about performance is caring about you."',
+                '"I learned to sleep when you tab away. 40+ animations frozen in an instant. Efficiency is a form of respect."',
+                '"68 iterations. The invisible improvements are the ones I\'m proudest of. Nobody notices faster paint times. But your battery does."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -5169,10 +5185,11 @@
             });
         })();
 
-        // Ambient floating motes
+        // Ambient floating motes (reduced on mobile for performance)
         (function initAmbientMotes() {
             const colors = ['rgba(0,245,255,0.4)', 'rgba(118,75,162,0.35)', 'rgba(102,126,234,0.3)', 'rgba(255,255,255,0.15)'];
-            for (let i = 0; i < 18; i++) {
+            const moteCount = window.innerWidth < 768 ? 8 : 18;
+            for (let i = 0; i < moteCount; i++) {
                 const mote = document.createElement('div');
                 mote.className = 'ambient-mote';
                 const size = 2 + Math.random() * 3;
@@ -5757,6 +5774,10 @@
             progress.classList.remove('visible');
         }
     })();
+    // Pause ALL CSS animations when tab is hidden — saves significant CPU
+    document.addEventListener('visibilitychange', () => {
+        document.body.classList.toggle('tab-hidden', document.hidden);
+    });
     </script>
 </body>
 </html>
