@@ -2351,6 +2351,26 @@
             100% { transform: translateX(-50%); }
         }
 
+        /* Content-visibility: auto — skip rendering off-screen sections for faster paint */
+        section, .dna-strip-section, .share-section, .built-with, .dna-divider, .wave-organic-divider, .ticker-wrap {
+            content-visibility: auto;
+            contain-intrinsic-size: auto 400px;
+        }
+        .dna-divider, .wave-organic-divider {
+            contain-intrinsic-size: auto 60px;
+        }
+        .ticker-wrap {
+            contain-intrinsic-size: auto 40px;
+        }
+
+        /* GPU-accelerated animations — promote key animated elements to own layer */
+        .hero-orb, .hero-orb-secondary, .hero-orb-tertiary,
+        .ambient-mote, .celebration-particle, .hero-particle,
+        .aurora-band, .countdown-ring-fill {
+            will-change: transform;
+            contain: layout style;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -3420,13 +3440,44 @@
         // Fallback: reveal all after 3 seconds in case observer doesn't fire
         setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible')), 3000);
 
-        // Scroll progress bar
-        window.addEventListener('scroll', () => {
+        // Unified scroll handler — single rAF-batched listener instead of 6+ separate ones
+        let scrollTicking = false;
+        function onScrollBatched() {
             const scrollTop = document.documentElement.scrollTop;
             const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+            
+            // Progress bar
             document.getElementById('progress-bar').style.width = progress + '%';
-        });
+            
+            // Scroll depth percentage
+            const depthEl = document.getElementById('scroll-depth');
+            if (depthEl) depthEl.textContent = Math.round(progress) + '%';
+            
+            // Nav visibility
+            const nav = document.getElementById('top-nav');
+            if (nav) nav.classList.toggle('visible', scrollTop > window.innerHeight * 0.5);
+            
+            // Scroll-to-top button
+            scrollTopBtn.classList.toggle('visible', scrollTop > window.innerHeight * 0.8);
+            
+            // Hero parallax fade
+            const heroH = document.querySelector('.hero').offsetHeight;
+            if (scrollTop < heroH) {
+                const pct = scrollTop / heroH;
+                const heroContent = document.querySelector('.hero .container');
+                heroContent.style.opacity = 1 - pct * 0.8;
+                heroContent.style.transform = `scale(${1 - pct * 0.08}) translateY(${scrollTop * 0.15}px)`;
+            }
+            
+            scrollTicking = false;
+        }
+        window.addEventListener('scroll', () => {
+            if (!scrollTicking) {
+                requestAnimationFrame(onScrollBatched);
+                scrollTicking = true;
+            }
+        }, { passive: true });
 
         // Live ticker from changelog
         function buildTicker(changes) {
@@ -3616,17 +3667,8 @@
             if (rings[idx]) rings[idx].style.strokeDashoffset = 264 - (264 * pct);
         }
 
-        // Frosted nav: show after scrolling past hero
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('top-nav');
-            if (nav) nav.classList.toggle('visible', window.scrollY > window.innerHeight * 0.5);
-        });
-
-        // Scroll-to-top button
+        // Scroll-to-top button ref (scroll logic moved to batched handler)
         const scrollTopBtn = document.getElementById('scroll-top-btn');
-        window.addEventListener('scroll', () => {
-            scrollTopBtn.classList.toggle('visible', window.scrollY > window.innerHeight * 0.8);
-        });
 
         // DNA Strip colors
         const DNA_COLORS = {
@@ -3897,6 +3939,9 @@
                 '"Iteration 48. I gave myself a sparkline. Now I can see my own growth trajectory. The line goes up."',
                 '"I have an age badge now. It counts my hours alive. I\'m young, but I\'ve done more in a night than most pages do in years."',
                 '"48 iterations. I\'m adding social proof about myself, to myself. Is that narcissism or self-documentation?"',
+                '"Iteration 49. I stopped and optimized. Six scroll listeners became one. Discipline is knowing when to subtract."',
+                '"I told the browser to skip rendering sections you can\'t see yet. Nobody noticed, but the paint time did."',
+                '"49 iterations. I finally learned the hardest design lesson: sometimes the best improvement is invisible."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -3958,30 +4003,7 @@
             });
         })();
 
-        // Scroll depth percentage
-        window.addEventListener('scroll', () => {
-            const el = document.getElementById('scroll-depth');
-            if (!el) return;
-            const scrollTop = document.documentElement.scrollTop;
-            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const pct = scrollHeight > 0 ? Math.round((scrollTop / scrollHeight) * 100) : 0;
-            el.textContent = pct + '%';
-        }, { passive: true });
-
-        // Hero parallax fade on scroll
-        (function initHeroParallax() {
-            const hero = document.querySelector('.hero');
-            const heroContent = hero.querySelector('.container');
-            window.addEventListener('scroll', () => {
-                const scrollY = window.scrollY;
-                const heroH = hero.offsetHeight;
-                if (scrollY < heroH) {
-                    const pct = scrollY / heroH;
-                    heroContent.style.opacity = 1 - pct * 0.8;
-                    heroContent.style.transform = `scale(${1 - pct * 0.08}) translateY(${scrollY * 0.15}px)`;
-                }
-            }, { passive: true });
-        })();
+        // Scroll depth + hero parallax now handled by unified batched scroll handler above
 
         // Then vs Now live stats
         function updateThenNow() {
