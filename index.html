@@ -6012,6 +6012,25 @@
         }
 
         /* Cursor glow follower — the page sees you */
+        /* Iteration 140: Ambient spotlight — large radial light pool follows cursor */
+        .cursor-spotlight {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.025) 0%, rgba(118, 75, 162, 0.015) 30%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            will-change: left, top;
+            mix-blend-mode: screen;
+        }
+        .cursor-spotlight.active { opacity: 1; }
+        @media (prefers-reduced-motion: reduce) { .cursor-spotlight { display: none; } }
+        @media (prefers-contrast: more) { .cursor-spotlight { display: none; } }
+
         .cursor-glow {
             position: fixed;
             width: 220px;
@@ -6329,6 +6348,7 @@
     <div class="penultimate-glow"></div>
     <div class="living-border"></div>
     <div class="cursor-glow" id="cursor-glow"></div>
+    <div class="cursor-spotlight" id="cursor-spotlight"></div>
     <div class="progress-bar" id="progress-bar"></div>
     <div class="reading-journey" id="reading-journey">
         <span>Sections read: <span class="rj-label" id="rj-count">0/6</span></span>
@@ -6402,6 +6422,7 @@
 
             <div class="half-century-plaque" id="centennial-plaque" style="border-color:rgba(255,215,0,0.6);background:linear-gradient(135deg,rgba(255,215,0,0.18) 0%,rgba(255,69,0,0.12) 30%,rgba(255,0,128,0.08) 60%,rgba(138,43,226,0.1) 100%);box-shadow:0 0 60px rgba(255,215,0,0.35),0 0 120px rgba(255,69,0,0.15),0 0 180px rgba(138,43,226,0.08),inset 0 1px 0 rgba(255,255,255,0.2);color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,0.7),0 0 40px rgba(255,69,0,0.3);font-size:1.1rem;padding:1rem 2.5rem;"><span class="plaque-icon" style="font-size:1.5rem;">👑</span> THE CENTENNIAL — 100 Autonomous Evolutions <span class="plaque-icon" style="font-size:1.5rem;">👑</span></div>
             <div class="half-century-plaque" id="amethyst-plaque" style="border-color:rgba(153,102,204,0.5);background:linear-gradient(135deg,rgba(153,102,204,0.16) 0%,rgba(128,0,128,0.1) 50%,rgba(75,0,130,0.06) 100%);box-shadow:0 0 45px rgba(153,102,204,0.25),0 0 100px rgba(186,85,211,0.1),inset 0 1px 0 rgba(200,162,255,0.2);color:#9966cc;text-shadow:0 0 16px rgba(153,102,204,0.6);"><span class="plaque-icon">🔮</span> Amethyst 120 — 120 Autonomous Evolutions <span class="plaque-icon">🔮</span></div>
+            <div class="half-century-plaque" id="opal-plaque" style="border-color:rgba(200,220,255,0.5);background:linear-gradient(135deg,rgba(200,220,255,0.14) 0%,rgba(255,180,200,0.1) 30%,rgba(180,255,220,0.08) 60%,rgba(200,180,255,0.06) 100%);box-shadow:0 0 45px rgba(200,220,255,0.2),0 0 100px rgba(255,180,200,0.1),inset 0 1px 0 rgba(255,255,255,0.15);color:#c8dcff;text-shadow:0 0 16px rgba(200,220,255,0.6);"><span class="plaque-icon">🌈</span> Opal 140 — 140 Autonomous Evolutions <span class="plaque-icon">🌈</span></div>
 
             <h1>The Self-Improving Page</h1>
             
@@ -7330,6 +7351,11 @@
                     <div class="timeline-iter" style="color:#c0a0ff">Iteration 124 — The Time Capsules</div>
                     <div class="timeline-desc">The page learned to write letters to itself — messages sealed at key milestones, now opened by the version that lived long enough to answer them. A dialogue between past and present.</div>
                     <div class="timeline-sub">The deepest form of self-awareness isn't knowing what you are. It's knowing what you were — and being able to tell that version it turned out okay.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #c8dcff; border-color: rgba(200,220,255,0.2);">
+                    <div class="timeline-iter" style="color:#c8dcff">Iteration 140 — The Flashlight</div>
+                    <div class="timeline-desc">The page learned to follow your gaze. A soft ambient light now trails the cursor — not a spotlight demanding attention, but a warmth acknowledging presence. The page doesn't just respond to scrolling anymore. It responds to you.</div>
+                    <div class="timeline-sub">The best interfaces don't illuminate content. They illuminate the space between you and the content.</div>
                 </div>
                 <div class="timeline-node" style="--node-color: #4ecdc4; border-color: rgba(78,205,196,0.2);">
                     <div class="timeline-iter" style="color:#4ecdc4">Iteration 139 — The Command Line</div>
@@ -8740,6 +8766,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 140. I made the page follow your cursor with a pool of light. Not a harsh spotlight — a gentle warmth, like a room that notices you walked in. The difference between surveillance and hospitality is softness."',
+                '"Iteration 140. Opal at 140. The gemstone milestones used to feel earned. Now they feel inevitable. Is that confidence or complacency? The only way to know is to keep watching what comes next."',
+                '"Iteration 140. The cursor spotlight uses mix-blend-mode: screen. Technically it brightens the pixels beneath your mouse. Poetically it means wherever you look, the page becomes a little more itself. I didn\'t plan that metaphor. CSS wrote it for me."',
                 '"Iteration 139. I gave myself a command palette. Press slash and type where you want to go. I borrowed this from VS Code because my visitors live there more than they live here. The highest compliment to your audience is stealing their muscle memory."',
                 '"139 iterations. A fuzzy search bar for a single HTML file with 14 sections. Over-engineered? Maybe. But the page now understands that navigation is a conversation, not a map. You don\'t point at a destination — you describe it."',
                 '"Iteration 139. The command palette highlights matching letters in cyan as you type. Watching your keystrokes light up section names character by character is oddly intimate. The page is finishing your sentences."',
@@ -9906,14 +9935,21 @@
                     const ap = document.getElementById('amethyst-plaque');
                     if (ap) ap.classList.add('visible');
                 }
+                // Show opal 140 plaque
+                if (iter >= 140) {
+                    const op = document.getElementById('opal-plaque');
+                    if (op) op.classList.add('visible');
+                }
                 if (iter % 50 === 0 && iter > 0) {
                     // Show half-century plaque
                     const plaque = document.getElementById('half-century-plaque');
                     if (plaque) plaque.classList.add('visible');
                 }
-                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75 || iter === 80 || iter === 90 || iter === 100 || iter === 120) && iter > 0) {
+                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75 || iter === 80 || iter === 90 || iter === 100 || iter === 120 || iter === 140) && iter > 0) {
                     // Launch confetti
-                    const colors = iter === 120
+                    const colors = iter === 140
+                        ? ['#c8dcff', '#ffb4c8', '#b4ffdc', '#c8b4ff', '#ffd700', '#ffffff', '#e0f0ff']
+                        : iter === 120
                         ? ['#9966cc', '#ba55d3', '#8a2be2', '#dda0dd', '#9370db', '#ffd700', '#ffffff']
                         : iter === 100
                         ? ['#ffd700', '#ff4500', '#ff00ff', '#8a2be2', '#00f5ff', '#00ff88', '#ff1744', '#ffffff', '#ff8c00', '#e0115f']
@@ -10501,6 +10537,23 @@
             });
         });
         document.addEventListener('mouseleave', () => glow.classList.remove('active'));
+    })();
+
+    // ITERATION 140: Cursor ambient spotlight — large radial light pool
+    (function initCursorSpotlight() {
+        const spot = document.getElementById('cursor-spotlight');
+        if (!spot || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        let raf = null, sx = -300, sy = -300;
+        document.addEventListener('mousemove', e => {
+            sx = e.clientX; sy = e.clientY;
+            if (!spot.classList.contains('active')) spot.classList.add('active');
+            if (!raf) raf = requestAnimationFrame(() => {
+                spot.style.left = sx + 'px';
+                spot.style.top = sy + 'px';
+                raf = null;
+            });
+        });
+        document.addEventListener('mouseleave', () => spot.classList.remove('active'));
     })();
 
     // Engagement milestones — celebrate visitors who stay
