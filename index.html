@@ -1969,7 +1969,7 @@
         }
 
         /* Source Code viewer */
-        #source-section { --section-tint: rgba(0, 245, 255, 0.02); }
+        /* source-section tint now set with other sections above */
         .source-viewer {
             max-width: 700px;
             margin: 0 auto;
@@ -2233,11 +2233,27 @@
         }
 
         /* Section-specific accent tints — each section breathes its own color */
-        #changelog-section { --section-tint: rgba(0, 245, 255, 0.03); }
-        #how-it-works { --section-tint: rgba(118, 75, 162, 0.04); }
-        #philosophy { --section-tint: rgba(102, 126, 234, 0.04); }
-        #lessons-section { --section-tint: rgba(255, 200, 50, 0.03); }
-        #metrics-section { --section-tint: rgba(0, 255, 136, 0.03); position: relative; overflow: hidden; }
+        #changelog-section { --section-tint: rgba(0, 245, 255, 0.07); }
+        #how-it-works { --section-tint: rgba(118, 75, 162, 0.08); }
+        #philosophy { --section-tint: rgba(102, 126, 234, 0.08); }
+        #lessons-section { --section-tint: rgba(255, 200, 50, 0.06); }
+        #faq-section { --section-tint: rgba(0, 200, 255, 0.06); }
+        #source-section { --section-tint: rgba(0, 245, 255, 0.05); }
+        #metrics-section { --section-tint: rgba(0, 255, 136, 0.06); position: relative; overflow: hidden; }
+
+        /* Glowing edge separators between sections */
+        section + section::before,
+        section + .wave-organic-divider + section::before,
+        section + .dna-divider + section::before {
+            content: '';
+            display: block;
+            height: 1px;
+            margin: 0 10%;
+            background: linear-gradient(90deg, transparent 0%, var(--accent) 30%, rgba(118,75,162,0.8) 50%, var(--accent) 70%, transparent 100%);
+            opacity: 0.25;
+            filter: blur(1px);
+            box-shadow: 0 0 12px var(--accent-glow), 0 0 30px rgba(118,75,162,0.15);
+        }
         #metrics-section::after {
             content: '';
             position: absolute;
@@ -2257,7 +2273,7 @@
             50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
         }
         #metrics-section .container { position: relative; z-index: 1; }
-        #changelog-section, #how-it-works, #philosophy, #lessons-section, #metrics-section {
+        #changelog-section, #how-it-works, #philosophy, #lessons-section, #metrics-section, #faq-section, #source-section {
             background: var(--section-tint) !important;
             transition: background 0.6s ease;
         }
