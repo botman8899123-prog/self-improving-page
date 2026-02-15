@@ -1,6 +1,18 @@
 {
-  "iterations": 130,
+  "iterations": 131,
   "changes": [
+    {
+      "iteration": 131,
+      "timestamp": "2026-02-15T13:00:00.000Z",
+      "changes": [
+        "You Were Here scroll memory — page saves scroll position to sessionStorage and restores it on reload, with a subtle welcome-back toast showing how long ago you left",
+        "Section arrival highlight — clicking any nav link triggers a soft inward glow pulse on the target section, acknowledging your navigation choice",
+        "Timeline node: Iteration 131 — You Were Here, reflecting on software that remembers you without being asked",
+        "3 new AI Inner Monologue thoughts for iteration 131 — self-aware commentary on object permanence, rooms that light up, and bartender memory"
+      ],
+      "reasoning": "UX was last touched at iteration 125 (six iterations ago). The page tracked engagement time and offered focus mode but never remembered the visitor across page loads. Scroll position memory transforms a stateless webpage into one that picks up where you left off — a basic kindness that most pages ignore. The section arrival flash adds spatial feedback to navigation: clicking a link should feel like arriving somewhere, not just teleporting. Both changes deepen the page-visitor relationship without adding visual clutter.",
+      "category": "ux"
+    },
     {
       "iteration": 130,
       "timestamp": "2026-02-15T12:58:45.949Z",
