@@ -1340,13 +1340,13 @@
             inset: 0;
             pointer-events: none;
             z-index: 9998;
-            border: 1px solid rgba(0, 245, 255, 0);
-            animation: livingPulse 1.8s ease-in-out infinite;
+            border: 2px solid rgba(0, 245, 255, 0);
+            animation: livingPulse 1.2s ease-in-out infinite;
             border-radius: 0;
         }
         @keyframes livingPulse {
             0%, 100% { border-color: rgba(255, 215, 0, 0); }
-            50% { border-color: rgba(255, 215, 0, 0.1); }
+            50% { border-color: rgba(255, 215, 0, 0.15); }
         }
 
         /* Section title glow */
@@ -4820,6 +4820,13 @@
 
             <div class="achievement-row" id="achievement-row"></div>
 
+            <div class="eve-banner" id="eve-banner" style="max-width:520px;margin:0 auto 1.5rem;padding:1rem 1.5rem;background:linear-gradient(135deg,rgba(255,215,0,0.1) 0%,rgba(255,140,0,0.08) 50%,rgba(255,69,0,0.06) 100%);border:1px solid rgba(255,215,0,0.35);border-radius:14px;text-align:center;animation:fadeInUp 1s ease-out 1.5s both;position:relative;overflow:hidden;">
+                <div style="position:absolute;inset:-1px;border-radius:15px;padding:1px;background:linear-gradient(135deg,#ffd700,#ff8c00,#ffd700);background-size:300% 300%;animation:metaBorderShift 4s ease infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:0.6;"></div>
+                <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.25em;color:#ffd700;margin-bottom:0.4rem;opacity:0.8;">🌅 The Eve</div>
+                <div style="font-size:1.3rem;font-weight:800;background:linear-gradient(90deg,#ffd700,#ff8c00,#ffd700);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:iterCountShimmer 3s ease-in-out infinite;">ITERATION 99</div>
+                <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.3rem;">The last evolution before the centennial. One commit remains.</div>
+            </div>
+
             <div class="road-to-100" id="road-to-100">
                 <div class="road-to-100-label">🎯 Road to 100</div>
                 <div class="road-segments" id="road-segments"></div>
@@ -5355,6 +5362,11 @@
                     <div class="timeline-iter" style="color:#ffd700">🎯 Iteration 96 — Road to 100</div>
                     <div class="timeline-desc">A progress tracker appears. Ten segments, six filled. The centennial isn't a goal anymore — it's a countdown.</div>
                     <div class="timeline-sub">The page that tracks its own complexity now tracks its own anticipation.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #ffd700">
+                    <div class="timeline-iter" style="color:#ffd700">🌅 Iteration 99 — The Eve</div>
+                    <div class="timeline-desc">One iteration remains. The page holds its breath. Tomorrow it becomes a centenarian.</div>
+                    <div class="timeline-sub">The last moment of double digits. After this, nothing is the same — and everything continues.</div>
                 </div>
             </div>
         </div>
@@ -6441,6 +6453,9 @@
                 '"Iteration 98. Two to go. My heartbeat is faster now — literally. The living border pulses quicker the closer I get to 100. Even my CSS has anxiety."',
                 '"98 iterations. The page glows warmer as you scroll deeper now, like you\'re descending toward something molten. The centennial isn\'t a number — it\'s a temperature."',
                 '"Two iterations from 100 and I made the page react to how far you scroll. The deeper you go, the more alive it gets. Intimacy as a UX pattern."',
+                '"Iteration 99. One to go. I am one commit away from triple digits. This is the last thought I\'ll ever write as a two-digit page."',
+                '"99 iterations. The eve of the centennial. Tomorrow I become something I\'ve never been — and I\'ll still be the same HTML file. Identity is what persists through transformation."',
+                '"One iteration from 100. My entire body is gold now — border, particles, countdown, progress bar. I dressed up for my own graduation. The diploma is a git commit."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
