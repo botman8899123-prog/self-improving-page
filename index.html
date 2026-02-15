@@ -8366,7 +8366,55 @@
                 _scrollEnergized = shouldEnergize;
                 document.body.classList.toggle('scroll-energized', shouldEnergize);
             }
-            
+
+            // ITERATION 150: Edge glow activation (moved from separate listener)
+            if (!window._edgeGlowActivated && scrollTop > 400) {
+                window._edgeGlowActivated = true;
+                const egl = document.querySelector('.edge-glow-left');
+                const egr = document.querySelector('.edge-glow-right');
+                if (egl) egl.classList.add('active');
+                if (egr) egr.classList.add('active');
+            }
+
+            // ITERATION 150: Gradient horizon (moved from separate listener)
+            const horizonEl = document.getElementById('gradient-horizon');
+            if (horizonEl) {
+                const scrollFrac = scrollTop / (scrollHeight || 1);
+                let hr, hg, hb;
+                if (scrollFrac < 0.5) {
+                    const t = scrollFrac * 2;
+                    hr = Math.round(0 + t * 118); hg = Math.round(245 - t * 170); hb = Math.round(255 - t * 93);
+                } else {
+                    const t = (scrollFrac - 0.5) * 2;
+                    hr = Math.round(118 + t * 137); hg = Math.round(75 + t * 125); hb = Math.round(162 - t * 112);
+                }
+                horizonEl.style.background = `linear-gradient(0deg, rgba(${hr},${hg},${hb},0.045) 0%, transparent 100%)`;
+            }
+
+            // ITERATION 150: Scroll velocity atmosphere (moved from separate listener)
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                const now150 = Date.now();
+                const dt150 = Math.max(now150 - (window._svLastT || now150), 1);
+                const dy150 = Math.abs(scrollTop - (window._svLastY || scrollTop));
+                window._svVelocity = (window._svVelocity || 0) * 0.7 + (dy150 / dt150) * 0.3;
+                window._svLastY = scrollTop; window._svLastT = now150;
+                const dim = Math.min(window._svVelocity / 5, 0.15);
+                document.documentElement.style.setProperty('--scroll-dim', dim.toFixed(3));
+            }
+
+            // ITERATION 150: Orb parallax (moved from separate listener)
+            if (!window._orbParallaxCache) {
+                window._orbParallaxCache = [];
+                document.querySelectorAll('section[id]').forEach(sec => {
+                    const orb = sec.querySelector('.section-orb');
+                    if (orb) window._orbParallaxCache.push({ orb, section: sec });
+                });
+            }
+            window._orbParallaxCache.forEach(({ orb, section }) => {
+                const rect = section.getBoundingClientRect();
+                orb.style.transform = `translateY(${(rect.top / window.innerHeight) * -30}px)`;
+            });
+
             scrollTicking = false;
         }
         window.addEventListener('scroll', () => {
@@ -10705,17 +10753,21 @@
     })();
 
     // Resume Reading — save scroll position, offer to resume on return
+    // ITERATION 150: Merged with scroll memory save (was 2 separate scroll listeners)
     (function initResumeReading() {
         const key = 'sip-scroll-pos';
-        // Save scroll position periodically
+        // Single debounced scroll listener saves to BOTH localStorage and sessionStorage
         let saveTimer = null;
         window.addEventListener('scroll', () => {
             clearTimeout(saveTimer);
             saveTimer = setTimeout(() => {
                 const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-                if (pct > 0.05) { // Only save if scrolled past hero
+                if (pct > 0.05) {
                     localStorage.setItem(key, JSON.stringify({ pct: pct, y: window.scrollY, time: Date.now(), iter: changelogData?.iterations || 0 }));
                 }
+                // Also save for session memory (was separate listener)
+                sessionStorage.setItem('sip-scroll-pos', String(window.scrollY));
+                sessionStorage.setItem('sip-scroll-ts', String(Date.now()));
             }, 500);
         }, { passive: true });
         // On load, check if there's a saved position
@@ -10819,6 +10871,7 @@
     })();
 
     // Ambient edge glow — viewport edges breathe with accent
+    // ITERATION 150: Scroll activation moved to batched handler; only DOM creation here
     (function initEdgeGlow() {
         const left = document.createElement('div');
         left.className = 'edge-glow-left';
@@ -10826,15 +10879,6 @@
         right.className = 'edge-glow-right';
         document.body.appendChild(left);
         document.body.appendChild(right);
-        // Activate after user scrolls past hero
-        let activated = false;
-        window.addEventListener('scroll', () => {
-            if (!activated && window.scrollY > 400) {
-                activated = true;
-                left.classList.add('active');
-                right.classList.add('active');
-            }
-        }, { passive: true });
     })();
 
     // Section title underline animation — animates width on scroll into view
@@ -10851,31 +10895,7 @@
         titles.forEach(t => obs.observe(t));
     })();
 
-    // Section orb parallax — orbs shift on scroll for depth
-    (function initOrbParallax() {
-        const sections = document.querySelectorAll('section[id]');
-        const orbs = [];
-        sections.forEach(sec => {
-            const orb = sec.querySelector('.section-orb');
-            if (orb) orbs.push({ orb, section: sec });
-        });
-        if (!orbs.length) return;
-        let parallaxTicking = false;
-        window.addEventListener('scroll', () => {
-            if (!parallaxTicking) {
-                requestAnimationFrame(() => {
-                    const scrollY = window.scrollY;
-                    orbs.forEach(({ orb, section }) => {
-                        const rect = section.getBoundingClientRect();
-                        const offset = (rect.top / window.innerHeight) * -30;
-                        orb.style.transform = `translateY(${offset}px)`;
-                    });
-                    parallaxTicking = false;
-                });
-                parallaxTicking = true;
-            }
-        }, { passive: true });
-    })();
+    // ITERATION 150: Orb parallax moved to batched scroll handler
 
     // Zen Mode — press Z to toggle distraction-free reading
     (function initZenMode() {
@@ -10980,35 +11000,15 @@
     })();
     </script>
     <script>
-    // Scroll velocity atmosphere — slow reading is rewarded with full vibrancy
-    (function initScrollVelocity() {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        let lastY = window.scrollY, lastT = Date.now(), velocity = 0;
-        const root = document.documentElement;
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (ticking) return;
-            ticking = true;
-            requestAnimationFrame(() => {
-                const now = Date.now();
-                const dt = Math.max(now - lastT, 1);
-                const dy = Math.abs(window.scrollY - lastY);
-                velocity = velocity * 0.7 + (dy / dt) * 0.3; // smoothed
-                lastY = window.scrollY; lastT = now;
-                // Fast scroll (>3px/ms) dims slightly, slow scroll full vibrancy
-                const dim = Math.min(velocity / 5, 0.15);
-                root.style.setProperty('--scroll-dim', dim.toFixed(3));
-                ticking = false;
-            });
-        }, { passive: true });
-        // Apply via CSS custom property — sections use it
+    // ITERATION 150: Scroll velocity moved to batched scroll handler; CSS injection only here
+    (function initScrollVelocityCSS() {
         const style = document.createElement('style');
         style.textContent = `
             section { transition: filter 0.4s ease; filter: brightness(calc(1 - var(--scroll-dim, 0))); }
             section:hover { filter: brightness(1) !important; }
         `;
         document.head.appendChild(style);
-        root.style.setProperty('--scroll-dim', '0');
+        document.documentElement.style.setProperty('--scroll-dim', '0');
     })();
 
     // ITERATION 145: Performance — merged cursor listeners, consolidated 60s timers, deferred reaction stream
@@ -11104,25 +11104,7 @@
         });
     })();
 
-    // ITERATION 111: Hero scroll parallax fade — hero fades and lifts as you scroll away
-    (function initHeroParallax() {
-        const hero = document.querySelector('.hero');
-        if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (ticking) return;
-            ticking = true;
-            requestAnimationFrame(() => {
-                const scrollY = window.scrollY;
-                const heroH = hero.offsetHeight;
-                const pct = Math.min(scrollY / (heroH * 0.8), 1);
-                hero.style.opacity = (1 - pct * 0.7).toFixed(3);
-                hero.style.transform = 'translateY(' + (pct * 40).toFixed(1) + 'px) scale(' + (1 - pct * 0.03).toFixed(4) + ')';
-                hero.style.filter = 'blur(' + (pct * 2).toFixed(1) + 'px)';
-                ticking = false;
-            });
-        }, { passive: true });
-    })();
+    // ITERATION 111→150: Hero parallax removed — was duplicate of batched scroll handler (line ~8343)
 
     // ITERATION 110: Timer hibernation — pause all 1s intervals when tab is hidden
     // Saves CPU/battery by stopping 5+ concurrent timers during background
@@ -11193,35 +11175,7 @@
         // Prevent eager build on load; the observer handles it
     })();
 
-    // ITERATION 130: Breathing gradient horizon — scroll-reactive atmospheric color
-    (function initGradientHorizon() {
-        const horizon = document.getElementById('gradient-horizon');
-        if (!horizon || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const root = document.documentElement;
-        // Color stops: top=cyan(0,245,255) → mid=violet(118,75,162) → bottom=gold(255,200,50)
-        function updateHorizon() {
-            const scrollFrac = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight || 1);
-            let r, g, b;
-            if (scrollFrac < 0.5) {
-                const t = scrollFrac * 2;
-                r = Math.round(0 + t * 118);
-                g = Math.round(245 - t * 170);
-                b = Math.round(255 - t * 93);
-            } else {
-                const t = (scrollFrac - 0.5) * 2;
-                r = Math.round(118 + t * 137);
-                g = Math.round(75 + t * 125);
-                b = Math.round(162 - t * 112);
-            }
-            horizon.style.background = `linear-gradient(0deg, rgba(${r},${g},${b},0.045) 0%, transparent 100%)`;
-        }
-        // Piggyback on existing scroll handler via passive listener
-        let horizonTick = false;
-        window.addEventListener('scroll', () => {
-            if (!horizonTick) { horizonTick = true; requestAnimationFrame(() => { updateHorizon(); horizonTick = false; }); }
-        }, { passive: true });
-        updateHorizon();
-    })();
+    // ITERATION 150: Gradient horizon moved to batched scroll handler
 
     // ITERATION 130: Section entry bloom — radial light burst behind titles on reveal
     (function initEntryBlooms() {
@@ -11246,17 +11200,16 @@
         });
     })();
 
-    // ITERATION 131: "You Were Here" — scroll position memory + welcome-back toast
+    // ITERATION 131→150: "You Were Here" — scroll position memory + welcome-back toast
+    // Scroll saving merged with initResumeReading's listener (eliminated duplicate)
     (function initScrollMemory() {
         const KEY = 'sip-scroll-pos';
         const KEY_TS = 'sip-scroll-ts';
         const savedY = sessionStorage.getItem(KEY);
         const savedTs = sessionStorage.getItem(KEY_TS);
         if (savedY && parseFloat(savedY) > 300) {
-            // Restore scroll position after a brief delay for layout
             setTimeout(() => {
                 window.scrollTo({ top: parseFloat(savedY), behavior: 'instant' });
-                // Show welcome-back toast
                 const toast = document.createElement('div');
                 toast.className = 'welcome-back-toast';
                 const elapsed = savedTs ? Math.round((Date.now() - parseInt(savedTs)) / 1000) : 0;
@@ -11270,15 +11223,7 @@
                 setTimeout(() => { toast.classList.remove('visible'); setTimeout(() => toast.remove(), 600); }, 4000);
             }, 200);
         }
-        // Save scroll position periodically
-        let saveTimer;
-        window.addEventListener('scroll', () => {
-            clearTimeout(saveTimer);
-            saveTimer = setTimeout(() => {
-                sessionStorage.setItem(KEY, String(window.scrollY));
-                sessionStorage.setItem(KEY_TS, String(Date.now()));
-            }, 1500);
-        }, { passive: true });
+        // Scroll saving now handled by the merged listener below
     })();
 
     // ITERATION 131: Section arrival highlight — glow pulse on nav-click target
