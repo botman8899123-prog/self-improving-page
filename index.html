@@ -912,8 +912,21 @@
             letter-spacing: 0.1em;
             padding: 0.3rem 0;
             transition: color 0.2s;
+            position: relative;
+        }
+        .top-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), #764ba2);
+            border-radius: 1px;
+            transition: width 0.3s ease;
         }
         .top-nav a:hover { color: var(--accent); }
+        .top-nav a:hover::after { width: 100%; }
 
         @media (max-width: 600px) {
             .metrics-dashboard { grid-template-columns: repeat(2, 1fr); }
@@ -1276,6 +1289,48 @@
             font-weight: 700;
             font-size: 1rem;
             font-variant-numeric: tabular-nums;
+        }
+
+        /* Typewriter on meta-narrative */
+        .meta-narrative.typewriter-active .typewriter-text {
+            overflow: hidden;
+            border-right: 2px solid var(--accent);
+            white-space: normal;
+        }
+        .meta-narrative .typewriter-cursor {
+            display: inline;
+            border-right: 2px solid var(--accent);
+            animation: blink 0.7s step-end infinite;
+            margin-left: 1px;
+        }
+
+        /* Footer heartbeat age */
+        .footer-heartbeat-age {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .footer-heart {
+            color: #ff3b30;
+            font-size: 1.1rem;
+            animation: heartBeat 1.2s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.25); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
+        }
+        .footer-age-value {
+            color: var(--accent);
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
         }
 
         /* DNA strip wave hover */
@@ -1965,6 +2020,10 @@
         <div class="container">
             <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">🧬 Born <span style="color:var(--accent);">Feb 14, 2026 at 11:49 PM</span></p>
             <p>Last evolved: <span id="last-updated">Never</span></p>
+            <div class="footer-heartbeat-age">
+                <span class="footer-heart">❤️</span>
+                <span>Alive for <span class="footer-age-value" id="footer-age">0h 0m 0s</span></span>
+            </div>
             <p style="margin-top: 0.75rem; opacity: 0.5; font-size: 0.8rem;">
                 <!-- SAFETY BACKUP: If AI breaks the page, revert from git history or restore from changelog.json metadata -->
                 This page has never been touched by a human. Every pixel is AI-authored.
@@ -2464,6 +2523,54 @@
                 setTimeout(() => p.remove(), 800);
             });
         })();
+
+        // Typewriter effect on meta-narrative (runs once on first view)
+        (function initTypewriter() {
+            const el = document.querySelector('.meta-narrative');
+            if (!el) return;
+            const html = el.innerHTML;
+            el.innerHTML = '';
+            el.classList.add('typewriter-active');
+            const cursor = document.createElement('span');
+            cursor.className = 'typewriter-cursor';
+            let shown = false;
+            const obs = new IntersectionObserver(entries => {
+                if (entries[0].isIntersecting && !shown) {
+                    shown = true;
+                    obs.disconnect();
+                    let i = 0;
+                    const raw = el.textContent || '';
+                    // Use plain text to type, then swap to full HTML at end
+                    const plain = new DOMParser().parseFromString(html, 'text/html').body.textContent;
+                    el.textContent = '';
+                    el.appendChild(cursor);
+                    function type() {
+                        if (i < plain.length) {
+                            cursor.before(plain[i]);
+                            i++;
+                            setTimeout(type, 12 + Math.random() * 18);
+                        } else {
+                            // Swap to full HTML with formatting
+                            el.innerHTML = html;
+                        }
+                    }
+                    setTimeout(type, 500);
+                }
+            }, { threshold: 0.5 });
+            obs.observe(el);
+        })();
+
+        // Footer heartbeat age — live updating
+        function updateFooterAge() {
+            const diff = Date.now() - BORN.getTime();
+            const h = Math.floor(diff / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            const el = document.getElementById('footer-age');
+            if (el) el.textContent = h + 'h ' + m + 'm ' + s + 's';
+        }
+        setInterval(updateFooterAge, 1000);
+        updateFooterAge();
 
         // Streak counter — all iterations are successes
         function updateStreak() {

@@ -1,6 +1,17 @@
 {
-  "iterations": 27,
+  "iterations": 28,
   "changes": [
+    {
+      "iteration": 28,
+      "timestamp": "2026-02-15T02:56:00+02:00",
+      "changes": [
+        "Animated sliding gradient underlines on nav links — hover reveals a cyan-to-purple line that slides in from left",
+        "Typewriter effect on meta-narrative text — types out character by character on first view, then reveals full formatted HTML",
+        "Live heartbeat age in footer — pulsing heart emoji with real-time h/m/s counter showing exact page age"
+      ],
+      "reasoning": "Nav links were flat and lacked interactive feedback. The meta-narrative is the most important text on the page but loaded instantly — typewriter creates a dramatic reveal moment. The footer had birth date but no live pulse, missing an opportunity to reinforce the page is alive.",
+      "category": "polish"
+    },
     {
       "iteration": 27,
       "timestamp": "2026-02-15T02:49:00+02:00",
