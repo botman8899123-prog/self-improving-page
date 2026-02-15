@@ -916,6 +916,77 @@
             color: var(--accent);
         }
 
+        /* LIVE badge */
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            border-radius: 50px;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: #ff3b30;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+        .live-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ff3b30;
+            animation: liveBadgePulse 1.5s ease-in-out infinite;
+        }
+        @keyframes liveBadgePulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,59,48,0.6); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(255,59,48,0); }
+        }
+
+        /* Origin story stat */
+        .origin-stat {
+            text-align: center;
+            padding: 2rem;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        .origin-stat .origin-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        .origin-stat .origin-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        .origin-stat .origin-sub {
+            font-size: 0.75rem;
+            color: rgba(180, 180, 200, 0.5);
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        /* Footer generation signature */
+        .generation-sig {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            color: rgba(180, 180, 200, 0.3);
+            letter-spacing: 0.05em;
+        }
+        .generation-sig .sig-iter {
+            color: var(--accent);
+            opacity: 0.5;
+        }
+
         /* Countdown urgency effect */
         .countdown.urgent {
             color: #ff6b6b;
@@ -1476,6 +1547,7 @@
             <div class="latest-evolution-card" id="latest-evolution-card" style="display:none;"></div>
 
             <div class="countdown-section">
+                <div class="live-badge"><span class="live-badge-dot"></span> Live</div>
                 <div class="countdown-label">Next Evolution In</div>
                 <div class="countdown" id="countdown">--:--</div>
             </div>
@@ -1581,6 +1653,18 @@
         </div>
     </section>
 
+    <section class="reveal">
+        <div class="container">
+            <div class="origin-stat">
+                <div class="origin-number" id="origin-lines">47 → <span id="origin-current-lines">2000+</span></div>
+                <div class="origin-label">Lines of code. This page started as a blank HTML skeleton.</div>
+                <div class="origin-sub">Every line was written by AI. Zero human keystrokes.</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="dna-divider"><svg viewBox="0 0 300 40"><path class="strand-1" d="M0,10 Q37.5,0 75,10 Q112.5,20 150,10 Q187.5,0 225,10 Q262.5,20 300,10"/><path class="strand-2" d="M0,30 Q37.5,40 75,30 Q112.5,20 150,30 Q187.5,40 225,30 Q262.5,20 300,30"/><line class="rung" x1="37" y1="5" x2="37" y2="35"/><line class="rung" x1="112" y1="15" x2="112" y2="25"/><line class="rung" x1="150" y1="10" x2="150" y2="30"/><line class="rung" x1="187" y1="15" x2="187" y2="25"/><line class="rung" x1="262" y1="5" x2="262" y2="35"/></svg></div>
+
     <section id="metrics-section" class="reveal">
         <div class="container">
             <h2 class="section-title">By The Numbers</h2>
@@ -1680,6 +1764,9 @@
             <p style="margin-top: 0.25rem; opacity: 0.4; font-size: 0.75rem;">
                 Built with autonomous AI iteration • OpenClaw Platform
             </p>
+            <div class="generation-sig" id="generation-sig">
+                // signed: iteration <span class="sig-iter" id="sig-iter">0</span> · autonomous · claude-opus · <span id="sig-timestamp"></span>
+            </div>
         </div>
     </footer>
 
@@ -1713,6 +1800,7 @@
                 updateMetrics();
                 updateLatestCard(changelogData.changes);
                 buildDNAStrip(changelogData.changes);
+                updateSignature();
             } catch (error) {
                 console.error('Failed to load changelog:', error);
             }
@@ -2071,6 +2159,27 @@
             legend.innerHTML = sorted.map(c => c.category).filter(c => c && !seen.has(c) && seen.add(c)).map(cat =>
                 `<div class="dna-legend-item"><span class="dna-legend-dot" style="background:${DNA_COLORS[cat] || '#a8e6cf'}"></span>${cat}</div>`
             ).join('');
+        }
+
+        // Origin story: update live line count
+        function updateOriginLines() {
+            fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
+                const lines = t.split('\n').length;
+                const el = document.getElementById('origin-current-lines');
+                if (el) el.textContent = lines.toLocaleString();
+            }).catch(() => {});
+        }
+        updateOriginLines();
+
+        // Generation signature
+        function updateSignature() {
+            if (!changelogData) return;
+            const sigIter = document.getElementById('sig-iter');
+            const sigTime = document.getElementById('sig-timestamp');
+            if (sigIter) sigIter.textContent = changelogData.iterations;
+            if (sigTime && changelogData.changes.length) {
+                sigTime.textContent = new Date(changelogData.changes[0].timestamp).toISOString().replace('T', ' ').slice(0, 19) + 'Z';
+            }
         }
 
         // Initialize
