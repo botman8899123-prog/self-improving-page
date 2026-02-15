@@ -1242,6 +1242,46 @@
             border-radius: 50%;
         }
 
+        /* Vignette effect — cinematic depth */
+        .vignette {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9997;
+            background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.4) 100%);
+        }
+
+        /* Evolution streak */
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            background: rgba(255, 165, 0, 0.06);
+            border: 1px solid rgba(255, 165, 0, 0.2);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out 1.3s both;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .streak-badge:hover {
+            border-color: rgba(255, 165, 0, 0.45);
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.1);
+        }
+        .streak-fire { font-size: 1.1rem; }
+        .streak-count {
+            color: #ffa500;
+            font-weight: 700;
+            font-size: 1rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* DNA strip wave hover */
+        .dna-strip-seg.wave-1 { flex: 1.5 !important; filter: brightness(1.15) !important; }
+        .dna-strip-seg.wave-2 { flex: 1.25 !important; filter: brightness(1.08) !important; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -1646,6 +1686,7 @@
     </style>
 </head>
 <body>
+    <div class="vignette"></div>
     <div class="living-border"></div>
     <div class="progress-bar" id="progress-bar"></div>
     <nav class="top-nav" id="top-nav">
@@ -1705,6 +1746,12 @@
             <div class="time-capsule" id="time-capsule">
                 <span class="time-capsule-icon">🕰️</span>
                 <span class="time-capsule-text">You're viewing iteration <strong>26</strong>. The first visitor saw a blank page with 47 lines of code. Now it has <span id="capsule-lines">2,283</span> lines — all written by AI.</span>
+            </div>
+
+            <div class="streak-badge" id="streak-badge">
+                <span class="streak-fire">🔥</span>
+                <span><span class="streak-count" id="streak-count">0</span> iteration streak</span>
+                <span style="opacity:0.4;font-size:0.7rem;">— no failures since birth</span>
             </div>
 
             <div class="countdown-section">
@@ -1962,7 +2009,9 @@
                 updateLatestCard(changelogData.changes);
                 buildDNAStrip(changelogData.changes);
                 updateSignature();
+                updateStreak();
                 setTimeout(initCursorGlow, 500);
+                setTimeout(initDNAWave, 500);
             } catch (error) {
                 console.error('Failed to load changelog:', error);
             }
@@ -2415,6 +2464,28 @@
                 setTimeout(() => p.remove(), 800);
             });
         })();
+
+        // Streak counter — all iterations are successes
+        function updateStreak() {
+            if (!changelogData) return;
+            const el = document.getElementById('streak-count');
+            if (el) el.textContent = changelogData.iterations;
+        }
+
+        // DNA strip wave hover effect
+        function initDNAWave() {
+            document.querySelectorAll('.dna-strip-seg').forEach((seg, idx, all) => {
+                seg.addEventListener('mouseenter', () => {
+                    if (all[idx - 1]) all[idx - 1].classList.add('wave-1');
+                    if (all[idx + 1]) all[idx + 1].classList.add('wave-1');
+                    if (all[idx - 2]) all[idx - 2].classList.add('wave-2');
+                    if (all[idx + 2]) all[idx + 2].classList.add('wave-2');
+                });
+                seg.addEventListener('mouseleave', () => {
+                    all.forEach(s => s.classList.remove('wave-1', 'wave-2'));
+                });
+            });
+        }
 
         // Initialize
         initDNA();

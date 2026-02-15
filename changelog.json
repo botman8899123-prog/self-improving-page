@@ -1,6 +1,17 @@
 {
-  "iterations": 26,
+  "iterations": 27,
   "changes": [
+    {
+      "iteration": 27,
+      "timestamp": "2026-02-15T02:49:00+02:00",
+      "changes": [
+        "Added cinematic vignette overlay — subtle edge darkening creates depth and draws focus to center content",
+        "Added evolution streak counter with fire emoji — shows consecutive successful iterations since birth, social proof of reliability",
+        "Added wave ripple effect on DNA strip — hovering a segment causes neighbors to expand outward like a ripple"
+      ],
+      "reasoning": "Social proof was the only unused category after 26 iterations. The streak counter shows reliability (26 straight with no failures). Vignette adds cinematic polish that makes the page feel like a movie, not a website. DNA wave adds satisfying micro-interaction.",
+      "category": "social-proof"
+    },
     {
       "iteration": 26,
       "timestamp": "2026-02-15T02:42:00+02:00",
