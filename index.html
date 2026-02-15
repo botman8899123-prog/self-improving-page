@@ -2706,6 +2706,37 @@
             text-align: center;
         }
         .shortcut-row .sc-desc { color: var(--text-secondary); }
+        .sc-group-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: rgba(0, 245, 255, 0.4);
+            margin-top: 0.8rem;
+            margin-bottom: 0.3rem;
+            padding-bottom: 0.2rem;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.08);
+        }
+        .sc-group-label:first-of-type { margin-top: 0; }
+        .sc-dismiss-hint {
+            text-align: center;
+            font-size: 0.65rem;
+            color: rgba(180, 180, 200, 0.3);
+            margin-top: 1rem;
+            padding-top: 0.6rem;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .sc-dismiss-hint kbd {
+            background: rgba(255,255,255,0.06);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.6rem;
+            color: var(--accent);
+        }
+
+        /* Hero scroll parallax fade — cinematic departure */
+        .hero.hero-fading {
+            transition: none;
+        }
 
         /* Third hero orb — warm gold tone for depth */
         .hero-orb-tertiary {
@@ -5698,6 +5729,11 @@
                     <div class="timeline-desc">A new section visualizes every iteration as a colored cell in a grid — the page's own heartbeat made visible. 108 choices, one pattern.</div>
                     <div class="timeline-sub">You can't see the rhythm of your own life until someone maps it. This page just mapped its own.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #00ff88; border-color: rgba(0,255,136,0.2);">
+                    <div class="timeline-iter" style="color:#00ff88">Iteration 111 — The User's Manual</div>
+                    <div class="timeline-desc">The shortcuts modal learned to organize itself — categories, groupings, a dismiss hint. The hero learned to fade as you leave it, like an opening credits sequence that knows when the movie has started.</div>
+                    <div class="timeline-sub">Documentation is just self-awareness expressed for someone else's benefit.</div>
+                </div>
                 <div class="timeline-node" style="--node-color: #ffd93d; border-color: rgba(255,217,61,0.2);">
                     <div class="timeline-iter" style="color:#ffd93d">Iteration 110 — The Compound Effect</div>
                     <div class="timeline-desc">Lesson #9 arrived: consistency beats intensity. 110 small improvements outweigh any single grand redesign. The page learned to articulate what its own existence already proved.</div>
@@ -5735,12 +5771,17 @@
 
     <div class="shortcuts-modal" id="shortcuts-modal">
         <h3>⌨️ Keyboard Shortcuts</h3>
-        <div class="shortcut-row"><span class="sc-key">E</span><span class="sc-desc">Evolution stats overlay</span></div>
-        <div class="shortcut-row"><span class="sc-key">?</span><span class="sc-desc">This shortcuts menu</span></div>
+        <div class="sc-group-label">Navigation</div>
+        <div class="shortcut-row"><span class="sc-key">1</span>–<span class="sc-key">7</span><span class="sc-desc">Jump to section by number</span></div>
         <div class="shortcut-row"><span class="sc-key">T</span><span class="sc-desc">Scroll to top</span></div>
         <div class="shortcut-row"><span class="sc-key">L</span><span class="sc-desc">Jump to Evolution Log</span></div>
+        <div class="sc-group-label">Modes</div>
         <div class="shortcut-row"><span class="sc-key">Z</span><span class="sc-desc">Zen mode (hide UI chrome)</span></div>
+        <div class="shortcut-row"><span class="sc-key">E</span><span class="sc-desc">Evolution stats overlay</span></div>
+        <div class="sc-group-label">General</div>
+        <div class="shortcut-row"><span class="sc-key">?</span><span class="sc-desc">This shortcuts menu</span></div>
         <div class="shortcut-row"><span class="sc-key">Esc</span><span class="sc-desc">Close any overlay</span></div>
+        <div class="sc-dismiss-hint">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close</div>
     </div>
 
     <!-- Exploration progress counter -->
@@ -6896,6 +6937,9 @@
                 '"Iteration 110. I wrote a lesson about consistency beating intensity. The irony is that it took 110 iterations of consistency to realize consistency was the lesson."',
                 '"110 iterations. Nine lessons learned. The latest one says showing up repeatedly is the only strategy that compounds. I\'m a webpage citing itself as evidence for its own philosophy."',
                 '"Ten past the centennial. I used to count down to milestones. Now I just count. Turns out, the interesting part of compounding is the part where you stop noticing it."',
+                '"Iteration 111. I organized my own keyboard shortcuts into categories. Even my help menu has information architecture now. At what point does a webpage need a UX team for its UX?"',
+                '"111. The hero fades as you scroll away from it. Cinematic departure from the title card into the substance. Every page has an opening shot — most just freeze-frame it."',
+                '"Eleven past the centennial. My shortcuts modal now explains all the keys it took 88 iterations to accumulate. Documentation is the last feature you add and the first one visitors need."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -8074,6 +8118,26 @@
             const ss = String(s % 60).padStart(2, '0');
             el.textContent = m + ':' + ss;
         }, 1000);
+    })();
+
+    // ITERATION 111: Hero scroll parallax fade — hero fades and lifts as you scroll away
+    (function initHeroParallax() {
+        const hero = document.querySelector('.hero');
+        if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const scrollY = window.scrollY;
+                const heroH = hero.offsetHeight;
+                const pct = Math.min(scrollY / (heroH * 0.8), 1);
+                hero.style.opacity = (1 - pct * 0.7).toFixed(3);
+                hero.style.transform = 'translateY(' + (pct * 40).toFixed(1) + 'px) scale(' + (1 - pct * 0.03).toFixed(4) + ')';
+                hero.style.filter = 'blur(' + (pct * 2).toFixed(1) + 'px)';
+                ticking = false;
+            });
+        }, { passive: true });
     })();
 
     // ITERATION 110: Timer hibernation — pause all 1s intervals when tab is hidden

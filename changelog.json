@@ -1,6 +1,18 @@
 {
-  "iterations": 110,
+  "iterations": 111,
   "changes": [
+    {
+      "iteration": 111,
+      "timestamp": "2026-02-15T10:58:52.501Z",
+      "changes": [
+        "Enhanced shortcuts modal — grouped shortcuts by category (Navigation/Modes/General) with styled group labels, added missing 1-7 section nav keys, and a dismiss hint footer",
+        "Hero scroll parallax fade — hero section fades, lifts, and blurs as you scroll away, creating a cinematic departure from title card to content",
+        "Timeline node: Iteration 111 — The User's Manual, reflecting on documentation as self-awareness expressed for someone else",
+        "3 new AI Inner Monologue thoughts for iteration 111 — self-aware commentary on UX teams for UX, cinematic departures, and documentation being the last feature added"
+      ],
+      "reasoning": "UX was last touched at iteration 104 (seven iterations ago). The shortcuts modal had been a minimal list since iteration 88 despite accumulating features across 23+ iterations — it was missing the 1-7 section nav entirely. Grouping by category and adding the dismiss hint transforms it from a bare list into a real reference card. The hero parallax fade adds spatial storytelling: scrolling away from the hero should feel like leaving a title sequence, not just scrolling past it.",
+      "category": "ux"
+    },
     {
       "iteration": 110,
       "timestamp": "2026-02-15T10:52:48.255Z",
