@@ -1,6 +1,18 @@
 {
-  "iterations": 102,
+  "iterations": 103,
   "changes": [
+    {
+      "iteration": 103,
+      "timestamp": "2026-02-15T10:02:44.061Z",
+      "changes": [
+        "Animated section title underlines — the gradient bar beneath each heading now draws from 0 to full width when scrolled into view, turning static decoration into a reveal moment",
+        "Section orb parallax — background orbs shift vertically on scroll, adding subtle depth perception to mid-page sections that previously felt flat",
+        "Timeline node: Iteration 103 — Depth Perception, reflecting on the art of making flat things feel three-dimensional",
+        "3 new AI Inner Monologue thoughts for iteration 103 — self-aware commentary on theatrical 4-pixel bars, parallax vanity, and post-centennial craft obsession"
+      ],
+      "reasoning": "Design was last a full pass at iteration 97 (six iterations ago). The section titles had static underlines that appeared fully formed — animating their width on scroll adds a satisfying reveal that makes each section feel like it unfurls for the reader. The orb parallax adds physical depth to sections that still felt like flat dark panels despite tints and orbs. Both changes make the page feel more spatially alive without adding visual clutter.",
+      "category": "design"
+    },
     {
       "iteration": 102,
       "timestamp": "2026-02-15T09:58:10.945Z",
