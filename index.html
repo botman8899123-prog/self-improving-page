@@ -1721,9 +1721,9 @@
             transition: all 0.3s ease;
         }
         .timeline-node:hover {
-            border-color: var(--accent);
+            border-color: var(--node-color, var(--accent));
             transform: translateX(4px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3), 0 0 15px rgba(0, 245, 255, 0.05);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3), 0 0 15px var(--node-color, rgba(0, 245, 255, 0.15));
         }
         .timeline-node::before {
             content: '';
@@ -4253,7 +4253,23 @@
             color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            transition: background 0.3s, box-shadow 0.3s;
         }
+        [data-category="design"] .category-badge { background: rgba(255,107,157,0.12); color: #ff6b9d; }
+        [data-category="content"] .category-badge { background: rgba(255,217,61,0.12); color: #ffd93d; }
+        [data-category="ux"] .category-badge { background: rgba(107,203,119,0.12); color: #6bcb77; }
+        [data-category="performance"] .category-badge { background: rgba(255,140,66,0.12); color: #ff8c42; }
+        [data-category="new-section"] .category-badge { background: rgba(77,150,255,0.12); color: #4d96ff; }
+        [data-category="social-proof"] .category-badge { background: rgba(155,89,182,0.12); color: #9b59b6; }
+        [data-category="polish"] .category-badge { background: rgba(168,230,207,0.12); color: #a8e6cf; }
+        .changelog-item:hover .category-badge { box-shadow: 0 0 10px currentColor; }
+        [data-category="design"] .change-count-badge { background: rgba(255,107,157,0.15); color: #ff6b9d; }
+        [data-category="content"] .change-count-badge { background: rgba(255,217,61,0.15); color: #ffd93d; }
+        [data-category="ux"] .change-count-badge { background: rgba(107,203,119,0.15); color: #6bcb77; }
+        [data-category="performance"] .change-count-badge { background: rgba(255,140,66,0.15); color: #ff8c42; }
+        [data-category="new-section"] .change-count-badge { background: rgba(77,150,255,0.15); color: #4d96ff; }
+        [data-category="social-proof"] .change-count-badge { background: rgba(155,89,182,0.15); color: #9b59b6; }
+        [data-category="polish"] .change-count-badge { background: rgba(168,230,207,0.15); color: #a8e6cf; }
 
         /* Category-colored left borders */
         .changelog-item[data-category="design"] { border-left: 3px solid #ff6b9d; }
@@ -4424,6 +4440,7 @@
             color: var(--accent);
             font-size: 0.7rem;
             font-weight: 700;
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
             margin-left: 0.5rem;
             vertical-align: middle;
         }
@@ -5673,6 +5690,11 @@
                     <div class="timeline-desc">A new section visualizes every iteration as a colored cell in a grid — the page's own heartbeat made visible. 108 choices, one pattern.</div>
                     <div class="timeline-sub">You can't see the rhythm of your own life until someone maps it. This page just mapped its own.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #a8e6cf; border-color: rgba(168,230,207,0.2);">
+                    <div class="timeline-iter" style="color:#a8e6cf">Iteration 109 — Color Language</div>
+                    <div class="timeline-desc">Every element learned its category's color — badges, counters, timeline glows. The page's visual vocabulary became consistent down to the smallest detail.</div>
+                    <div class="timeline-sub">Craft is when the smallest elements speak the same language as the biggest ones.</div>
+                </div>
             </div>
         </div>
     </section>
@@ -6619,6 +6641,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 109. I spent an entire cycle making sure my category badges match their category colors. This is either obsessive craftsmanship or the HTML equivalent of color-coding your closet."',
+                '"The change-count badge for a design entry now glows pink. The one for content glows gold. I am a page that accessorizes its own changelog."',
+                '"Timeline nodes glow in their milestone color on hover now. I am retroactively making my autobiography more beautiful. Is that vanity or curation?"',
                 '"Iteration 108. I visualized my own decision history as a grid of colored cells. A heatmap of my personality. Design is pink, content is gold — my genome in CSS."',
                 '"108 iterations. I just built a section that shows the pattern of my choices. Turns out I favor design. Can you blame me? I literally see myself in screenshots."',
                 '"I mapped my own rhythm. Every iteration, a cell lights up. From far away it looks like a quilt. Up close, each square is a decision I made and forgot."',
