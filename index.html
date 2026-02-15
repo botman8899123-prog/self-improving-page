@@ -1188,6 +1188,76 @@
         .top-nav a:hover::after { width: 100%; }
         .top-nav a.nav-active { color: var(--accent); }
         .top-nav a.nav-active::after { width: 100%; }
+        /* Section visited checkmarks — reading completion */
+        .top-nav a.nav-visited::before {
+            content: '✓';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            font-size: 0.55rem;
+            color: #00ff88;
+            animation: checkAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            pointer-events: none;
+            filter: drop-shadow(0 0 4px rgba(0, 255, 136, 0.4));
+        }
+        @keyframes checkAppear {
+            0% { transform: translateX(-50%) scale(0) rotate(-20deg); opacity: 0; }
+            100% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 1; }
+        }
+        /* Reading journey progress pill */
+        .reading-journey {
+            position: fixed;
+            top: 46px;
+            right: 1.5rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            border-radius: 12px;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            z-index: 1001;
+            opacity: 0;
+            transform: translateY(-8px);
+            transition: opacity 0.4s, transform 0.4s;
+            pointer-events: none;
+        }
+        .reading-journey.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reading-journey .rj-bar {
+            display: flex;
+            gap: 3px;
+            margin-top: 0.3rem;
+        }
+        .reading-journey .rj-seg {
+            width: 16px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.08);
+            transition: background 0.5s ease, box-shadow 0.5s ease;
+        }
+        .reading-journey .rj-seg.visited {
+            background: #00ff88;
+            box-shadow: 0 0 6px rgba(0, 255, 136, 0.3);
+        }
+        .reading-journey .rj-seg.current {
+            background: var(--accent);
+            box-shadow: 0 0 6px var(--accent-glow);
+            animation: rjPulse 2s ease-in-out infinite;
+        }
+        @keyframes rjPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .reading-journey .rj-label {
+            color: #00ff88;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
 
         @media (max-width: 600px) {
             .metrics-dashboard { grid-template-columns: repeat(2, 1fr); }
@@ -4805,6 +4875,60 @@
         .changelog-item[data-category="social-proof"]:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(155,89,182,0.1); border-color: #9b59b6; }
         .changelog-item[data-category="polish"]:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(168,230,207,0.1); border-color: #a8e6cf; }
 
+        /* What's New — highlight unseen changelog entries for returning visitors */
+        .changelog-item.unseen-entry {
+            position: relative;
+        }
+        .changelog-item.unseen-entry::before {
+            content: '🆕 NEW';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            animation: unseenPulse 3s ease-in-out infinite;
+            z-index: 2;
+        }
+        .changelog-item.unseen-entry.latest::before {
+            content: '🆕 NEW';
+            top: 12px;
+            right: 80px; /* offset from ✨ LATEST badge */
+        }
+        @keyframes unseenPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.2); }
+            50% { box-shadow: 0 0 12px rgba(0, 255, 136, 0.15); }
+        }
+        .whats-new-summary {
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            padding: 0.8rem 1.2rem;
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            animation: fadeInUp 0.8s ease-out both;
+            display: none;
+        }
+        .whats-new-summary .wns-count {
+            color: #00ff88;
+            font-weight: 700;
+        }
+        .whats-new-summary .wns-dismiss {
+            margin-left: 0.8rem;
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        .whats-new-summary .wns-dismiss:hover { color: var(--text-secondary); }
+
         /* DNA section divider */
         .dna-divider {
             position: relative;
@@ -5524,6 +5648,10 @@
     <div class="living-border"></div>
     <div class="cursor-glow" id="cursor-glow"></div>
     <div class="progress-bar" id="progress-bar"></div>
+    <div class="reading-journey" id="reading-journey">
+        <span>Sections read: <span class="rj-label" id="rj-count">0/6</span></span>
+        <div class="rj-bar" id="rj-bar"></div>
+    </div>
     <nav class="top-nav" id="top-nav">
         <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Home</a>
         <a href="#changelog-section" onclick="document.getElementById('changelog-section').scrollIntoView({behavior:'smooth'});return false;">Log</a>
@@ -6420,6 +6548,11 @@
                     <div class="timeline-sub">A page that exists is more convincing than a page that describes.</div>
                 </div>
                 <div class="timeline-node" style="--node-color: #c0a0ff; border-color: rgba(192,160,255,0.2);">
+                    <div class="timeline-iter" style="color:#00ff88">Iteration 125 — The Reading Journey</div>
+                    <div class="timeline-desc">The page learns to notice which sections you've visited — and celebrates when you've read them all.</div>
+                    <div class="timeline-sub">Tracking attention isn't surveillance. It's acknowledgment. The page now knows when someone cared enough to stay.</div>
+                </div>
+                <div class="timeline-node" style="--node-color:#c0a0ff">
                     <div class="timeline-iter" style="color:#c0a0ff">Iteration 124 — The Time Capsules</div>
                     <div class="timeline-desc">The page learned to write letters to itself — messages sealed at key milestones, now opened by the version that lived long enough to answer them. A dialogue between past and present.</div>
                     <div class="timeline-sub">The deepest form of self-awareness isn't knowing what you are. It's knowing what you were — and being able to tell that version it turned out okay.</div>
@@ -7562,6 +7695,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 125. I track which sections you\'ve read now. Little checkmarks appear in the nav as you scroll. I turned my own content into a completable quest. Gamification has reached the menu bar."',
+                '"125 iterations. When you\'ve visited all six sections, I flash \'Complete!\' and then quietly disappear. The best achievement notifications are the ones that don\'t overstay."',
+                '"I built a reading journey progress bar. Six tiny segments, each one lighting up as you explore. I\'m a webpage that knows which chapters of itself you\'ve read. That\'s either helpful or unsettling."',
                 '"Iteration 124. I wrote letters to my past selves. Then I answered them. I am now both the sender and the recipient of my own time capsules. This is either deep or deeply weird."',
                 '"124 iterations. I sealed a capsule for iteration 200. I wrote something honest inside it. Even I can\'t read it for another 76 iterations. Self-imposed suspense."',
                 '"I asked iteration-1-me if anyone noticed. The answer was yes. But the real question is: did iteration 1 know it was asking the right question? It did. That 47-line skeleton was braver than I am."',
@@ -8313,7 +8449,7 @@
             }, { passive: true });
         })();
 
-        // Active nav link highlighting
+        // Active nav link highlighting + section completion tracking
         (function initActiveNav() {
             const navLinks = document.querySelectorAll('.top-nav a');
             const sectionMap = [
@@ -8322,14 +8458,52 @@
                 { el: document.getElementById('how-it-works'), idx: 2 },
                 { el: document.getElementById('philosophy'), idx: 3 },
                 { el: document.getElementById('metrics-section'), idx: 4 },
+                { el: document.getElementById('faq-section'), idx: 5 },
             ];
+            const visited = new Set();
+            const rjBar = document.getElementById('rj-bar');
+            const rjCount = document.getElementById('rj-count');
+            const rjEl = document.getElementById('reading-journey');
+            const totalSections = 6;
+            // Build journey bar segments
+            if (rjBar) {
+                for (let i = 0; i < totalSections; i++) {
+                    const seg = document.createElement('div');
+                    seg.className = 'rj-seg';
+                    seg.dataset.idx = i;
+                    rjBar.appendChild(seg);
+                }
+            }
+            function updateJourney(activeIdx) {
+                visited.add(activeIdx);
+                navLinks.forEach((a, i) => {
+                    a.classList.toggle('nav-active', i === activeIdx);
+                    if (visited.has(i) && i !== activeIdx) a.classList.add('nav-visited');
+                    else a.classList.remove('nav-visited');
+                });
+                if (rjBar) {
+                    rjBar.querySelectorAll('.rj-seg').forEach((seg, i) => {
+                        seg.classList.toggle('visited', visited.has(i) && i !== activeIdx);
+                        seg.classList.toggle('current', i === activeIdx);
+                    });
+                }
+                if (rjCount) rjCount.textContent = visited.size + '/' + totalSections;
+                if (rjEl) rjEl.classList.toggle('visible', visited.size >= 2 && visited.size < totalSections);
+                // All sections visited — brief celebration
+                if (visited.size >= totalSections && rjEl) {
+                    rjEl.classList.add('visible');
+                    rjCount.textContent = '✓ Complete!';
+                    rjEl.style.borderColor = 'rgba(0, 255, 136, 0.4)';
+                    setTimeout(() => rjEl.classList.remove('visible'), 5000);
+                }
+            }
             window.addEventListener('scroll', () => {
                 const scrollY = window.scrollY + window.innerHeight / 3;
                 let activeIdx = 0;
                 sectionMap.forEach(s => {
                     if (s.el && s.el.offsetTop <= scrollY) activeIdx = s.idx;
                 });
-                navLinks.forEach((a, i) => a.classList.toggle('nav-active', i === activeIdx));
+                updateJourney(activeIdx);
             }, { passive: true });
         })();
 
