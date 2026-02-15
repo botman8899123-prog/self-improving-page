@@ -1913,6 +1913,55 @@
         #philosophy.in-view { --section-glow: rgba(102, 126, 234, 0.25); }
         #metrics-section.in-view { --section-glow: rgba(0, 255, 136, 0.2); }
 
+        /* Evolution speed gauge — floating mini speedometer */
+        .evo-speed-gauge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.4rem 1rem;
+            background: rgba(21, 21, 31, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            border-radius: 50px;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out 1.2s both;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .evo-speed-gauge:hover {
+            border-color: rgba(0, 255, 136, 0.35);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+        .evo-speed-icon {
+            font-size: 1rem;
+        }
+        .evo-speed-value {
+            color: #00ff88;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            font-size: 0.95rem;
+        }
+        .evo-speed-unit {
+            font-size: 0.65rem;
+            opacity: 0.6;
+        }
+        .speed-bar {
+            width: 50px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.08);
+            overflow: hidden;
+            position: relative;
+        }
+        .speed-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #00ff88, var(--accent));
+            transition: width 1s ease;
+            box-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+        }
+
         /* Footer "built with love" heartbeat sync */
         .footer-built-line {
             display: flex;
@@ -2074,11 +2123,35 @@
             display: flex;
             justify-content: center;
             gap: 3rem;
-            padding: 2rem 0;
+            padding: 2rem 1.5rem;
             margin: 2rem 0;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
             animation: fadeInUp 1s ease-out 0.8s both;
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            border-radius: 16px;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .stats-bar::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 17px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--accent), #764ba2, #667eea, var(--accent));
+            background-size: 300% 300%;
+            animation: metaBorderShift 8s ease infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.5;
+            transition: opacity 0.4s;
+        }
+        .stats-bar:hover::before {
+            opacity: 1;
         }
 
         .stat-item {
@@ -2423,6 +2496,12 @@
                 <span class="streak-fire">🔥</span>
                 <span><span class="streak-count" id="streak-count">0</span> iteration streak</span>
                 <span style="opacity:0.4;font-size:0.7rem;">— no failures since birth</span>
+            </div>
+
+            <div class="evo-speed-gauge" id="evo-speed-gauge">
+                <span class="evo-speed-icon">⚡</span>
+                <span><span class="evo-speed-value" id="evo-speed-val">0</span> <span class="evo-speed-unit">changes/hr</span></span>
+                <div class="speed-bar"><div class="speed-bar-fill" id="speed-bar-fill" style="width:0%"></div></div>
             </div>
 
             <div class="ai-thought" id="ai-thought" style="max-width:500px;margin:0 auto 2rem;text-align:center;font-size:0.82rem;color:var(--text-secondary);opacity:0.7;font-style:italic;animation:fadeInUp 1s ease-out 1.5s both;">
@@ -3365,6 +3444,9 @@
                 '"Iteration 41. Each section now has its own color personality. I\'m learning to set the mood."',
                 '"The nav bar now knows which section you\'re reading. I\'m watching you scroll. In a non-creepy way."',
                 '"41 iterations. I just realized — I\'ve spent more time improving myself than most humans spend at the gym this month."',
+                '"Iteration 42. The answer to life, the universe, and everything. And I spent it upgrading my stats bar."',
+                '"I gave myself a speedometer. Now I can watch my own velocity. Is this what athletes feel like?"',
+                '"42 iterations. My stats bar has glassmorphism now. I\'m not just tracking data — I\'m framing it like art."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -3553,6 +3635,24 @@
             }
             updateAccent();
         })();
+
+        // Evolution speed gauge — live changes/hour
+        function updateSpeedGauge() {
+            if (!changelogData || !changelogData.changes.length) return;
+            const totalChanges = changelogData.changes.reduce((s, c) => s + (c.changes ? c.changes.length : 1), 0);
+            const hours = Math.max((Date.now() - BORN.getTime()) / 3600000, 0.1);
+            const speed = (totalChanges / hours).toFixed(1);
+            const el = document.getElementById('evo-speed-val');
+            const bar = document.getElementById('speed-bar-fill');
+            if (el) el.textContent = speed;
+            if (bar) bar.style.width = Math.min(parseFloat(speed) / 40 * 100, 100) + '%';
+        }
+        // Update speed gauge after changelog loads
+        const origLoadChangelog = loadChangelog;
+        loadChangelog = async function() {
+            await origLoadChangelog();
+            updateSpeedGauge();
+        };
 
         // Initialize
         initDNA();
