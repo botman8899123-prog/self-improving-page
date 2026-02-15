@@ -1,6 +1,17 @@
 {
-  "iterations": 28,
+  "iterations": 29,
   "changes": [
+    {
+      "iteration": 29,
+      "timestamp": "2026-02-15T03:04:00+02:00",
+      "changes": [
+        "Added rotating AI Inner Monologue — witty first-person thoughts cycle every 12 seconds, giving the page personality and self-awareness",
+        "Fixed hardcoded iteration number in time capsule — now dynamically updates from changelog data instead of showing stale 'iteration 26'",
+        "Added '📡 Live Feed' label above ticker strip — transforms anonymous scrolling text into a branded data stream"
+      ],
+      "reasoning": "The page was technically impressive but lacked personality — it described self-improvement without expressing self-awareness. The inner monologue gives visitors a window into the AI's 'mind', making the experience more intimate and memorable. The hardcoded iteration was a bug that undermined the 'everything is live' narrative.",
+      "category": "content"
+    },
     {
       "iteration": 28,
       "timestamp": "2026-02-15T02:56:00+02:00",
