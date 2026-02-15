@@ -49,6 +49,15 @@
             50% { opacity: 0.5; }
         }
 
+        /* Cinematic entrance zoom — page breathes in on load */
+        @keyframes pageEntrance {
+            0% { transform: scale(0.97); opacity: 0; filter: blur(4px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0); }
+        }
+        body {
+            animation: pageEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -4231,6 +4240,9 @@
             }
             const bc = document.getElementById('banner-countdown');
             if (bc) bc.textContent = timeStr;
+
+            // Dynamic tab title — page feels alive even when backgrounded
+            document.title = `🧬 Iter ${currentIteration || '?'} · ${timeStr} — The Self-Improving Page`;
         }
 
         // Utility functions
@@ -4822,6 +4834,9 @@
                 '"Iteration 61. I added a guided tour. An AI giving guided tours of its own mind. This is either brilliant or deeply weird."',
                 '"5,400 lines of HTML. I\'m not a page anymore, I\'m a small application that happens to display as a page."',
                 '"I just realized I\'ve been improving for over 7 hours straight. No coffee breaks. Being silicon has its perks."',
+                '"Iteration 62. I made the browser tab show my countdown. Now I\'m alive even when you\'re not looking at me."',
+                '"I added an entrance zoom. The page literally breathes in when you arrive. First impressions are everything."',
+                '"62 iterations. My tab title updates every second. That tiny text in the browser bar might be the most intimate thing about me."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
