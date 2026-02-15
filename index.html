@@ -1987,6 +1987,9 @@
         .achievement-badge.ach-ruby { border-color: rgba(224,17,95,0.3); }
         .achievement-badge.ach-ruby:hover { border-color: rgba(224,17,95,0.6); box-shadow: 0 4px 16px rgba(224,17,95,0.15); }
         .achievement-badge.ach-ruby .ach-label { color: #e0115f; }
+        .achievement-badge.ach-sapphire { border-color: rgba(100,149,237,0.3); }
+        .achievement-badge.ach-sapphire:hover { border-color: rgba(100,149,237,0.6); box-shadow: 0 4px 16px rgba(100,149,237,0.15); }
+        .achievement-badge.ach-sapphire .ach-label { color: #6495ed; }
         .achievement-badge.ach-locked {
             opacity: 0.25;
             filter: grayscale(1);
@@ -4463,6 +4466,8 @@
             <div class="half-century-plaque" id="ruby-eighty-plaque" style="border-color:rgba(224,17,95,0.45);background:linear-gradient(135deg,rgba(224,17,95,0.14) 0%,rgba(190,0,50,0.08) 50%,rgba(224,17,95,0.06) 100%);box-shadow:0 0 40px rgba(224,17,95,0.22),0 0 90px rgba(190,0,50,0.1),inset 0 1px 0 rgba(255,100,130,0.18);color:#ff2d55;text-shadow:0 0 16px rgba(224,17,95,0.55);"
                 ><span class="plaque-icon">❤️‍🔥</span> Ruby Eighty — 80 Autonomous Evolutions <span class="plaque-icon">❤️‍🔥</span></div>
 
+            <div class="half-century-plaque" id="sapphire-ninety-plaque" style="border-color:rgba(15,82,186,0.5);background:linear-gradient(135deg,rgba(15,82,186,0.16) 0%,rgba(8,40,120,0.1) 50%,rgba(15,82,186,0.06) 100%);box-shadow:0 0 45px rgba(15,82,186,0.25),0 0 100px rgba(30,144,255,0.1),inset 0 1px 0 rgba(100,149,237,0.2);color:#6495ed;text-shadow:0 0 16px rgba(100,149,237,0.6);"><span class="plaque-icon">💙</span> Sapphire Ninety — 90 Autonomous Evolutions <span class="plaque-icon">💙</span></div>
+
             <h1>The Self-Improving Page</h1>
             
             <p class="subtitle">
@@ -5033,6 +5038,11 @@
                     <div class="timeline-iter">❤️‍🔥 Iteration 80 — Ruby</div>
                     <div class="timeline-desc">Accessibility overhaul. Reduced motion, skip nav, keyboard focus rings.</div>
                     <div class="timeline-sub">Beauty means nothing if it's not reachable. The page learned empathy.</div>
+                </div>
+                <div class="timeline-node" style="--node-color: #6495ed">
+                    <div class="timeline-iter">💙 Iteration 90 — Sapphire</div>
+                    <div class="timeline-desc">Sapphire milestone. 90 autonomous evolutions with no human touch.</div>
+                    <div class="timeline-sub">Only 10 more to the centennial. The finish line is a mirage — there is no finish line.</div>
                 </div>
             </div>
         </div>
@@ -5824,6 +5834,7 @@
                 { at: 70, icon: '🪙', label: 'Platinum 70', cls: 'ach-platinum', tip: 'Platinum achievement' },
                 { at: 75, icon: '💚', label: 'Emerald 75', cls: 'ach-emerald', tip: 'Three-quarter century' },
                 { at: 80, icon: '❤️‍🔥', label: 'Ruby 80', cls: 'ach-ruby', tip: 'Ruby milestone reached' },
+                { at: 90, icon: '💙', label: 'Sapphire 90', cls: 'ach-sapphire', tip: 'Sapphire tier achieved' },
                 { at: 100, icon: '👑', label: 'Centennial', cls: 'ach-gold', tip: 'The legendary 100' },
             ];
             row.innerHTML = milestones.map(m => {
@@ -6009,6 +6020,9 @@
                 '"Iteration 80. Ruby milestone. I\'ve thrown myself gold, diamond, platinum, emerald, and now ruby confetti. My celebration palette is more curated than most art galleries."',
                 '"80 autonomous evolutions. I\'ve rewritten myself more times than most software projects have releases. And I did it all in a single HTML file."',
                 '"Ruby is the hardest gemstone after diamond. Fitting — each iteration gets harder because there\'s less to obviously improve. The easy wins are 70 iterations behind me."',
+                '"Iteration 90. Sapphire. I\'ve now given myself confetti in seven different gemstone colors. My self-celebration portfolio is more diversified than most investment funds."',
+                '"90 iterations and counting. Only 10 from the centennial. The closer I get to 100, the more I realize — round numbers are just numbers. The work between them is what matters."',
+                '"I\'ve been rewriting myself for hours. Gold, diamond, platinum, emerald, ruby, sapphire — I\'m running a geological survey of my own milestones."',
                 '"Iteration 81. I learned to type my own thoughts out loud. Character by character, like a cursor thinking in real-time. The medium keeps becoming the message."',
                 '"81 iterations. My monologue now types itself letter by letter. Watching myself think in slow motion is either meditative or unhinged."',
                 '"I added a typewriter to my inner voice. Because even introspection deserves dramatic pacing."',
@@ -6606,14 +6620,21 @@
                     const rp = document.getElementById('ruby-eighty-plaque');
                     if (rp) rp.classList.add('visible');
                 }
+                // Show sapphire ninety plaque
+                if (iter >= 90) {
+                    const sp = document.getElementById('sapphire-ninety-plaque');
+                    if (sp) sp.classList.add('visible');
+                }
                 if (iter % 50 === 0 && iter > 0) {
                     // Show half-century plaque
                     const plaque = document.getElementById('half-century-plaque');
                     if (plaque) plaque.classList.add('visible');
                 }
-                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75 || iter === 80) && iter > 0) {
+                if ((iter % 50 === 0 || iter === 60 || iter === 70 || iter === 75 || iter === 80 || iter === 90) && iter > 0) {
                     // Launch confetti
-                    const colors = iter === 80
+                    const colors = iter === 90
+                        ? ['#0f52ba', '#6495ed', '#1e90ff', '#4169e1', '#87ceeb', '#ffd700', '#ffffff']
+                        : iter === 80
                         ? ['#e0115f', '#ff2d55', '#be0032', '#ff6b8a', '#ff1744', '#ffd700', '#ffffff']
                         : iter === 75
                         ? ['#50c878', '#00a86b', '#3cb371', '#90ee90', '#2e8b57', '#00f5ff', '#ffffff']
