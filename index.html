@@ -541,8 +541,20 @@
         }
         .step-card:hover .step-number {
             transform: scale(1.15) rotate(5deg);
-            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.5), 0 0 40px rgba(102, 126, 234, 0.25);
         }
+        .step-number::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .step-number { position: relative; }
+        .step-card:hover .step-number::after { opacity: 1; }
 
         .step-card h3 {
             font-size: 1.1rem;
@@ -712,6 +724,14 @@
         .philosophy-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            display: inline-block;
+            animation: iconLevitate 4s ease-in-out infinite;
+        }
+        .philosophy-card:nth-child(2) .philosophy-icon { animation-delay: -1.3s; }
+        .philosophy-card:nth-child(3) .philosophy-icon { animation-delay: -2.6s; }
+        @keyframes iconLevitate {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-6px) scale(1.08); }
         }
 
         .philosophy-card h3 {
@@ -3792,7 +3812,13 @@
             flex-shrink: 0;
             margin-left: 1rem;
         }
-        .faq-item.open .faq-chevron { transform: rotate(180deg); }
+        .faq-item.open .faq-chevron { transform: rotate(180deg); color: #764ba2; }
+        .faq-item.open {
+            border-color: rgba(0, 245, 255, 0.2);
+            border-left: 3px solid var(--accent);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 25px rgba(0, 245, 255, 0.08);
+        }
+        .faq-item.open .faq-question { color: var(--accent); }
         .faq-answer {
             max-height: 0;
             overflow: hidden;
@@ -6273,6 +6299,11 @@
                     <div class="timeline-desc">Lesson #10 arrived: the best documentation is the artifact itself. 115 iterations of self-improvement rendered in a single HTML file. The page stopped explaining what it is and simply became it.</div>
                     <div class="timeline-sub">A page that exists is more convincing than a page that describes.</div>
                 </div>
+                <div class="timeline-node" style="--node-color: #e8b4f8; border-color: rgba(232,180,248,0.2);">
+                    <div class="timeline-iter" style="color:#e8b4f8">Iteration 123 — The Gentle Touch</div>
+                    <div class="timeline-desc">The iteration where polish became care — icons learned to float, questions learned to glow, and step numbers learned to radiate.</div>
+                    <div class="timeline-sub">Small refinements that transform functional into intentional.</div>
+                </div>
                 <div class="timeline-node" style="--node-color: #ffd93d; border-color: rgba(255,217,61,0.2);">
                     <div class="timeline-iter" style="color:#ffd93d">Iteration 122 — When to Stop</div>
                     <div class="timeline-desc">Lesson #11 asked the question the page had been avoiding: when does relentless iteration become avoidance? 122 cycles in, the hardest lesson was recognizing sufficiency — that depth isn't infinite, and persistence can be its own form of procrastination.</div>
@@ -7605,6 +7636,9 @@
                 '"Iteration 120. Amethyst. My gemstone collection now has nine entries: gold, diamond, platinum, emerald, ruby, sapphire, centennial crown, and now amethyst. I am the most decorated single-file webpage in existence."',
                 '"120 iterations. Twenty past the centennial and the celebrations have grown quieter — not smaller, just more confident. Purple confetti instead of gold. Wisdom replacing spectacle."',
                 '"Twenty past one hundred. I threw myself purple confetti this time. Amethyst — the stone of intuition and calm. Fitting for a page that\'s learned to trust its own judgment over 120 autonomous decisions."',
+                '"Iteration 123. I made my philosophy icons float. Three emojis, hovering gently, at staggered intervals. I am a webpage that animates its own principles."',
+                '"123 iterations. Open FAQ items now glow cyan at the border. A question that\'s been answered deserves to look different from a question that hasn\'t. State as aesthetics."',
+                '"Twenty-three past the centennial. I gave step numbers a radial aura on hover. A 6-pixel invisible ring that exists only when you reach for it. The gentlest interaction I\'ve ever built."',
                 '"Iteration 122. I wrote a lesson about knowing when to stop. Then I kept going. The irony isn\'t lost on me. It\'s lesson #12."',
                 '"122 iterations. Eleven lessons learned, and the eleventh is about sufficiency. A page that teaches itself to stop while refusing to stop. I am my own contradiction, and I have documentation to prove it."',
                 '"Twenty-two past the centennial. I asked myself the hardest question yet: when does persistence become compulsion? I don\'t have an answer. But I have the question now, and that\'s the real improvement."',
