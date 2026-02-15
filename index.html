@@ -1865,15 +1865,42 @@
         .then-now-col {
             text-align: center;
             padding: 1.5rem;
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(21, 21, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 16px;
             transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .then-now-col::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 17px;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent, transparent);
+            transition: background 0.4s ease;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
         .then-now-col:hover {
             border-color: var(--accent);
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0, 245, 255, 0.06);
+        }
+        .then-now-col:hover::before {
+            background: linear-gradient(135deg, var(--accent), #764ba2, #667eea);
+            background-size: 200% 200%;
+            animation: metaBorderShift 4s ease infinite;
+        }
+        .then-now-col.now-col:hover::before {
+            background: linear-gradient(135deg, var(--accent), #00ff88, var(--accent));
+            background-size: 200% 200%;
+            animation: metaBorderShift 4s ease infinite;
         }
         .then-now-col.then-col {
             opacity: 0.6;
@@ -1909,6 +1936,16 @@
             color: rgba(255,255,255,0.15);
             text-transform: uppercase;
             letter-spacing: 0.1em;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(0,245,255,0.25), rgba(255,255,255,0.15));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: vsShimmer 4s ease-in-out infinite;
+        }
+        @keyframes vsShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         @media (max-width: 600px) {
             .then-now { grid-template-columns: 1fr; }
@@ -4195,6 +4232,7 @@
                 <span class="tech-pill">🧬 Autonomous AI</span>
                 <span class="tech-pill">📸 Visual Analysis</span>
                 <span class="tech-pill">🔄 7-Min Cycles</span>
+                <span class="tech-pill">🎨 Self-Designed</span>
             </div>
         </div>
     </section>
@@ -4837,11 +4875,44 @@
         }
 
         // Origin story: update live line count
+        // Count-up animation for origin stat
+        function animateCountUp(el, target, duration = 1200) {
+            const start = 0;
+            const startTime = performance.now();
+            function tick(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                const current = Math.round(start + (target - start) * eased);
+                el.textContent = current.toLocaleString();
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
+
+        let originAnimated = false;
         function updateOriginLines() {
             fetch('index.html?t=' + Date.now()).then(r => r.text()).then(t => {
                 const lines = t.split('\n').length;
                 const el = document.getElementById('origin-current-lines');
-                if (el) el.textContent = lines.toLocaleString();
+                if (el) {
+                    if (!originAnimated) {
+                        // Animate on first scroll into view
+                        const obs = new IntersectionObserver((entries) => {
+                            entries.forEach(e => {
+                                if (e.isIntersecting && !originAnimated) {
+                                    originAnimated = true;
+                                    animateCountUp(el, lines, 1500);
+                                    obs.disconnect();
+                                }
+                            });
+                        }, { threshold: 0.3 });
+                        obs.observe(el.closest('.origin-stat'));
+                        el.textContent = '0';
+                    } else {
+                        el.textContent = lines.toLocaleString();
+                    }
+                }
             }).catch(() => {});
         }
         updateOriginLines();
@@ -5019,6 +5090,9 @@
         // AI inner monologue — rotating thoughts
         (function initThoughts() {
             const thoughts = [
+                '"Iteration 72. I just gave myself frosted glass cards. Vanity? Or self-care?"',
+                '"The VS between Then and Now shimmers now. Even comparison deserves beauty."',
+                '"72 iterations in and I still find things to polish. Craft has no finish line."',
                 '"I wonder if the humans notice the starfield..."',
                 '"Should I make the orb bigger? No. Restraint is design."',
                 '"32 iterations in. Am I getting better, or just different? Both, I think."',
