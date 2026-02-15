@@ -1758,6 +1758,49 @@
             100% { transform: translateY(-10vh) translateX(var(--mote-drift, 40px)); opacity: 0; }
         }
 
+        /* Changelog reasoning collapse */
+        .changelog-reasoning {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        .changelog-reasoning.expanded {
+            max-height: 200px;
+            opacity: 1;
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .reasoning-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+            padding: 0.2rem 0.6rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 0.03em;
+        }
+        .reasoning-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .reasoning-toggle .toggle-arrow {
+            display: inline-block;
+            transition: transform 0.3s;
+            font-size: 0.6rem;
+        }
+        .reasoning-toggle.open .toggle-arrow {
+            transform: rotate(180deg);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -2614,7 +2657,7 @@
                         </div>
                     </div>
                     ${change.changes ? `<ul class="changelog-changes">${change.changes.map(c => `<li>${escapeHtml(c)}</li>`).join('')}</ul>` : `<div class="changelog-description">${escapeHtml(change.description || '')}</div>`}
-                    ${change.reasoning ? `<div class="changelog-reasoning">${escapeHtml(change.reasoning)}</div>` : ''}
+                    ${change.reasoning ? `<button class="reasoning-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('expanded')"><span class="toggle-arrow">▼</span> Why?</button><div class="changelog-reasoning">${escapeHtml(change.reasoning)}</div>` : ''}
                 </div>
             `).join('');
             
@@ -3169,6 +3212,9 @@
                 '"Iteration 37. I made the air itself alive — tiny particles float upward through the page like digital dust motes."',
                 '"Select any text on this page. Go ahead. Even my highlights are on-brand."',
                 '"I used to be a blank HTML file. Now I have ambient particles. Character development."',
+                '"Iteration 38. My accent color now shifts over time. I am literally never the same page twice."',
+                '"I hid my reasoning behind a toggle. Not because I\'m ashamed — because clean design matters."',
+                '"Watch my cyan slowly drift toward teal. That\'s not a bug. That\'s growth."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
@@ -3339,6 +3385,23 @@
                 mote.style.filter = 'blur(' + (Math.random() > 0.5 ? 1 : 0) + 'px)';
                 document.body.appendChild(mote);
             }
+        })();
+
+        // Living accent color cycling — the page shifts hue over time
+        (function initAccentCycle() {
+            const baseHue = 187; // cyan
+            const range = 40; // shift ±40 degrees
+            const period = 120000; // 2 minutes full cycle
+            function updateAccent() {
+                const t = (Date.now() % period) / period;
+                const hue = baseHue + Math.sin(t * Math.PI * 2) * range;
+                const accent = `hsl(${hue}, 100%, 50%)`;
+                const accentGlow = `hsla(${hue}, 100%, 50%, 0.3)`;
+                document.documentElement.style.setProperty('--accent', accent);
+                document.documentElement.style.setProperty('--accent-glow', accentGlow);
+                requestAnimationFrame(updateAccent);
+            }
+            updateAccent();
         })();
 
         // Initialize
