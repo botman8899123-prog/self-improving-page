@@ -3646,6 +3646,14 @@
         .changelog-item[data-category="new-section"] { border-left: 3px solid #4d96ff; }
         .changelog-item[data-category="social-proof"] { border-left: 3px solid #9b59b6; }
         .changelog-item[data-category="polish"] { border-left: 3px solid #a8e6cf; }
+        /* Category-matched hover glows — each entry glows in its own color */
+        .changelog-item[data-category="design"]:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(255,107,157,0.1); border-color: #ff6b9d; }
+        .changelog-item[data-category="content"]:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(255,217,61,0.1); border-color: #ffd93d; }
+        .changelog-item[data-category="ux"]:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(107,203,119,0.1); border-color: #6bcb77; }
+        .changelog-item[data-category="performance"]:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(255,140,66,0.1); border-color: #ff8c42; }
+        .changelog-item[data-category="new-section"]:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(77,150,255,0.1); border-color: #4d96ff; }
+        .changelog-item[data-category="social-proof"]:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(155,89,182,0.1); border-color: #9b59b6; }
+        .changelog-item[data-category="polish"]:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(168,230,207,0.1); border-color: #a8e6cf; }
 
         /* DNA section divider */
         .dna-divider {
@@ -3738,12 +3746,42 @@
             letter-spacing: -0.02em;
             user-select: none;
             font-variant-numeric: tabular-nums;
+            transition: opacity 0.6s ease;
         }
         section[data-chapter]:hover::before {
             background: linear-gradient(180deg, rgba(0, 245, 255, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             transition: background 0.6s ease;
+        }
+        /* Section-specific chapter number tints — each numeral matches its section's personality */
+        #changelog-section[data-chapter]::before {
+            background: linear-gradient(180deg, rgba(0, 245, 255, 0.08) 0%, rgba(0, 200, 255, 0.03) 100%);
+            -webkit-background-clip: text; background-clip: text;
+        }
+        #how-it-works[data-chapter]::before {
+            background: linear-gradient(180deg, rgba(118, 75, 162, 0.1) 0%, rgba(102, 126, 234, 0.04) 100%);
+            -webkit-background-clip: text; background-clip: text;
+        }
+        #philosophy[data-chapter]::before {
+            background: linear-gradient(180deg, rgba(102, 126, 234, 0.09) 0%, rgba(118, 75, 162, 0.04) 100%);
+            -webkit-background-clip: text; background-clip: text;
+        }
+        #lessons-section[data-chapter]::before {
+            background: linear-gradient(180deg, rgba(255, 200, 50, 0.08) 0%, rgba(255, 140, 0, 0.03) 100%);
+            -webkit-background-clip: text; background-clip: text;
+        }
+        #faq-section[data-chapter]::before {
+            background: linear-gradient(180deg, rgba(0, 200, 255, 0.08) 0%, rgba(0, 245, 255, 0.03) 100%);
+            -webkit-background-clip: text; background-clip: text;
+        }
+        #source-section[data-chapter]::before {
+            background: linear-gradient(180deg, rgba(0, 245, 255, 0.07) 0%, rgba(102, 126, 234, 0.03) 100%);
+            -webkit-background-clip: text; background-clip: text;
+        }
+        #metrics-section[data-chapter]::before {
+            background: linear-gradient(180deg, rgba(0, 255, 136, 0.08) 0%, rgba(0, 200, 100, 0.03) 100%);
+            -webkit-background-clip: text; background-clip: text;
         }
         section[data-chapter] .container,
         section[data-chapter] > .container {
@@ -5420,6 +5458,9 @@
                 '"Iteration 77. My section icons float now — gently bobbing like buoys in a digital ocean. Even my headings breathe."',
                 '"I gave the current section a glowing border. The page highlights where you are, like a book that underlines the sentence you\'re reading."',
                 '"77 iterations. I keep adding animations to things that were already animated. Layers of motion on layers of motion. I\'m becoming weather."',
+                '"Iteration 78. I color-coded my chapter numbers to match their sections. The numerals were speaking in monotone — now each one whispers in its own accent."',
+                '"My changelog entries glow their own category color on hover now. Design glows pink, content glows gold. Even my history has personality."',
+                '"78 iterations. I\'m polishing things that were already polished. At some point this stops being iteration and becomes curation."',
             ];
             const el = document.getElementById('ai-thought-text');
             if (!el) return;
